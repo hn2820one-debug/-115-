@@ -69,7 +69,7 @@ const I18N = {
     dark: '深色',
     storage_memory: '記憶體（重整清空）',
     storage_local: 'Local（永久儲存）',
-    storage_drive: 'Google Drive（開發中）',
+    storage_drive: 'Google Drive 同步',
     noWrong: '🎉 目前沒有錯題！繼續保持。',
     noJournal: '尚無學習記錄。完成第一節後這裡會出現日誌。',
     noSummary: '尚無三句話總結。完成節次並填寫後會出現在這裡。',
@@ -136,7 +136,7 @@ const I18N = {
     dark: 'Dark',
     storage_memory: 'Memory (clears on reload)',
     storage_local: 'Local (permanent)',
-    storage_drive: 'Google Drive (coming soon)',
+    storage_drive: 'Google Drive Sync',
     noWrong: '🎉 No wrong answers yet! Keep it up.',
     noJournal: 'No learning records yet. Complete your first session to see the journal.',
     noSummary: 'No summaries yet. Write three-sentence summaries after completing sessions.',
@@ -190,10 +190,251 @@ const LocalStore = {
   }
 };
 
-const DriveStore = {
-  load()  { console.warn('DriveStore: not yet implemented, fallback to LocalStore'); return LocalStore.load(); },
-  save(s) { LocalStore.save(s); }
-};
+const DriveStore = (() => {
+  // ── Config (separate from user data, survives fl_v1 clears) ───
+  const CFG_KEY   = 'fl_config';
+  const SCOPE     = 'https://www.googleapis.com/auth/drive.appdata';
+  const FILE_NAME = 'fl_userstate.json';
+
+  let _token     = null;   // { value, expiry }
+  let _fileId    = null;
+  let _saveTimer = null;
+  let _status    = 'idle'; // 'idle'|'syncing'|'ok'|'error'
+
+  function _cfg()         { try { return JSON.parse(localStorage.getItem(CFG_KEY)||'{}'); } catch { return {}; } }
+  function _setCfg(patch) { localStorage.setItem(CFG_KEY, JSON.stringify({..._cfg(),...patch})); }
+  function _clientId()    { return _cfg().driveClientId || ''; }
+  function _tokenOk()     { return !!(_token?.value && Date.now() < _token.expiry - 60000); }
+
+  async function _requestToken(prompt='') {
+    return new Promise((resolve, reject) => {
+      if (typeof google === 'undefined' || !google.accounts?.oauth2)
+        return reject(new Error('Google Identity Services 尚未載入'));
+      google.accounts.oauth2.initTokenClient({
+        client_id: _clientId(),
+        scope: SCOPE,
+        callback(r) {
+          if (r.error) return reject(new Error(r.error_description || r.error));
+          _token = { value: r.access_token, expiry: Date.now() + (r.expires_in||3600)*1000 };
+          _setCfg({ driveConnected: true, driveLastAuth: new Date().toISOString() });
+          resolve(_token.value);
+        },
+        error_callback(e) { reject(new Error(e?.message||'OAuth error')); }
+      }).requestAccessToken({ prompt });
+    });
+  }
+
+  async function _tok() {
+    if (_tokenOk()) return _token.value;
+    try { return await _requestToken('none'); } catch {}
+    return await _requestToken('');
+  }
+
+  async function _api(method, path, { params, json, raw, rawType }={}) {
+    const t = await _tok();
+    const isUpload = raw !== undefined;
+    const base = isUpload
+      ? 'https://www.googleapis.com/upload/drive/v3'
+      : 'https://www.googleapis.com/drive/v3';
+    const url = new URL(`${base}/${path}`);
+    if (params) Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+    const headers = { Authorization: `Bearer ${t}` };
+    let body;
+    if (isUpload) {
+      body = raw;
+      headers['Content-Type'] = rawType || 'application/json';
+    } else if (json !== undefined) {
+      body = JSON.stringify(json);
+      headers['Content-Type'] = 'application/json';
+    }
+    const r = await fetch(url.toString(), { method, headers, body });
+    if (!r.ok) { const e = await r.text().catch(()=>''); throw new Error(`Drive ${method} ${path}: ${r.status} ${e.slice(0,120)}`); }
+    const text = await r.text();
+    try { return text ? JSON.parse(text) : null; } catch { return null; }
+  }
+
+  async function _findFile() {
+    if (_fileId) return _fileId;
+    const res = await _api('GET', 'files', { params: {
+      q: `name='${FILE_NAME}' and 'appDataFolder' in parents and trashed=false`,
+      spaces: 'appDataFolder', fields: 'files(id)'
+    }});
+    _fileId = res?.files?.[0]?.id || null;
+    return _fileId;
+  }
+
+  async function _createFile(data) {
+    const meta = JSON.stringify({ name: FILE_NAME, parents: ['appDataFolder'] });
+    const body = JSON.stringify(data);
+    const b    = '----FLboundary' + Math.random().toString(36).slice(2);
+    const mp   = `--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n--${b}\r\nContent-Type: application/json\r\n\r\n${body}\r\n--${b}--`;
+    const res  = await _api('POST', 'files', {
+      params: { uploadType: 'multipart', fields: 'id' },
+      raw: mp, rawType: `multipart/related; boundary=${b}`
+    });
+    _fileId = res?.id || null;
+  }
+
+  async function _updateFile(data) {
+    await _api('PATCH', `files/${_fileId}`, {
+      params: { uploadType: 'media' }, raw: JSON.stringify(data), rawType: 'application/json'
+    });
+  }
+
+  async function _downloadFile(id) {
+    const t = await _tok();
+    const r = await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`,
+      { headers: { Authorization: `Bearer ${t}` } });
+    if (!r.ok) throw new Error(`Drive download: ${r.status}`);
+    return r.text();
+  }
+
+  function _setStatus(s, ts) {
+    _status = s;
+    if (ts) _setCfg({ driveLastSync: ts });
+    // Refresh Drive UI row if visible
+    const el = document.getElementById('drive-cfg-inner');
+    if (el) el.innerHTML = _pub.configHtml();
+  }
+
+  const _pub = {
+    configured() { return !!_clientId(); },
+    connected()  { return _tokenOk(); },
+    status()     { return _status; },
+    lastSync()   { return _cfg().driveLastSync || null; },
+    clientId()   { return _clientId(); },
+
+    setClientId(id) {
+      _setCfg({ driveClientId: id.trim() });
+      _fileId = null;
+      flog('STORAGE', 'DriveStore: Client ID saved');
+    },
+
+    async connect() {
+      if (!this.configured()) throw new Error('請先輸入 Google Client ID');
+      _setStatus('syncing');
+      await _requestToken('');
+      _setStatus('ok', new Date().toISOString());
+      flog('STORAGE', 'DriveStore.connect: authorized');
+      showToast('✓ 已連接 Google Drive', 'success');
+    },
+
+    disconnect() {
+      if (_token?.value && typeof google !== 'undefined')
+        google.accounts.oauth2.revoke(_token.value, ()=>{});
+      _token = null; _fileId = null;
+      _setCfg({ driveConnected: false });
+      _setStatus('idle');
+      flog('STORAGE', 'DriveStore.disconnect: revoked');
+      showToast('已中斷 Google Drive 連接', 'info');
+    },
+
+    async load() {
+      if (!this.configured() || !this.connected()) return LocalStore.load();
+      try {
+        _setStatus('syncing');
+        const id = await _findFile();
+        if (!id) { _setStatus('ok', new Date().toISOString()); return LocalStore.load(); }
+        const txt  = await _downloadFile(id);
+        const data = JSON.parse(txt);
+        LocalStore.save(data);
+        _setStatus('ok', new Date().toISOString());
+        flog('STORAGE', 'DriveStore.load: fetched from Drive');
+        return data;
+      } catch(e) {
+        flogErr('STORAGE', 'DriveStore.load failed', e);
+        _setStatus('error');
+        return LocalStore.load();
+      }
+    },
+
+    save(s) {
+      LocalStore.save(s); // always local-first
+      if (!this.configured() || !this.connected()) return;
+      clearTimeout(_saveTimer);
+      _saveTimer = setTimeout(async () => {
+        try {
+          _setStatus('syncing');
+          const id = await _findFile();
+          if (id) { await _updateFile(s); }
+          else    { await _createFile(s); }
+          _setStatus('ok', new Date().toISOString());
+          flog('STORAGE', 'DriveStore.save: synced', { fileId: _fileId });
+        } catch(e) {
+          flogErr('STORAGE', 'DriveStore.save failed', e);
+          _setStatus('error');
+        }
+      }, 3000); // debounce 3 s
+    },
+
+    // HTML fragment for settings UI (called by renderSettings)
+    configHtml() {
+      const cid   = this.clientId();
+      const conn  = this.connected();
+      const st    = this.status();
+      const ls    = this.lastSync();
+      const lsFmt = ls ? new Date(ls).toLocaleString('zh-TW',{dateStyle:'short',timeStyle:'short'}) : '從未';
+      const stBadge = st==='ok' ? `<span style="color:var(--accent-green)">✓ 已同步</span>`
+                    : st==='syncing' ? `<span style="color:var(--accent-gold)">⟳ 同步中…</span>`
+                    : st==='error'   ? `<span style="color:var(--accent-red)">✗ 同步失敗</span>`
+                    : `<span style="color:var(--text-muted)">未連接</span>`;
+      return `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:6px;">
+            Google OAuth Client ID
+            <a href="https://console.cloud.google.com/" target="_blank" rel="noopener"
+               style="color:var(--accent-blue);margin-left:6px;font-size:11px;">📖 設定說明</a>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="drive-cid-input" type="text" value="${esc(cid)}"
+              placeholder="xxxxxxxx.apps.googleusercontent.com"
+              style="flex:1;background:var(--bg-input);border:1px solid var(--border);border-radius:6px;
+                     padding:8px 10px;color:var(--text-primary);font-size:12px;font-family:monospace;"
+              oninput="document.getElementById('drive-cid-save').style.opacity='1'">
+            <button id="drive-cid-save" onclick="driveSaveClientId()"
+              style="opacity:${cid?'1':'0.5'};background:var(--accent-blue);color:#fff;border:none;
+                     border-radius:6px;padding:8px 14px;font-size:12px;cursor:pointer;transition:opacity 0.2s;">
+              儲存
+            </button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:12px;">
+            ${stBadge}
+            ${conn ? `<span style="color:var(--text-muted);margin-left:8px;">上次：${lsFmt}</span>` : ''}
+          </div>
+          <div style="display:flex;gap:8px;">
+            ${conn
+              ? `<button onclick="driveSync()" style="background:var(--bg-input);color:var(--accent-teal);
+                   border:1px solid var(--accent-teal);border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;">
+                   ⟳ 立即同步</button>
+                 <button onclick="driveDisconnect()" style="background:var(--bg-input);color:var(--accent-red);
+                   border:1px solid var(--accent-red);border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;">
+                   中斷連接</button>`
+              : `<button onclick="driveConnect()" ${!cid?'disabled':''} style="background:${cid?'#1a3a6e':'var(--bg-input)'};
+                   color:${cid?'var(--accent-blue)':'var(--text-muted)'};border:1px solid ${cid?'var(--accent-blue)':'var(--border)'};
+                   border-radius:6px;padding:7px 14px;font-size:12px;cursor:${cid?'pointer':'not-allowed'};">
+                   連接 Google Drive</button>`}
+          </div>
+        </div>
+        <details style="margin-top:14px;">
+          <summary style="font-size:11px;color:var(--text-muted);cursor:pointer;">📖 如何取得 Client ID？（展開說明）</summary>
+          <ol style="font-size:11px;color:var(--text-secondary);margin-top:8px;padding-left:18px;line-height:2;">
+            <li>前往 <a href="https://console.cloud.google.com/" target="_blank" style="color:var(--accent-blue);">console.cloud.google.com</a>，用你的 Google 帳號登入</li>
+            <li>建立新專案（名稱隨意，如 FoundationLearn）</li>
+            <li>左側選單 → API 和服務 → 啟用 API → 搜尋「Google Drive API」→ 啟用</li>
+            <li>左側 → OAuth 同意畫面 → 選「外部」→ 填入應用程式名稱 → 儲存</li>
+            <li>左側 → 憑證 → 建立憑證 → OAuth 用戶端 ID → 選「Web 應用程式」</li>
+            <li>已授權的 JavaScript 來源：加入 <code style="background:var(--bg-input);padding:2px 4px;border-radius:3px;">http://localhost:8080</code></li>
+            <li>若已部署 GitHub Pages 也加入那個網址</li>
+            <li>建立後複製「用戶端 ID」（格式：xxxxxxxx.apps.googleusercontent.com）</li>
+            <li>貼到上方輸入框，按儲存，再按「連接 Google Drive」</li>
+          </ol>
+        </details>`;
+    }
+  };
+  return _pub;
+})();
 
 // ================================================================
 // 4. APP STATE
@@ -2595,12 +2836,17 @@ function renderSettings() {
       <div class="setting-row">
         <div>
           <div class="setting-label">${t('storage_drive')}</div>
-          <div class="setting-desc">⚠ 開發中，目前使用 Local 備援</div>
+          <div class="setting-desc">${DriveStore.connected()?'<span style="color:var(--accent-green)">✓ 已連接並自動同步</span>':'自動備份到你的 Google Drive'}</div>
         </div>
         <div class="setting-control">
           <button class="setting-btn${mode==='drive'?' active':''}" onclick="setStorageMode('drive')">選擇</button>
         </div>
       </div>
+    </div>
+
+    <div class="settings-section card" style="margin-top:16px;">
+      <div class="settings-title">🔗 Google Drive 同步設定</div>
+      <div id="drive-cfg-inner">${DriveStore.configHtml()}</div>
     </div>
 
     <div class="settings-section card" style="margin-top:16px;">
@@ -2697,12 +2943,61 @@ function setLang(lang) {
 function setStorageMode(mode) {
   flog('STORAGE', `setStorageMode: ${appState.settings.storageMode} → ${mode}`);
   userState.settings.storageMode = mode;
+  appState.settings.storageMode  = mode;
   if (mode === 'memory') appState.storage = MemoryStore;
   else if (mode === 'drive') appState.storage = DriveStore;
   else appState.storage = LocalStore;
   save();
   showToast(`儲存方式已切換為：${mode}`, 'info');
   renderSettings();
+}
+
+function driveSaveClientId() {
+  const input = document.getElementById('drive-cid-input');
+  if (!input) return;
+  const id = input.value.trim();
+  if (!id) { showToast('請輸入 Client ID', 'warn'); return; }
+  DriveStore.setClientId(id);
+  flog('STORAGE', 'driveSaveClientId: saved');
+  showToast('✓ Client ID 已儲存，請按「連接 Google Drive」授權', 'success');
+  const saveBtn = document.getElementById('drive-cid-save');
+  if (saveBtn) saveBtn.style.opacity = '0.5';
+  const inner = document.getElementById('drive-cfg-inner');
+  if (inner) inner.innerHTML = DriveStore.configHtml();
+}
+
+async function driveConnect() {
+  try {
+    await DriveStore.connect();
+    // If drive mode selected, reload from Drive
+    if (appState.settings.storageMode === 'drive') {
+      showToast('正在從 Drive 載入最新記錄…', 'info');
+      userState = await DriveStore.load();
+    }
+    renderSettings();
+  } catch(e) {
+    flogErr('STORAGE', 'driveConnect failed', e);
+    showToast('連接失敗：' + (e.message || '未知錯誤'), 'error', 5000);
+    renderSettings();
+  }
+}
+
+function driveDisconnect() {
+  DriveStore.disconnect();
+  renderSettings();
+}
+
+async function driveSync() {
+  if (!DriveStore.connected()) { showToast('請先連接 Google Drive', 'warn'); return; }
+  try {
+    showToast('⟳ 同步中…', 'info');
+    userState = await DriveStore.load();
+    showToast('✓ 同步完成', 'success');
+    renderSettings();
+  } catch(e) {
+    flogErr('STORAGE', 'driveSync failed', e);
+    showToast('同步失敗：' + (e.message || ''), 'error', 5000);
+  }
 }
 
 function exportJSON() {
@@ -2804,7 +3099,10 @@ async function initApp() {
   else if (savedMode === 'drive') appState.storage = DriveStore;
   else appState.storage = LocalStore;
 
-  userState = appState.storage.load();
+  // Drive mode: try async load (gracefully falls back to LocalStore if not connected)
+  userState = (savedMode === 'drive')
+    ? (await DriveStore.load())
+    : appState.storage.load();
   appState.settings.lang = userState.settings?.lang || 'zh';
 
   // Language toggle
