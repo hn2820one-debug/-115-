@@ -6,30 +6,43 @@
   "title": "對數運算練習",
   "titleEn": "Logarithm Practice",
   "platform": "paul",
-  "objective": "熟練三條對數律與 ln/e 互換，能把含指數的式子取 ln 後展開成加減乘——這是 Arrhenius 線性化的核心手算技巧",
-  "isCore": false,
+  "objective": "把三條對數律與 ln/e 互換練到反射動作，能把含指數的式子取 ln 展開、或把多個對數合併成一個——這是 Arrhenius 線性化的核心手算技巧",
+  "isCore": true,
   "status": "done",
   "gradImportance": "essential",
-  "tier": "backbone",
+  "tier": "core",
   "cognition": "calculation",
   "prereq": ["S3"],
   "assessWeight": "heavy",
   "extension": "none",
-  "gradCourse": ["general"],
-  "content": "<!-- backbone 計算節：對數律演練。承 S3，為 S90/S91 Arrhenius 線性化備好手算技巧。 -->\n\n## 一、先講白話：對數律在幫你做什麼？\n\n對數律只做一件事：**把難算的「乘、除、次方」降級成好算的「加、減、乘」。** 乘變加、除變減、次方變乘係數。後面 Arrhenius 之所以能把一條彎曲的指數曲線「拉成直線」，靠的就是這個降級魔術。這一節不講新概念，純粹把 S3 的工具練到反射動作。\n\n---\n\n## 二、先記死：ln 與 e 的互換\n\n$$\\ln\\!\\left(e^{x}\\right) = x \\qquad e^{\\ln x} = x \\;(x>0) \\tag{1}$$\n\n最常出現、要能秒答的幾個值：\n\n| 式子 | 答案 | 為什麼 |\n|---|---|---|\n| $\\ln(e^{3})$ | $3$ | $\\ln(e^x)=x$ |\n| $e^{\\ln 5}$ | $5$ | $e^{\\ln x}=x$ |\n| $\\ln 1$ | $0$ | 因為 $e^{0}=1$ |\n| $\\ln e$ | $1$ | 因為 $e^{1}=e$ |\n\n---\n\n## 三、三條對數律（本節主角）\n\n$$\\ln(ab) = \\ln a + \\ln b \\tag{2}$$\n$$\\ln\\!\\frac{a}{b} = \\ln a - \\ln b \\tag{3}$$\n$$\\ln\\!\\left(a^{n}\\right) = n\\,\\ln a \\tag{4}$$\n\n**式(2)–(4) 符號表（共用）**\n\n| 符號 | 意義 | 限制 |\n|---|---|---|\n| $a,\\ b$ | 真數（被取對數的量） | 必須 $>0$ |\n| $n$ | 次方的指數 | 任意實數（可正可負可分數） |\n| $\\ln$ | 自然對數（以 $e$ 為底） | — |\n\n口訣：**乘變加（式2）、除變減（式3）、次方掉下來變乘（式4）**。式(4) 最關鍵——它把卡在右上角指數的東西拉到前面變成乘法係數。\n\n---\n\n## 四、完整計算範例：把 Arrhenius 式取 ln「拉直」（逐行）\n\n> 範例：把指數式 $D = D_0\\,e^{-Q/RT}$ 兩邊取 $\\ln$，整理成「直線」形式。每行只做一個動作。\n\n第 1 步：兩邊同時取 $\\ln$（等號才仍成立）\n\n$$\\ln D = \\ln\\!\\left(D_0\\,e^{-Q/RT}\\right)$$\n\n第 2 步：右邊是「兩個東西相乘」，用式(2) 乘變加\n\n$$\\ln D = \\ln D_0 + \\ln\\!\\left(e^{-Q/RT}\\right) \\quad\\text{（}\\ln(ab)=\\ln a+\\ln b\\text{）}$$\n\n第 3 步：右邊第二項是 $\\ln(e^{\\Box})$，用式(1) 直接抵消\n\n$$\\ln D = \\ln D_0 + \\left(-\\frac{Q}{RT}\\right) \\quad\\text{（因為 }\\ln(e^x)=x\\text{）}$$\n\n第 4 步：把常數 $\\dfrac{Q}{R}$ 抽出來，剩下變數 $\\dfrac{1}{T}$\n\n$$\\ln D = \\ln D_0 - \\frac{Q}{R}\\cdot\\frac{1}{T}$$\n\n停下來看：這已經是直線 $y = c + m\\,x$ 的形狀了——$y=\\ln D$、$x=\\dfrac{1}{T}$、斜率 $m=-\\dfrac{Q}{R}$、截距 $c=\\ln D_0$。**一條彎曲的指數曲線，被對數律拉成了一條直線。** 這就是你練對數律的終極目的（S90/S91 會正式用它求活化能）。\n\n---\n\n## 五、易混淆對比（最常見的扣分點）\n\n| 常見錯誤寫法 | 正確 |\n|---|---|\n| $\\ln(a+b) = \\ln a + \\ln b$ ❌ | 加法**不能**拆！式(2) 是「乘」變加，不是「加」變加。$\\ln(a+b)$ 無法化簡。 |\n| $\\dfrac{\\ln a}{\\ln b} = \\ln\\dfrac{a}{b}$ ❌ | 錯。式(3) 是 $\\ln\\dfrac{a}{b}=\\ln a-\\ln b$（相減），不是相除。 |\n| $\\ln(a^n) = (\\ln a)^n$ ❌ | 錯。式(4) 是 $n\\,\\ln a$（次方掉下來變乘），不是整包再 n 次方。 |\n\n> 核心：式(1)–(4) 要練到看一眼就會用，尤其式(4) 把指數拉下來、以及第四節那套「取 ln 拉直」流程。",
+  "gradCourse": ["general", "thermo"],
+  "content": "<!-- core 深講節（自足版）：對數律演練。承 S3，為 S90/S91 Arrhenius 線性化備好手算技巧。 -->\n\n## 一、先講白話：對數律在幫你做什麼？\n\n對數律只做一件事：**把難算的「乘、除、次方」降級成好算的「加、減、乘」。** 乘變加、除變減、次方變乘係數。為什麼這很重要？因為彎曲的指數曲線一旦取了對數，就會被「拉直」成一條好分析的直線——Arrhenius 能從一堆實驗數據反推活化能，靠的就是這個降級魔術。這一節不講新概念，純粹把 S3 的工具練到不假思索。\n\n---\n\n## 二、先記死：ln 與 e 的互換\n\n$$\\ln\\!\\left(e^{x}\\right) = x \\qquad e^{\\ln x} = x \\;(x>0) \\tag{1}$$\n\n最常出現、要能秒答的幾個值：\n\n| 式子 | 答案 | 為什麼 |\n|---|---|---|\n| $\\ln(e^{3})$ | $3$ | $\\ln(e^x)=x$ |\n| $e^{\\ln 5}$ | $5$ | $e^{\\ln x}=x$ |\n| $\\ln 1$ | $0$ | 因為 $e^{0}=1$ |\n| $\\ln e$ | $1$ | 因為 $e^{1}=e$ |\n\n---\n\n## 三、三條對數律（本節主角）\n\n$$\\ln(ab) = \\ln a + \\ln b \\tag{2}$$\n$$\\ln\\!\\frac{a}{b} = \\ln a - \\ln b \\tag{3}$$\n$$\\ln\\!\\left(a^{n}\\right) = n\\,\\ln a \\tag{4}$$\n\n**式(2)–(4) 符號表（共用）**\n\n| 符號 | 意義 | 限制 |\n|---|---|---|\n| $a,\\ b$ | 真數（被取對數的量） | 必須 $>0$ |\n| $n$ | 次方的指數 | 任意實數（可正可負可分數） |\n| $\\ln$ | 自然對數（以 $e$ 為底） | — |\n\n口訣：**乘變加（式2）、除變減（式3）、次方掉下來變乘（式4）**。式(4) 最關鍵——它把卡在右上角指數的東西拉到前面變成乘法係數。\n\n**這三條從哪來？**（不必硬背，理解一次就忘不掉）式(2) 其實是指數律 $e^p\\cdot e^q=e^{p+q}$ 的「倒帶版」：兩個東西相乘，等於它們的指數相加；取對數就是把指數讀出來，所以「乘」對應「加」。式(3)、(4) 同理，都是指數律的鏡像。\n\n---\n\n## 四、看圖：為什麼「乘」會變「加」？（含讀圖導引）\n\n下方畫出 $y=\\ln x$。盯著它看，就能「看見」乘變加。\n\n[CHART:functionPlot]\n\n**讀圖導引（這張圖怎麼看）**\n\n- **X 軸**：真數 $x$（只有 $x>0$ 才有圖）。**Y 軸**：$\\ln x$。\n- **通過 $(1,0)$**：$\\ln 1=0$。往右成長越來越慢（這是對數「壓縮大數」的特性）。\n- **看「乘變加」**：在 X 軸上把 $x$ 從 1 → 2 → 4 → 8（每次**乘** 2），對應的 $\\ln x$ 值是 $0 → 0.69 → 1.39 → 2.08$，每一步都**加**了同樣的 $\\ln 2\\approx0.69$。橫軸做乘法、縱軸就變成等距加法——這就是式(2) 的圖像版。\n- **最該注意的地方**：對數把「相乘的關係」攤平成「相加的關係」，所以原本指數爆衝的曲線取了 ln 之後會變成可以用直線分析。Arrhenius plot 就是利用這點。\n\n---\n\n## 五、完整範例 A：把 Arrhenius 式取 ln「拉直」（逐行）\n\n> 把指數式 $D = D_0\\,e^{-Q/RT}$ 兩邊取 $\\ln$，整理成「直線」形式。每行只做一個動作。\n\n第 1 步：兩邊同時取 $\\ln$（等號才仍成立）\n\n$$\\ln D = \\ln\\!\\left(D_0\\,e^{-Q/RT}\\right)$$\n\n第 2 步：右邊是「兩個東西相乘」，用式(2) 乘變加\n\n$$\\ln D = \\ln D_0 + \\ln\\!\\left(e^{-Q/RT}\\right) \\quad\\text{（}\\ln(ab)=\\ln a+\\ln b\\text{）}$$\n\n第 3 步：右邊第二項是 $\\ln(e^{\\Box})$，用式(1) 直接抵消\n\n$$\\ln D = \\ln D_0 + \\left(-\\frac{Q}{RT}\\right) \\quad\\text{（因為 }\\ln(e^x)=x\\text{）}$$\n\n第 4 步：把常數 $\\dfrac{Q}{R}$ 抽出來，剩下變數 $\\dfrac{1}{T}$\n\n$$\\ln D = \\ln D_0 - \\frac{Q}{R}\\cdot\\frac{1}{T}$$\n\n停下來看：這已經是直線 $y = c + m\\,x$ 的形狀了——$y=\\ln D$、$x=\\dfrac{1}{T}$、斜率 $m=-\\dfrac{Q}{R}$、截距 $c=\\ln D_0$。**一條彎曲的指數曲線，被對數律拉成了一條直線。**\n\n---\n\n## 六、完整範例 B：反方向——把多個對數合併成一個（逐行）\n\n> 化簡 $2\\ln x + \\ln 3 - \\ln y$ 成單一個對數。（這是「展開」的逆操作，考試常考）\n\n第 1 步：先處理係數——用式(4) 把 $2$ 收回指數\n\n$$2\\ln x = \\ln(x^{2}) \\quad\\text{（係數變次方，式(4) 反用）}$$\n\n第 2 步：現在式子是 $\\ln(x^2) + \\ln 3 - \\ln y$。把「加」收成「乘」（式2 反用）\n\n$$\\ln(x^{2}) + \\ln 3 = \\ln(3x^{2})$$\n\n第 3 步：把「減」收成「除」（式3 反用）\n\n$$\\ln(3x^{2}) - \\ln y = \\ln\\!\\frac{3x^{2}}{y}$$\n\n> **答案：$2\\ln x + \\ln 3 - \\ln y = \\ln\\dfrac{3x^{2}}{y}$。** 合併口訣與展開相反：係數先變次方、加變乘、減變除。\n\n---\n\n## 七、易混淆對比（最常見的扣分點）\n\n| 常見錯誤寫法 | 正確 |\n|---|---|\n| $\\ln(a+b) = \\ln a + \\ln b$ ❌ | 加法**不能**拆！式(2) 是「乘」變加，不是「加」變加。$\\ln(a+b)$ 無法化簡。 |\n| $\\dfrac{\\ln a}{\\ln b} = \\ln\\dfrac{a}{b}$ ❌ | 錯。式(3) 是 $\\ln\\dfrac{a}{b}=\\ln a-\\ln b$（相減），不是相除。 |\n| $\\ln(a^n) = (\\ln a)^n$ ❌ | 錯。式(4) 是 $n\\,\\ln a$（次方掉下來變乘），不是整包再 n 次方。 |\n| 合併時忘了係數先變次方 | $2\\ln x$ 要先寫成 $\\ln x^2$ 才能併進乘除。 |\n\n> 本節無延伸。核心：式(1)–(4) 練到反射、第五節「取 ln 拉直」與第六節「合併成單一對數」兩個方向都會。",
   "fieldLink": "把 D=D₀e^(−Q/RT) 取 ln 拉成直線（ln D 對 1/T），斜率 −Q/R 就能反推活化能 Q——S90/S91 會正式用到本節練的對數律。",
   "checkpoints": [
     { "id": "c1", "text": "能秒答 ln(eˣ)=x、e^(ln x)=x、ln1=0、ln e=1" },
-    { "id": "c2", "text": "手寫三條對數律，並各造一個例子" },
-    { "id": "c3", "text": "做 10 題 ln/e 換算與展開題（Paul 的 log/exp 練習）" },
-    { "id": "c4", "text": "能自己把一個指數式取 ln 後展開成加減乘形式" },
-    { "id": "c5", "text": "三句話總結本節" }
+    { "id": "c2", "text": "手寫三條對數律，並各造一個例子；能說出『乘變加』的由來" },
+    { "id": "c3", "text": "能把一個指數式取 ln 後展開成加減乘形式（範例 A）" },
+    { "id": "c4", "text": "能把多個對數反向合併成單一個對數（範例 B）" },
+    { "id": "c5", "text": "做 10 題 ln/e 換算與展開題（Paul 的 log 練習）" },
+    { "id": "c6", "text": "三句話總結本節" }
   ],
   "resources": [
     { "type": "link", "label": "Paul's Math Notes — Logarithm Functions", "url": "https://tutorial.math.lamar.edu/Classes/Alg/LogFunctions.aspx" },
-    { "type": "link", "label": "Paul's Math Notes — Exponential Functions", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ExpFunctions.aspx" }
+    { "type": "link", "label": "（選做）Paul's Math Notes — Exponential Functions", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ExpFunctions.aspx" }
   ],
-  "charts": [],
+  "charts": [
+    {
+      "type": "functionPlot",
+      "title": "y = ln x：橫軸每乘 2，縱軸就加一個 ln2（乘變加的圖像）",
+      "params": {
+        "curves": [
+          { "fn": "ln", "a": 1, "b": 0, "label": "y = ln x", "color": "#2dd4bf" }
+        ],
+        "xrange": [0.1, 9],
+        "yrange": [-2.5, 2.5]
+      }
+    }
+  ],
   "quiz": [
     {
       "type": "fill",
@@ -68,14 +81,14 @@
     {
       "type": "fill",
       "difficulty": "standard",
-      "q": "把 D = D₀·e^(−Q/RT) 兩邊取 ln 並展開後，ln D 等於 ln D₀ 加上哪一項？（填那一項，含負號）",
-      "answer": "−Q/(RT)",
-      "explain": "逐步：①取 ln：ln D=ln(D₀·e^(−Q/RT))。②乘變加：=ln D₀+ln(e^(−Q/RT))。③ln(eˣ)=x 抵消：=ln D₀+(−Q/RT)。所以加的那一項是 −Q/(RT)。"
+      "q": "反向合併：把 3 ln x − ln 2 寫成單一個對數。",
+      "answer": "ln(x³/2)",
+      "explain": "①係數先變次方：3 ln x = ln(x³)。②減變除：ln(x³) − ln 2 = ln(x³/2)。"
     },
     {
       "type": "single",
       "difficulty": "standard",
-      "q": "承上，ln D = ln D₀ − (Q/R)(1/T) 看成直線 y=c+mx 時，斜率 m 是？",
+      "q": "把 D = D₀·e^(−Q/RT) 兩邊取 ln 並展開後，斜率（對 1/T）是？",
       "options": [
         "−Q/R",
         "ln D₀",
@@ -83,7 +96,7 @@
         "−Q/(RT)"
       ],
       "answer": 0,
-      "explain": "對照 y=c+mx：y=ln D、x=1/T、截距 c=ln D₀、斜率 m=−Q/R。斜率是「乘在變數 1/T 前面的常數」，即 −Q/R。"
+      "explain": "ln D = ln D₀ − (Q/R)(1/T)，對照直線 y=c+mx：y=ln D、x=1/T、截距 ln D₀、斜率 m=−Q/R。"
     },
     {
       "type": "fill",

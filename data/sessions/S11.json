@@ -6,30 +6,43 @@
   "title": "鏈鎖律（二）：練習",
   "titleEn": "Chain Rule II — Practice",
   "platform": "paul",
-  "objective": "熟練鏈鎖律的各種題型，特別是 e^(kx) 與 e^(−Q/RT) 型——後者正是 Arrhenius 式對溫度微分的核心",
-  "isCore": false,
+  "objective": "熟練鏈鎖律各種題型，特別是 e^(kx) 與 e^(−Q/RT) 型——後者正是 Arrhenius 式對溫度微分的核心，本節親手做一次",
+  "isCore": true,
   "status": "done",
   "gradImportance": "essential",
-  "tier": "backbone",
+  "tier": "core",
   "cognition": "calculation",
   "prereq": ["S10"],
   "assessWeight": "heavy",
   "extension": "none",
   "gradCourse": ["general", "thermo"],
-  "content": "<!-- backbone 計算節：鏈鎖律演練。承 S10，climax 是 Arrhenius e^(−Q/RT) 對 T 的微分。 -->\n\n## 一、先講白話：把 S10 的招式練到反射\n\n概念在 S10 講完了——「外層導數 × 內層導數」。這一節不講新東西，只把它套到各種題型上練到不假思索。特別要練熟 $e^{kx}$ 型，因為它一路通到熱力學與擴散。\n\n公式回顧：\n\n$$\\frac{dy}{dx} = f'\\big(g(x)\\big)\\cdot g'(x) \\tag{1}$$\n\n---\n\n## 二、題型一：指數型 e^(kx)（最重要）\n\n外層 $e^{(\\,)}$ 微分還是 $e^{(\\,)}$，再乘內層導數。\n\n> 範例：求 $y=e^{-2x}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分（內層當一整塊）\n\n$$\\frac{d}{d\\Box}e^{\\Box} = e^{\\Box} = e^{-2x} \\quad\\text{（內層 }-2x\\text{ 代回）}$$\n\n第 2 步：乘上內層 $-2x$ 的導數 $-2$\n\n$$y' = e^{-2x}\\cdot(-2) = -2e^{-2x}$$\n\n---\n\n## 三、題型二：指數套多項式 e^(x²)\n\n> 範例：求 $y=e^{x^{2}}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分 → $e^{x^{2}}$。\n\n第 2 步：內層 $x^{2}$ 導數 → $2x$。\n\n第 3 步：相乘\n\n$$y' = e^{x^{2}}\\cdot 2x = 2x\\,e^{x^{2}}$$\n\n---\n\n## 四、題型三：含 ln 的合成\n\n外層 $\\ln(\\Box)$ 微分得 $\\dfrac{1}{\\Box}$，再乘內層導數。\n\n> 範例：求 $y=\\ln(3x^{2})$ 的導數。\n\n第 1 步：外層 $\\ln(\\Box)$ 微分 → $\\dfrac{1}{\\Box}=\\dfrac{1}{3x^{2}}$。\n\n第 2 步：內層 $3x^{2}$ 導數 → $6x$。\n\n第 3 步：相乘並化簡\n\n$$y' = \\frac{1}{3x^{2}}\\cdot 6x = \\frac{6x}{3x^{2}} = \\frac{2}{x}$$\n\n（也可先用對數律 $\\ln(3x^2)=\\ln 3+2\\ln x$，微分得 $0+2/x$，殊途同歸。）\n\n---\n\n## 五、進階範例：Arrhenius 式 e^(−Q/RT) 對溫度 T 微分（逐行）\n\n這是本節的重頭戲，也是你之後 S90 真正會用到的微分。把 $Q$、$R$ 都當常數，變數是溫度 $T$。\n\n第 1 步：辨認內外層\n\n$$\\text{外層}: e^{\\Box}\\quad\\text{內層}: \\Box = -\\frac{Q}{R}\\cdot\\frac{1}{T} = -\\frac{Q}{R}T^{-1}$$\n\n（把 $-\\dfrac{Q}{RT}$ 改寫成 $-\\dfrac{Q}{R}T^{-1}$，方便對 $T$ 用冪次法則。）\n\n第 2 步：外層微分 → $e^{-Q/RT}$（內層代回）。\n\n第 3 步：內層對 $T$ 微分（冪次法則，$T^{-1}\\to -1\\cdot T^{-2}$）\n\n$$\\frac{d}{dT}\\!\\left(-\\frac{Q}{R}T^{-1}\\right) = -\\frac{Q}{R}\\cdot(-1)T^{-2} = +\\frac{Q}{R}T^{-2} = \\frac{Q}{RT^{2}}$$\n\n第 4 步：外層 × 內層（式1）\n\n$$\\frac{d}{dT}e^{-Q/RT} = e^{-Q/RT}\\cdot\\frac{Q}{RT^{2}} \\tag{2}$$\n\n> **結果（式2）為正**：代表溫度 $T$ 上升時 $e^{-Q/RT}$ 增加——也就是擴散係數 $D$ 隨溫度上升。這跟你現場「溫度升、IMC 長更快」的直覺一致。S90 會把這個結果接回 Arrhenius。\n\n---\n\n## 六、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\dfrac{d}{dx}e^{-2x}=e^{-2x}$？ | 漏乘內層。正解 $-2e^{-2x}$。 |\n| 對 $T$ 微分時把 $Q,R$ 也微分？ | 不要。$Q,R$ 是常數，只有 $T$ 是變數。 |\n| $-\\dfrac{Q}{RT}$ 對 $T$ 微分忘了改寫 | 先寫成 $-\\dfrac{Q}{R}T^{-1}$ 再套冪次法則，符號最不易錯。 |\n\n> 本節無延伸。核心：四類題型都「外層導數 × 內層導數」，尤其熟練 $e^{kx}$ 與式(2) Arrhenius 微分。",
+  "content": "<!-- core 深講節（自足版）：鏈鎖律演練。承 S10，climax 是 Arrhenius e^(−Q/RT) 對 T 的微分。 -->\n\n## 一、先講白話：把 S10 的招式練到反射\n\n概念在 S10 講完了——「外層導數 × 內層導數」。這一節不講新東西，只把它套到各種題型上練到不假思索。特別要練熟 $e^{kx}$ 型，因為它一路通到熱力學與擴散。\n\n公式回顧：\n\n$$\\frac{dy}{dx} = f'\\big(g(x)\\big)\\cdot g'(x) \\tag{1}$$\n\n---\n\n## 二、題型一：指數型 e^(kx)（最重要）\n\n外層 $e^{(\\,)}$ 微分還是 $e^{(\\,)}$，再乘內層導數。\n\n> 範例：求 $y=e^{-2x}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分（內層當一整塊）\n\n$$\\frac{d}{d\\Box}e^{\\Box} = e^{\\Box} = e^{-2x} \\quad\\text{（內層 }-2x\\text{ 代回）}$$\n\n第 2 步：乘上內層 $-2x$ 的導數 $-2$\n\n$$y' = e^{-2x}\\cdot(-2) = -2e^{-2x}$$\n\n---\n\n## 三、題型二：指數套多項式 e^(x²)\n\n> 範例：求 $y=e^{x^{2}}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分 → $e^{x^{2}}$。\n\n第 2 步：內層 $x^{2}$ 導數 → $2x$。\n\n第 3 步：相乘\n\n$$y' = e^{x^{2}}\\cdot 2x = 2x\\,e^{x^{2}}$$\n\n---\n\n## 四、題型三：含 ln 的合成\n\n外層 $\\ln(\\Box)$ 微分得 $\\dfrac{1}{\\Box}$，再乘內層導數。\n\n> 範例：求 $y=\\ln(3x^{2})$ 的導數。\n\n第 1 步：外層 $\\ln(\\Box)$ 微分 → $\\dfrac{1}{\\Box}=\\dfrac{1}{3x^{2}}$。\n\n第 2 步：內層 $3x^{2}$ 導數 → $6x$。\n\n第 3 步：相乘並化簡\n\n$$y' = \\frac{1}{3x^{2}}\\cdot 6x = \\frac{6x}{3x^{2}} = \\frac{2}{x}$$\n\n（也可先用對數律 $\\ln(3x^2)=\\ln 3+2\\ln x$，微分得 $0+2/x$，殊途同歸。）\n\n---\n\n## 五、看圖：e^(−x) 的衰減與切線（含讀圖導引）\n\n下圖是 $y=e^{-x}$（指數衰減），附可移動切線。\n\n[CHART:functionPlot]\n\n**讀圖導引（這張互動圖怎麼看）**\n\n- **X 軸**：$x$。**Y 軸**：$y=e^{-x}$。**黃色虛線**：切線。\n- **曲線形狀**：往右快速衰減、貼近 0 但不碰到（永遠為正）。\n- **拖動 $x_0$**：切線斜率永遠是**負的**，而且等於 $-e^{-x_0}$（即 $-1\\times$ 高度）。這正是 $\\dfrac{d}{dx}e^{-x}=-e^{-x}$：內層 $-x$ 的導數 $-1$ 乘進去，讓斜率變負。\n- **最該注意的地方**：和 S9 的 $e^x$（斜率為正、等於高度）對比——這裡多了內層的 $-1$，斜率就翻成負的。內層導數會「改變斜率的正負與大小」，這就是鏈鎖律的威力。\n\n---\n\n## 六、進階範例：Arrhenius 式 e^(−Q/RT) 對溫度 T 微分（逐行）\n\n這是本節的重頭戲，也是你之後 S90 真正會用到的微分。把 $Q$、$R$ 都當常數，變數是溫度 $T$。\n\n第 1 步：辨認內外層\n\n$$\\text{外層}: e^{\\Box}\\quad\\text{內層}: \\Box = -\\frac{Q}{R}\\cdot\\frac{1}{T} = -\\frac{Q}{R}T^{-1}$$\n\n（把 $-\\dfrac{Q}{RT}$ 改寫成 $-\\dfrac{Q}{R}T^{-1}$，方便對 $T$ 用冪次法則。）\n\n第 2 步：外層微分 → $e^{-Q/RT}$（內層代回）。\n\n第 3 步：內層對 $T$ 微分（冪次法則，$T^{-1}\\to -1\\cdot T^{-2}$）\n\n$$\\frac{d}{dT}\\!\\left(-\\frac{Q}{R}T^{-1}\\right) = -\\frac{Q}{R}\\cdot(-1)T^{-2} = +\\frac{Q}{R}T^{-2} = \\frac{Q}{RT^{2}}$$\n\n第 4 步：外層 × 內層（式1）\n\n$$\\frac{d}{dT}e^{-Q/RT} = e^{-Q/RT}\\cdot\\frac{Q}{RT^{2}} \\tag{2}$$\n\n> **結果（式2）為正**：代表溫度 $T$ 上升時 $e^{-Q/RT}$ 增加——也就是擴散係數 $D$ 隨溫度上升。這跟你現場「溫度升、IMC 長更快」的直覺一致。S90 會把這個結果接回 Arrhenius。\n\n---\n\n## 七、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\dfrac{d}{dx}e^{-2x}=e^{-2x}$？ | 漏乘內層。正解 $-2e^{-2x}$。 |\n| 對 $T$ 微分時把 $Q,R$ 也微分？ | 不要。$Q,R$ 是常數，只有 $T$ 是變數。 |\n| $-\\dfrac{Q}{RT}$ 對 $T$ 微分忘了改寫 | 先寫成 $-\\dfrac{Q}{R}T^{-1}$ 再套冪次法則，符號最不易錯。 |\n| 內層導數只影響大小？ | 還會影響正負（如 $-x$ 的 $-1$ 讓斜率變負）。 |\n\n> 本節無延伸。核心：四類題型都「外層導數 × 內層導數」，尤其熟練 $e^{kx}$ 與式(2) Arrhenius 微分。",
   "fieldLink": "Arrhenius 圖斜率與『溫度升、D 增、IMC 長更快』都來自 d/dT[e^(−Q/RT)]=e^(−Q/RT)·Q/(RT²)（式2，為正）；S90 會接回去。",
   "checkpoints": [
     { "id": "c1", "text": "能背鏈鎖律並口述（外層導數 × 內層導數）" },
     { "id": "c2", "text": "特別確認 d/dx[e^(−kx)] = −k·e^(−kx)，符號不漏" },
-    { "id": "c3", "text": "完成 Paul 的鏈鎖律練習至少 8 題" },
-    { "id": "c4", "text": "能跟著第五節，把 e^(−Q/RT) 對 T 微分一次" },
-    { "id": "c5", "text": "標記做錯的題型並寫下錯誤原因" },
+    { "id": "c3", "text": "拖動互動圖切線，確認 e^(−x) 的斜率永遠是 −e^(−x)（負、等於 −高度）" },
+    { "id": "c4", "text": "完成 Paul 的鏈鎖律練習至少 8 題" },
+    { "id": "c5", "text": "能跟著第六節，把 e^(−Q/RT) 對 T 微分一次" },
     { "id": "c6", "text": "三句話總結本節" }
   ],
   "resources": [
     { "type": "link", "label": "Paul's Math Notes — Chain Rule", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ChainRule.aspx" }
   ],
-  "charts": [],
+  "charts": [
+    {
+      "type": "functionPlot",
+      "title": "y = e^(−x) 與可移動切線：斜率永遠是 −e^(−x)（負、等於 −高度）",
+      "params": {
+        "curves": [
+          { "fn": "exp", "a": 1, "k": -1, "b": 0, "label": "y = e^(−x)", "color": "#a78bfa" }
+        ],
+        "xrange": [-1, 3],
+        "yrange": [-0.5, 3],
+        "tangent": { "curve": 0, "x0": 1, "adjustable": true }
+      }
+    }
+  ],
   "quiz": [
     {
       "type": "single",
