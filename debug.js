@@ -480,3 +480,15 @@ flog('UI', 'debug.js loaded', {
   ua:   navigator.userAgent.slice(0, 80),
   tip:  'Ctrl+Shift+D to open panel'
 });
+
+// ── 7. Auto-open panel when URL hash contains "debug" ────────────
+// tool.html 的「取得 Log」按鈕會帶 #debug 過來，頁面載入完後自動彈出面板
+if (location.hash.toLowerCase().includes('debug')) {
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      if (!FL_LOG._panel) _buildPanel();
+      if (!FL_LOG._panel._open) _togglePanel();
+      flog('UI', 'debug panel auto-opened via URL hash');
+    }, 1200); // 等 app.js 初始化完成
+  });
+}
