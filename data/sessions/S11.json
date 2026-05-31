@@ -1,0 +1,102 @@
+{
+  "id": "S11",
+  "stage": 1,
+  "week": 1,
+  "order": 11,
+  "title": "鏈鎖律（二）：練習",
+  "titleEn": "Chain Rule II — Practice",
+  "platform": "paul",
+  "objective": "熟練鏈鎖律的各種題型，特別是 e^(kx) 與 e^(−Q/RT) 型——後者正是 Arrhenius 式對溫度微分的核心",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "backbone",
+  "cognition": "calculation",
+  "prereq": ["S10"],
+  "assessWeight": "heavy",
+  "extension": "none",
+  "gradCourse": ["general", "thermo"],
+  "content": "<!-- backbone 計算節：鏈鎖律演練。承 S10，climax 是 Arrhenius e^(−Q/RT) 對 T 的微分。 -->\n\n## 一、先講白話：把 S10 的招式練到反射\n\n概念在 S10 講完了——「外層導數 × 內層導數」。這一節不講新東西，只把它套到各種題型上練到不假思索。特別要練熟 $e^{kx}$ 型，因為它一路通到熱力學與擴散。\n\n公式回顧：\n\n$$\\frac{dy}{dx} = f'\\big(g(x)\\big)\\cdot g'(x) \\tag{1}$$\n\n---\n\n## 二、題型一：指數型 e^(kx)（最重要）\n\n外層 $e^{(\\,)}$ 微分還是 $e^{(\\,)}$，再乘內層導數。\n\n> 範例：求 $y=e^{-2x}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分（內層當一整塊）\n\n$$\\frac{d}{d\\Box}e^{\\Box} = e^{\\Box} = e^{-2x} \\quad\\text{（內層 }-2x\\text{ 代回）}$$\n\n第 2 步：乘上內層 $-2x$ 的導數 $-2$\n\n$$y' = e^{-2x}\\cdot(-2) = -2e^{-2x}$$\n\n---\n\n## 三、題型二：指數套多項式 e^(x²)\n\n> 範例：求 $y=e^{x^{2}}$ 的導數。\n\n第 1 步：外層 $e^{\\Box}$ 微分 → $e^{x^{2}}$。\n\n第 2 步：內層 $x^{2}$ 導數 → $2x$。\n\n第 3 步：相乘\n\n$$y' = e^{x^{2}}\\cdot 2x = 2x\\,e^{x^{2}}$$\n\n---\n\n## 四、題型三：含 ln 的合成\n\n外層 $\\ln(\\Box)$ 微分得 $\\dfrac{1}{\\Box}$，再乘內層導數。\n\n> 範例：求 $y=\\ln(3x^{2})$ 的導數。\n\n第 1 步：外層 $\\ln(\\Box)$ 微分 → $\\dfrac{1}{\\Box}=\\dfrac{1}{3x^{2}}$。\n\n第 2 步：內層 $3x^{2}$ 導數 → $6x$。\n\n第 3 步：相乘並化簡\n\n$$y' = \\frac{1}{3x^{2}}\\cdot 6x = \\frac{6x}{3x^{2}} = \\frac{2}{x}$$\n\n（也可先用對數律 $\\ln(3x^2)=\\ln 3+2\\ln x$，微分得 $0+2/x$，殊途同歸。）\n\n---\n\n## 五、進階範例：Arrhenius 式 e^(−Q/RT) 對溫度 T 微分（逐行）\n\n這是本節的重頭戲，也是你之後 S90 真正會用到的微分。把 $Q$、$R$ 都當常數，變數是溫度 $T$。\n\n第 1 步：辨認內外層\n\n$$\\text{外層}: e^{\\Box}\\quad\\text{內層}: \\Box = -\\frac{Q}{R}\\cdot\\frac{1}{T} = -\\frac{Q}{R}T^{-1}$$\n\n（把 $-\\dfrac{Q}{RT}$ 改寫成 $-\\dfrac{Q}{R}T^{-1}$，方便對 $T$ 用冪次法則。）\n\n第 2 步：外層微分 → $e^{-Q/RT}$（內層代回）。\n\n第 3 步：內層對 $T$ 微分（冪次法則，$T^{-1}\\to -1\\cdot T^{-2}$）\n\n$$\\frac{d}{dT}\\!\\left(-\\frac{Q}{R}T^{-1}\\right) = -\\frac{Q}{R}\\cdot(-1)T^{-2} = +\\frac{Q}{R}T^{-2} = \\frac{Q}{RT^{2}}$$\n\n第 4 步：外層 × 內層（式1）\n\n$$\\frac{d}{dT}e^{-Q/RT} = e^{-Q/RT}\\cdot\\frac{Q}{RT^{2}} \\tag{2}$$\n\n> **結果（式2）為正**：代表溫度 $T$ 上升時 $e^{-Q/RT}$ 增加——也就是擴散係數 $D$ 隨溫度上升。這跟你現場「溫度升、IMC 長更快」的直覺一致。S90 會把這個結果接回 Arrhenius。\n\n---\n\n## 六、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\dfrac{d}{dx}e^{-2x}=e^{-2x}$？ | 漏乘內層。正解 $-2e^{-2x}$。 |\n| 對 $T$ 微分時把 $Q,R$ 也微分？ | 不要。$Q,R$ 是常數，只有 $T$ 是變數。 |\n| $-\\dfrac{Q}{RT}$ 對 $T$ 微分忘了改寫 | 先寫成 $-\\dfrac{Q}{R}T^{-1}$ 再套冪次法則，符號最不易錯。 |\n\n> 本節無延伸。核心：四類題型都「外層導數 × 內層導數」，尤其熟練 $e^{kx}$ 與式(2) Arrhenius 微分。",
+  "fieldLink": "Arrhenius 圖斜率與『溫度升、D 增、IMC 長更快』都來自 d/dT[e^(−Q/RT)]=e^(−Q/RT)·Q/(RT²)（式2，為正）；S90 會接回去。",
+  "checkpoints": [
+    { "id": "c1", "text": "能背鏈鎖律並口述（外層導數 × 內層導數）" },
+    { "id": "c2", "text": "特別確認 d/dx[e^(−kx)] = −k·e^(−kx)，符號不漏" },
+    { "id": "c3", "text": "完成 Paul 的鏈鎖律練習至少 8 題" },
+    { "id": "c4", "text": "能跟著第五節，把 e^(−Q/RT) 對 T 微分一次" },
+    { "id": "c5", "text": "標記做錯的題型並寫下錯誤原因" },
+    { "id": "c6", "text": "三句話總結本節" }
+  ],
+  "resources": [
+    { "type": "link", "label": "Paul's Math Notes — Chain Rule", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ChainRule.aspx" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "d/dx[e^(−3x)] = ?",
+      "options": [
+        "−3e^(−3x)",
+        "e^(−3x)",
+        "3e^(−3x)",
+        "−e^(−3x)/3"
+      ],
+      "answer": 0,
+      "explain": "外層 e^(□) 微分還是 e^(−3x)；內層 −3x 導數是 −3；相乘得 −3e^(−3x)。負號與係數 3 都不能漏。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "basic",
+      "q": "求 y=e^(x²) 的導數 y'。（填完整結果）",
+      "answer": "2x·e^(x²)",
+      "explain": "外層 e^(□) 微分得 e^(x²)；內層 x² 導數得 2x；相乘得 2x·e^(x²)。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "對 e^(−Q/RT) 的 T 微分用鏈鎖律時，Q 與 R 要當常數、只有 T 是變數。",
+      "answer": true,
+      "explain": "正確。Arrhenius 式裡 Q（活化能）與 R（氣體常數）都是常數，微分對象是溫度 T。把它們當常數提著，只對含 T 的部分動手。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "求 y=ln(5x³) 的導數。",
+      "options": [
+        "1/(5x³)",
+        "3/x",
+        "15x²",
+        "5/x"
+      ],
+      "answer": 1,
+      "explain": "外層 ln(□) 導數 1/(5x³)；內層 5x³ 導數 15x²；相乘 15x²/(5x³)=3/x。（或用對數律 ln(5x³)=ln5+3ln x，微分得 3/x。）"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "求 y=(x²+1)⁴ 的導數 y'。（填完整結果）",
+      "answer": "8x(x²+1)³",
+      "explain": "外層 (□)⁴ 導數 4(□)³=4(x²+1)³；內層 x²+1 導數 2x；相乘 4(x²+1)³·2x=8x(x²+1)³。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "d/dx[e^(0.5x)] 在 x=0 的值是多少？",
+      "options": [
+        "0.5",
+        "1",
+        "0",
+        "2"
+      ],
+      "answer": 0,
+      "explain": "d/dx[e^(0.5x)]=0.5·e^(0.5x)（內層 0.5x 導數 0.5）。代入 x=0：0.5·e⁰=0.5×1=0.5。"
+    },
+    {
+      "type": "free",
+      "difficulty": "challenge",
+      "q": "進階：把 Arrhenius 式 D=D₀·e^(−Q/RT) 對溫度 T 微分，求 dD/dT。（D₀、Q、R 為常數）寫出每一步。",
+      "explain": "答對不易，重點在親手做出 S90 會用到的這個微分，並確認結果為正（溫度升、D 增）。",
+      "strategy": "策略：D₀ 是常數提著，對 e^(−Q/RT) 用鏈鎖律；先把 −Q/RT 改寫成 −(Q/R)T⁻¹ 再對 T 微分。\n① dD/dT = D₀ · d/dT[e^(−Q/RT)]（常數 D₀ 提出）。\n② 外層 e^(□) 微分 → e^(−Q/RT)。\n③ 內層 −(Q/R)T⁻¹ 對 T 微分：用冪次法則 T⁻¹→−T⁻²，得 −(Q/R)(−1)T⁻² = +(Q/R)T⁻² = Q/(RT²)。\n④ 外×內：d/dT[e^(−Q/RT)] = e^(−Q/RT)·Q/(RT²)。\n⑤ 乘回 D₀：dD/dT = D₀·e^(−Q/RT)·Q/(RT²) = D·Q/(RT²)（因 D=D₀e^(−Q/RT)）。\n結論：dD/dT > 0（Q、R、T²、D 都為正），所以溫度升高 D 一定增加。心法：含 e 的合成微分『外層不變、乘內層導數』；遇到分母有 T 先改寫成負次方，符號最不會錯。這題就是 S90 Arrhenius 的微分版預習。"
+    }
+  ]
+}

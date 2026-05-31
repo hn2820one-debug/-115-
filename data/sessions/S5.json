@@ -1,0 +1,68 @@
+{
+  "id": "S5",
+  "stage": 1,
+  "week": 1,
+  "order": 5,
+  "title": "極限概念（一）",
+  "titleEn": "Limits I — Concept",
+  "platform": "junyi",
+  "objective": "用圖形直覺理解「x 趨近某值時 y 趨近什麼」，並建立關鍵觀念：極限看的是『趨近』，函數在該點可以沒有定義",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "backbone",
+  "cognition": "concept",
+  "prereq": ["S2"],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": ["general"],
+  "content": "<!-- backbone 概念節：極限直覺。不碰 ε-δ，重點在『趨近、不一定到達』。為 S7 導數定義鋪路。 -->\n\n## 一、先講白話：極限問的是「快到的時候，往哪裡靠？」\n\n你開車往一面牆靠近，車速越來越慢。問題不是「你撞到牆沒」，而是「你正在往哪個位置靠」。<span class=\"term-zh\">極限</span>（<span class=\"term-en\">limit</span>）就是在問這件事：當輸入 $x$ 越來越靠近某個值時，輸出 $y$ 正在往哪個數字靠過去——**不管它最後有沒有真的到。**\n\n這個「有沒有真的到不重要、往哪靠才重要」的觀念，是下一步定義導數（S7）的關鍵。先把它建立起來。\n\n---\n\n## 二、正式記號與定義\n\n$$\\lim_{x \\to a} f(x) = L \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $\\displaystyle\\lim$ | <span class=\"term-zh\">極限</span>（<span class=\"term-en\">limit</span>） | 「趨近時的去向」 |\n| $x \\to a$ | $x$ 趨近 $a$ | 讀作「x approaches a」；$x$ 可從左、右兩側靠近，但不等於 $a$ |\n| $f(x)$ | 函數值 | 隨 $x$ 變動的輸出 |\n| $L$ | 極限值 | $x$ 靠近 $a$ 時 $f(x)$ 所趨近的那個數 |\n\n白話讀法：「當 $x$ 趨近 $a$ 時，$f(x)$ 趨近 $L$。」\n\n---\n\n## 三、最重要的觀念：趨近 ≠ 到達\n\n極限只看「$x$ 靠近 $a$ 的路上、$f(x)$ 往哪走」，**完全不管 $x=a$ 那一點本身發生什麼事**。所以會出現一種看似奇怪、其實很關鍵的情況：函數在 $a$ 點沒有定義，極限卻存在。\n\n例子：考慮 $\\displaystyle f(x)=\\frac{x^{2}-1}{x-1}$。\n\n直接把 $x=1$ 代入，分母 $=0$，函數在 $x=1$ **沒有定義**（那裡是個破洞）。但先化簡：\n\n$$\\frac{x^{2}-1}{x-1} = \\frac{(x+1)(x-1)}{x-1} = x+1 \\quad(x\\neq 1)\\text{（分子因式分解，約掉公因子 }x-1\\text{）}$$\n\n所以當 $x$ 從兩側趨近 1 時，$f(x)$ 趨近 $1+1=2$：\n\n$$\\lim_{x \\to 1}\\frac{x^{2}-1}{x-1} = 2$$\n\n圖上的樣子：一條 $y=x+1$ 的直線，但在 $x=1$ 處挖了一個空心洞。$x$ 從左右靠近時，$y$ 明明白白往 2 靠——即使 $x=1$ 那一點是空的。**這就是「極限存在、但函數在該點無定義」的典型。**\n\n---\n\n## 四、簡單情況：能直接代入就直接代入\n\n如果函數在 $a$ 點很「乖」（連續、沒有破洞），極限就等於直接代入的值：\n\n$$\\lim_{x \\to 2}(3x+1) = 3(2)+1 = 7 \\quad\\text{（直接代入 }x=2\\text{）}$$\n\n多數多項式都屬於這種「好算」的情況。真正需要技巧的是下一節 S6 的 $0/0$ 型——那時就得像第三節那樣先化簡再代入。\n\n---\n\n## 五、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| 極限值 $L$ 一定等於 $f(a)$？ | 不一定。$f(a)$ 可以無定義或不等於 $L$；極限只看「趨近的去向」。 |\n| $x \\to a$ 代表 $x = a$？ | 不是。$x$ 無限靠近 $a$ 但不等於 $a$。等號那一點刻意被排除。 |\n\n> 本節無延伸。核心：看懂式(1) 的記號、牢記「趨近 ≠ 到達」、會用「化簡消破洞」處理 0/0 的雛型。",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "看完均一「極限與連續」影片（或 3B1B Limits）" },
+    { "id": "c2", "text": "能用「趨近、不一定到達」一句話說明極限" },
+    { "id": "c3", "text": "在紙上畫出一個極限存在、但函數在該點挖洞無定義的例子" },
+    { "id": "c4", "text": "三句話總結本節" }
+  ],
+  "resources": [
+    { "type": "video", "label": "均一：極限與連續", "url": "https://www.junyiacademy.org" },
+    { "type": "video", "label": "3Blue1Brown：Limits", "url": "https://www.youtube.com/c/3blue1brown" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "fill",
+      "difficulty": "basic",
+      "q": "求 lim(x→3) (2x+1) = ?（這是好算的直接代入型，填數字）",
+      "answer": "7",
+      "explain": "(2x+1) 是連續的多項式，直接代入 x=3：2×3+1=7。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "若 lim(x→a) f(x) = L，則一定有 f(a) = L。",
+      "answer": false,
+      "explain": "錯。極限只看「x 趨近 a 時 f(x) 往哪靠」，f(a) 本身可以無定義、或等於別的值。最典型的就是 (x²−1)/(x−1) 在 x=1 無定義，但極限是 2。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "對 f(x)=(x²−1)/(x−1)，下列敘述何者正確？",
+      "options": [
+        "f(1) 有定義且等於 2",
+        "f(1) 無定義，但 lim(x→1) f(x) = 2",
+        "f(1) 無定義，極限也不存在",
+        "f(1)=0"
+      ],
+      "answer": 1,
+      "explain": "x=1 時分母為 0，故 f(1) 無定義（圖上是破洞）。但化簡後 f(x)=x+1（x≠1），x 趨近 1 時 f(x) 趨近 2，所以極限存在且為 2。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "求 lim(x→0) (x² + 5x + 3) = ?（多項式，直接代入，填數字）",
+      "answer": "3",
+      "explain": "多項式處處連續，直接代入 x=0：0²+5×0+3 = 3。"
+    }
+  ]
+}

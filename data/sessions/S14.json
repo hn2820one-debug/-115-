@@ -1,0 +1,44 @@
+{
+  "id": "S14",
+  "stage": 1,
+  "week": 1,
+  "order": 14,
+  "title": "Week 1 整理",
+  "titleEn": "Week 1 Summary",
+  "platform": "self",
+  "objective": "把本週所有微分公式與規則整理成一張手寫『微分一頁通』，用輸出強化記憶並找出自己的弱項",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "support",
+  "tier": "tool",
+  "cognition": "synthesis",
+  "prereq": ["S8", "S11"],
+  "assessWeight": "light",
+  "extension": "none",
+  "gradCourse": ["general"],
+  "content": "<!-- tool 節：輸出整理任務。下表是參考骨架，重點動作是『自己手寫一遍』。 -->\n\n## 本節是「輸出」，不是「再讀一遍」\n\n讀過不等於記住。這一節的核心動作只有一個：**親手把本週公式默寫成一張 A4 的「微分一頁通」**。下面的表格只是骨架對照，寫的時候先蓋住、自己默，再打開核對。\n\n---\n\n## 微分公式骨架（核對用）\n\n### 基本導數\n\n| 函數 $f(x)$ | 導數 $f'(x)$ | 出處 |\n|---|---|---|\n| $c$（常數） | $0$ | S8 |\n| $x^{n}$ | $n\\,x^{n-1}$ | S8 冪次法則 |\n| $e^{x}$ | $e^{x}$ | S9 |\n| $e^{kx}$ | $k\\,e^{kx}$ | S9 / S11 |\n| $\\ln x$ | $1/x$ | S9 |\n\n### 三條規則\n\n- **常數倍**：$(c\\,f)' = c\\,f'$\n- **和差**：$(f \\pm g)' = f' \\pm g'$\n- **鏈鎖律**：$\\dfrac{d}{dx}f(g(x)) = f'(g(x))\\cdot g'(x)$（外層導數 × 內層導數）\n\n### 應用：求極值四步\n\n求導 → 令 $f'(x)=0$ 解臨界點 → 一階導數測試（兩側 $f'$ 變號）→ 代回求極值。\n\n---\n\n## 本週的三個現場鉤子（一句話記住）\n\n- <span class=\"term-zh\">升溫速率</span>（<span class=\"term-en\">ramp rate</span>）$=\\dfrac{dT}{dt}$＝溫度曲線的斜率（S7）。\n- 最佳製程參數＝目標函數的極值（S12）。\n- <span class=\"term-en\">Arrhenius</span> 線性化＝取 $\\ln$ + 對數律（S3/S4），微分版見 S11 式(2)。",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "蓋住骨架，自己默寫本週全部微分公式成一張 A4「微分一頁通」" },
+    { "id": "c2", "text": "在每個公式旁用一句白話寫它在做什麼" },
+    { "id": "c3", "text": "打開核對，圈出默錯或寫不出的 2 條（這就是你的弱項）" },
+    { "id": "c4", "text": "三句話總結：本週我最有把握與最不熟的各是什麼" }
+  ],
+  "resources": [],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "multi",
+      "difficulty": "basic",
+      "q": "（自我檢查）以下哪些是正確的微分公式？（可複選）",
+      "options": [
+        "d/dx(x³) = 3x²",
+        "d/dx(eˣ) = x·eˣ⁻¹",
+        "d/dx(ln x) = 1/x",
+        "d/dx(e^(2x)) = 2e^(2x)"
+      ],
+      "answer": [0, 2, 3],
+      "explain": "①d/dx(x³)=3x²（冪次法則）✓。②d/dx(eˣ)=eˣ，不是 x·eˣ⁻¹（那是亂套冪次法則）✗。③d/dx(ln x)=1/x ✓。④d/dx(e^(2x))=2e^(2x)（鏈鎖律，k=2）✓。若選錯第②項，回看 S9。"
+    }
+  ]
+}

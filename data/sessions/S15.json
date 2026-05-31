@@ -1,0 +1,45 @@
+{
+  "id": "S15",
+  "stage": 1,
+  "week": 1,
+  "order": 15,
+  "title": "Week 1 綜合練習（計時）",
+  "titleEn": "Week 1 Mixed Practice (Timed)",
+  "platform": "paul",
+  "objective": "在計時壓力下完成混合微分題，量測自己的熟練度與速度，找出考試情境下會卡住的題型",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "tool",
+  "cognition": "calculation",
+  "prereq": ["S8", "S11", "S12"],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": ["general"],
+  "content": "<!-- tool 節：計時測驗任務。可用本 App「練習」頁的計時模式跨節抽題實作。 -->\n\n## 為什麼要「計時」？\n\n平常慢慢做會的，考試時不一定來得及。這一節把本週所有工具放一起、加上時間壓力，測的不是「會不會」，而是「夠不夠熟」。會但很慢，等於還沒過關。\n\n---\n\n## 做法\n\n1. 打開本 App 的<strong>「練習」頁</strong>，選 Week 1 範圍、開啟<strong>計時模式</strong>（或用 Paul 的混合微分題自行計時）。\n2. 設 **30 分鐘**，做 **12 題**：\n   - 多項式微分 4 題（冪次法則 S8）\n   - 指數/對數微分 4 題（S9）\n   - 鏈鎖律 4 題（S10/S11）\n3. 中途不查公式表（模擬考試）。做完才對答案、圈錯題。\n\n---\n\n## 評分標準\n\n| 正確率 | 判讀 | 下一步 |\n|---|---|---|\n| ≥ 10/12 | 熟練，可放心進 Week 2 | 直接 S16 收尾 |\n| 8–9/12 | 堪用，但有特定弱項 | 在錯的題型多練 2 組 |\n| < 8/12 | 還不夠熟 | 回看對應節次影片，明天重測一次 |\n\n速度也記一筆：若 30 分鐘做不完 12 題，代表某些步驟還不夠自動化（通常是鏈鎖律或符號處理），那就是 S16 要補的重點。",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "用練習頁計時模式（或自備計時器）30 分鐘內做完 12 題混合微分" },
+    { "id": "c2", "text": "全程不查公式表，模擬考試情境" },
+    { "id": "c3", "text": "對答案、記錄正確率與用時" },
+    { "id": "c4", "text": "圈出所有錯題，準備 S16 訂正" }
+  ],
+  "resources": [
+    { "type": "link", "label": "Paul's Math Notes — Differentiation 練習題", "url": "https://tutorial.math.lamar.edu/Problems/CalcI/DiffFormulas.aspx" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "（自我評估，誠實作答）這次計時測驗你的正確率落在哪一檔？",
+      "options": [
+        "≥10/12 熟練",
+        "8–9/12 堪用",
+        "<8/12 需加強"
+      ],
+      "answer": 0,
+      "explain": "無論落在哪一檔都沒關係——這題只是讓你誠實記錄。S16 會帶你針對錯題訂正。重點是知道自己現在站在哪裡。"
+    }
+  ]
+}

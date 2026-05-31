@@ -1,0 +1,42 @@
+{
+  "id": "S1",
+  "stage": 1,
+  "week": 1,
+  "order": 1,
+  "title": "開局設定",
+  "titleEn": "Setup & Goal Setting",
+  "platform": "self",
+  "objective": "建立學習節奏、設定兩年目標、把所有學習平台加入書籤，讓三個月的補底有可執行的軌道",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "support",
+  "tier": "tool",
+  "cognition": "synthesis",
+  "prereq": [],
+  "assessWeight": "light",
+  "extension": "field",
+  "gradCourse": ["general"],
+  "content": "<!-- tool 節：動作導向（設定/書籤/輸出），非教學長文。 -->\n\n## 這是你的起跑線\n\n這份補底計劃共 **192 節 × 45 分鐘 = 144 小時**，分三階段、12 週。三個月後你坐進中興材料所的教室時，腦中要有畫面，而不是一片空白。\n\n這一節不教知識，只做一件事：**把軌道鋪好**。把平台收藏好、把目標寫下來、把時段排進行事曆。動作做完，後面 191 節才跑得動。\n\n---\n\n## 四條學習原則（整段計劃都適用）\n\n1. **小檢核點是「動作」不是「概念」**——做得到、打得了勾才算數。看懂不等於學會。\n2. **每節最後寫「三句話總結」**：用自己的話說出這節學到什麼。這是「求懂」的把關動作，騙得了別人騙不了這三句話。\n3. **看到「現場連結」停 30 秒**：想想在 ASMPT 見過的哪個情況。你的現場經驗是別人沒有的鉤子。\n4. **落後不要有罪惡感**，從落後處繼續，不要跳過核心章節（Week 1-2 微積分、Week 6 擴散、Week 7 相圖、Week 9 自由能）。\n\n---\n\n## 學習地圖（先有全局，再走細節）\n\n```\n第一階段（Week 1-4，64 節）：數學工具 + 物理化學地基\n第二階段（Week 5-8，64 節）：材料科學核心（結構→缺陷→擴散→相圖→相變）\n第三階段（Week 9-12，64 節）：固態熱力學先修 + 整合\n```\n\n本週（Week 1）是**微積分 I**：函數、極限、導數。它是後面所有計算的底層工具——擴散的 <span class=\"term-en\">Arrhenius</span> 式、熱力學的 <span class=\"term-zh\">偏微分</span>（<span class=\"term-en\">partial derivative</span>）全都建立在這週的東西上。\n\n---\n\n## 你的優勢：現場經驗不是零基礎\n\n你有 ASMPT 半導體封裝現場經驗——<span class=\"term-en\">TCB</span> 製程、<span class=\"term-zh\">介金屬化合物</span>（<span class=\"term-en\">IMC</span>）生長、<span class=\"term-zh\">熱膨脹係數</span>（<span class=\"term-en\">TEC</span>）不匹配。這些現象的理論根源，正是這三個月要補的。每一個「現場連結」方塊，就是把你的經驗掛上理論鉤子的地方。\n\n> 「節奏比強度重要。」落後就從落後處繼續，不要跳過、不要放棄。三個月後，你坐進教室時，腦中會有畫面。",
+  "fieldLink": "你在 ASMPT 每天看到的：焊料回流、bond profile、IMC 生長——這三個月把它們的理論根源補起來，開學會比同學多一個維度。",
+  "checkpoints": [
+    { "id": "c1", "text": "讀完本節與上方四條學習原則" },
+    { "id": "c2", "text": "把均一、Khan Academy、3Blue1Brown、Paul's Math、DoITPoMS 五個平台加入瀏覽器書籤" },
+    { "id": "c3", "text": "在筆記本第一頁寫下你的兩年目標（為什麼讀這個碩士）" },
+    { "id": "c4", "text": "在行事曆排好每週固定讀書時段（平日 2 節、週末 3 節）" },
+    { "id": "c5", "text": "三句話總結：我打算怎麼用這三個月" }
+  ],
+  "resources": [
+    { "type": "link", "label": "均一教育平台（數學中文影片）", "url": "https://www.junyiacademy.org" },
+    { "type": "link", "label": "Khan Academy", "url": "https://www.khanacademy.org" },
+    { "type": "link", "label": "Paul's Online Math Notes（練習題）", "url": "https://tutorial.math.lamar.edu" },
+    { "type": "link", "label": "DoITPoMS TLP（材料互動教材）", "url": "https://www.doitpoms.ac.uk/tlplib/index.php" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "free",
+      "difficulty": "basic",
+      "q": "用三句話寫下：你為什麼要讀中興材料所？這三個月你最想搞懂什麼？（自由作答，只存檔不評分，開學前可回來重看）"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "id": "S9",
+  "stage": 1,
+  "week": 1,
+  "order": 9,
+  "title": "指數與對數的導數",
+  "titleEn": "Derivatives of Exponential & Logarithm",
+  "platform": "junyi",
+  "objective": "記住 d(eˣ)/dx=eˣ（導數是自己）與 d(ln x)/dx=1/x，並能處理 e^(kx) 型——這些是熱力學與擴散反覆出現的微分",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "backbone",
+  "cognition": "calculation",
+  "prereq": ["S8", "S3"],
+  "assessWeight": "heavy",
+  "extension": "none",
+  "gradCourse": ["general", "thermo"],
+  "content": "<!-- backbone 計算節：指數與對數的導數。承 S3、S8，為 S11 鏈鎖律與 S90 Arrhenius 備料。 -->\n\n## 一、先講白話：有一個函數，微分後還是它自己\n\n冪次法則微分後次方會降一階（$x^3\\to x^2$）。但有一個函數很特別：微分後**原封不動還是它自己**——那就是 $e^x$。這個性質讓 $e^x$ 成為整個熱力學與擴散的寵兒。這一節把指數與對數的導數一次記牢。\n\n---\n\n## 二、指數函數的導數：導數是自己\n\n$$\\frac{d}{dx}e^{x} = e^{x} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $e^{x}$ | 以自然底數 $e$ 為底的指數函數 | 見 S3 |\n| $\\dfrac{d}{dx}e^{x}$ | 它對 $x$ 的導數 | 結果仍是 $e^{x}$ |\n\n這正是 S3 說的「成長速度等於自己當下的值」的數學寫法。也代表 $e^x$ 在每一點的切線斜率，剛好等於該點的函數高度。\n\n當指數上不是單純的 $x$、而是 $kx$（$k$ 為常數）時，要多乘一個 $k$（這是 S10/S11 鏈鎖律的預告）：\n\n$$\\frac{d}{dx}e^{kx} = k\\,e^{kx} \\tag{2}$$\n\n直覺：指數上的變化「快了 $k$ 倍」，所以整體變化率也放大 $k$ 倍。例如 $\\dfrac{d}{dx}e^{-x} = -e^{-x}$（這裡 $k=-1$）。\n\n---\n\n## 三、對數函數的導數\n\n$$\\frac{d}{dx}\\ln x = \\frac{1}{x} \\tag{3}$$\n\n**式(3) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $\\ln x$ | 自然對數（見 S3） | 定義域 $x>0$ |\n| $\\dfrac{1}{x}$ | 它的導數 | $x$ 越大、斜率越小（曲線越走越平，呼應 S3 圖形） |\n\n一個好用的小結果：$\\ln(kx)$ 的導數**和 $\\ln x$ 一樣是 $1/x$**，因為常數倍在對數裡只是加一個常數、微分後消失：\n\n$$\\ln(kx) = \\ln k + \\ln x \\;\\Rightarrow\\; \\frac{d}{dx}\\ln(kx) = 0 + \\frac{1}{x} = \\frac{1}{x} \\tag{4}$$\n\n（用了 S4 的對數律把乘積拆成相加，再微分。常數 $\\ln k$ 的導數為 0。）\n\n---\n\n## 四、完整範例（逐行）\n\n> 範例：求 $\\dfrac{d}{dx}\\big(3e^{x} + 2\\ln x - e^{-x}\\big)$。\n\n第 1 步：和差規則逐項拆開（S8 式4）\n\n$$= \\frac{d}{dx}(3e^{x}) + \\frac{d}{dx}(2\\ln x) - \\frac{d}{dx}(e^{-x})$$\n\n第 2 步：第一項，係數 3 提出，$e^x$ 導數還是 $e^x$（式1）\n\n$$\\frac{d}{dx}(3e^{x}) = 3e^{x}$$\n\n第 3 步：第二項，係數 2 提出，$\\ln x$ 導數是 $1/x$（式3）\n\n$$\\frac{d}{dx}(2\\ln x) = 2\\cdot\\frac{1}{x} = \\frac{2}{x}$$\n\n第 4 步：第三項 $e^{-x}$，用式(2) 取 $k=-1$，得 $-e^{-x}$\n\n$$\\frac{d}{dx}(e^{-x}) = -e^{-x}$$\n\n第 5 步：組合（注意原式第三項前面有減號）\n\n$$= 3e^{x} + \\frac{2}{x} - (-e^{-x}) = 3e^{x} + \\frac{2}{x} + e^{-x}$$\n\n> **答案：$3e^{x} + \\dfrac{2}{x} + e^{-x}$。**\n\n---\n\n## 五、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\dfrac{d}{dx}e^{x} = xe^{x-1}$？ | 錯！那是把冪次法則亂套。$e^x$ 是「變數在指數」，導數就是 $e^x$ 本身（式1）。 |\n| $\\dfrac{d}{dx}e^{-x} = e^{-x}$？ | 錯，少了 $k=-1$。正確是 $-e^{-x}$（式2）。 |\n| $\\dfrac{d}{dx}\\ln x = \\dfrac{1}{x}$ 只在 $x>0$？ | 對。$\\ln x$ 定義域本來就是 $x>0$，導數 $1/x$ 也在此範圍談。 |\n\n> 本節無延伸。核心：式(1) $e^x$ 微分是自己、式(2) $e^{kx}$ 多乘 $k$、式(3) $\\ln x$ 導數 $1/x$。",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "記住 d(eˣ)/dx=eˣ（並理解它代表切線斜率＝函數高度）" },
+    { "id": "c2", "text": "記住 d(eᵏˣ)/dx=k·eᵏˣ，特別確認 d(e⁻ˣ)/dx=−e⁻ˣ" },
+    { "id": "c3", "text": "記住 d(ln x)/dx=1/x，並知道 ln(kx) 導數也是 1/x" },
+    { "id": "c4", "text": "做 5 題含 e 與 ln 的微分，不看公式表" },
+    { "id": "c5", "text": "三句話總結本節" }
+  ],
+  "resources": [
+    { "type": "video", "label": "均一：指數與對數函數的微分", "url": "https://www.junyiacademy.org" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "d/dx(eˣ) = ?",
+      "options": [
+        "eˣ",
+        "x·eˣ⁻¹",
+        "1/eˣ",
+        "x·eˣ"
+      ],
+      "answer": 0,
+      "explain": "指數函數 eˣ 的導數還是 eˣ（式1），這是它最特別的性質。x·eˣ⁻¹ 是誤把冪次法則套到指數函數上的常見錯誤。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "d/dx(ln x) = ?",
+      "options": [
+        "1/x",
+        "ln x",
+        "x",
+        "eˣ"
+      ],
+      "answer": 0,
+      "explain": "自然對數 ln x 的導數是 1/x（式3）。x 越大斜率越小，對應 ln x 圖形越往右越平。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "d/dx(e^(−x)) = e^(−x)。",
+      "answer": false,
+      "explain": "錯。指數上是 −x，k=−1，要多乘 k：d/dx(e^(−x)) = (−1)·e^(−x) = −e^(−x)。負號不能漏。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "d/dx(e^(−x)) = ?",
+      "options": [
+        "−e^(−x)",
+        "e^(−x)",
+        "eˣ",
+        "−1/eˣ⁺¹"
+      ],
+      "answer": 0,
+      "explain": "套式(2)，k=−1：d/dx(e^(kx))=k·e^(kx) = (−1)·e^(−x) = −e^(−x)。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "求 d/dx(5eˣ + 4 ln x)，請填寫完整導數。",
+      "answer": "5eˣ + 4/x",
+      "explain": "逐項：d/dx(5eˣ)=5eˣ（係數提出、eˣ 導數是自己）；d/dx(4 ln x)=4·(1/x)=4/x。合起來 5eˣ+4/x。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "曲線 f(x)=eˣ 在 x=0 處的切線斜率是多少？（填數字）",
+      "answer": "1",
+      "explain": "f'(x)=eˣ。斜率＝導數值，代入 x=0：e⁰=1。所以 eˣ 在原點的切線斜率剛好是 1。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "challenge",
+      "q": "進階：曲線 f(x)=eˣ 在哪一點 x 的切線斜率等於 2？（用 ln 表示）",
+      "answer": "x = ln 2",
+      "explain": "答對不易，重點在『把求導與解指數方程式（取 ln）串起來』。",
+      "strategy": "策略：切線斜率＝導數，先寫出導數，令它等於 2，再解出 x。\n① f(x)=eˣ 的導數 f'(x)=eˣ（式1）。\n② 令斜率為 2：eˣ = 2。\n③ 變數卡在指數上 → 兩邊取 ln（S3 的招式）：ln(eˣ)=ln2，左邊抵消得 x=ln2≈0.693。\n心法：『在哪裡斜率等於某值』＝先求導、令導數＝該值、再解方程式。這題的解方程式部分用到 S3『取 ln 解指數』，看到指數函數求導後常要再取 ln。"
+    }
+  ]
+}

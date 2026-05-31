@@ -1,0 +1,97 @@
+{
+  "id": "S4",
+  "stage": 1,
+  "week": 1,
+  "order": 4,
+  "title": "對數運算練習",
+  "titleEn": "Logarithm Practice",
+  "platform": "paul",
+  "objective": "熟練三條對數律與 ln/e 互換，能把含指數的式子取 ln 後展開成加減乘——這是 Arrhenius 線性化的核心手算技巧",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "backbone",
+  "cognition": "calculation",
+  "prereq": ["S3"],
+  "assessWeight": "heavy",
+  "extension": "none",
+  "gradCourse": ["general"],
+  "content": "<!-- backbone 計算節：對數律演練。承 S3，為 S90/S91 Arrhenius 線性化備好手算技巧。 -->\n\n## 一、先講白話：對數律在幫你做什麼？\n\n對數律只做一件事：**把難算的「乘、除、次方」降級成好算的「加、減、乘」。** 乘變加、除變減、次方變乘係數。後面 Arrhenius 之所以能把一條彎曲的指數曲線「拉成直線」，靠的就是這個降級魔術。這一節不講新概念，純粹把 S3 的工具練到反射動作。\n\n---\n\n## 二、先記死：ln 與 e 的互換\n\n$$\\ln\\!\\left(e^{x}\\right) = x \\qquad e^{\\ln x} = x \\;(x>0) \\tag{1}$$\n\n最常出現、要能秒答的幾個值：\n\n| 式子 | 答案 | 為什麼 |\n|---|---|---|\n| $\\ln(e^{3})$ | $3$ | $\\ln(e^x)=x$ |\n| $e^{\\ln 5}$ | $5$ | $e^{\\ln x}=x$ |\n| $\\ln 1$ | $0$ | 因為 $e^{0}=1$ |\n| $\\ln e$ | $1$ | 因為 $e^{1}=e$ |\n\n---\n\n## 三、三條對數律（本節主角）\n\n$$\\ln(ab) = \\ln a + \\ln b \\tag{2}$$\n$$\\ln\\!\\frac{a}{b} = \\ln a - \\ln b \\tag{3}$$\n$$\\ln\\!\\left(a^{n}\\right) = n\\,\\ln a \\tag{4}$$\n\n**式(2)–(4) 符號表（共用）**\n\n| 符號 | 意義 | 限制 |\n|---|---|---|\n| $a,\\ b$ | 真數（被取對數的量） | 必須 $>0$ |\n| $n$ | 次方的指數 | 任意實數（可正可負可分數） |\n| $\\ln$ | 自然對數（以 $e$ 為底） | — |\n\n口訣：**乘變加（式2）、除變減（式3）、次方掉下來變乘（式4）**。式(4) 最關鍵——它把卡在右上角指數的東西拉到前面變成乘法係數。\n\n---\n\n## 四、完整計算範例：把 Arrhenius 式取 ln「拉直」（逐行）\n\n> 範例：把指數式 $D = D_0\\,e^{-Q/RT}$ 兩邊取 $\\ln$，整理成「直線」形式。每行只做一個動作。\n\n第 1 步：兩邊同時取 $\\ln$（等號才仍成立）\n\n$$\\ln D = \\ln\\!\\left(D_0\\,e^{-Q/RT}\\right)$$\n\n第 2 步：右邊是「兩個東西相乘」，用式(2) 乘變加\n\n$$\\ln D = \\ln D_0 + \\ln\\!\\left(e^{-Q/RT}\\right) \\quad\\text{（}\\ln(ab)=\\ln a+\\ln b\\text{）}$$\n\n第 3 步：右邊第二項是 $\\ln(e^{\\Box})$，用式(1) 直接抵消\n\n$$\\ln D = \\ln D_0 + \\left(-\\frac{Q}{RT}\\right) \\quad\\text{（因為 }\\ln(e^x)=x\\text{）}$$\n\n第 4 步：把常數 $\\dfrac{Q}{R}$ 抽出來，剩下變數 $\\dfrac{1}{T}$\n\n$$\\ln D = \\ln D_0 - \\frac{Q}{R}\\cdot\\frac{1}{T}$$\n\n停下來看：這已經是直線 $y = c + m\\,x$ 的形狀了——$y=\\ln D$、$x=\\dfrac{1}{T}$、斜率 $m=-\\dfrac{Q}{R}$、截距 $c=\\ln D_0$。**一條彎曲的指數曲線，被對數律拉成了一條直線。** 這就是你練對數律的終極目的（S90/S91 會正式用它求活化能）。\n\n---\n\n## 五、易混淆對比（最常見的扣分點）\n\n| 常見錯誤寫法 | 正確 |\n|---|---|\n| $\\ln(a+b) = \\ln a + \\ln b$ ❌ | 加法**不能**拆！式(2) 是「乘」變加，不是「加」變加。$\\ln(a+b)$ 無法化簡。 |\n| $\\dfrac{\\ln a}{\\ln b} = \\ln\\dfrac{a}{b}$ ❌ | 錯。式(3) 是 $\\ln\\dfrac{a}{b}=\\ln a-\\ln b$（相減），不是相除。 |\n| $\\ln(a^n) = (\\ln a)^n$ ❌ | 錯。式(4) 是 $n\\,\\ln a$（次方掉下來變乘），不是整包再 n 次方。 |\n\n> 核心：式(1)–(4) 要練到看一眼就會用，尤其式(4) 把指數拉下來、以及第四節那套「取 ln 拉直」流程。",
+  "fieldLink": "把 D=D₀e^(−Q/RT) 取 ln 拉成直線（ln D 對 1/T），斜率 −Q/R 就能反推活化能 Q——S90/S91 會正式用到本節練的對數律。",
+  "checkpoints": [
+    { "id": "c1", "text": "能秒答 ln(eˣ)=x、e^(ln x)=x、ln1=0、ln e=1" },
+    { "id": "c2", "text": "手寫三條對數律，並各造一個例子" },
+    { "id": "c3", "text": "做 10 題 ln/e 換算與展開題（Paul 的 log/exp 練習）" },
+    { "id": "c4", "text": "能自己把一個指數式取 ln 後展開成加減乘形式" },
+    { "id": "c5", "text": "三句話總結本節" }
+  ],
+  "resources": [
+    { "type": "link", "label": "Paul's Math Notes — Logarithm Functions", "url": "https://tutorial.math.lamar.edu/Classes/Alg/LogFunctions.aspx" },
+    { "type": "link", "label": "Paul's Math Notes — Exponential Functions", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ExpFunctions.aspx" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "fill",
+      "difficulty": "basic",
+      "q": "化簡 ln(e^(−12.03)) = ?（填數字）",
+      "answer": "-12.03",
+      "explain": "套用 ln(eˣ)=x，直接等於指數值 −12.03。e 與 ln 互相抵消，不必動手算。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "ln(x²) 化簡後等於下列何者？",
+      "options": [
+        "2/x",
+        "(ln x)²",
+        "2 ln x",
+        "x²"
+      ],
+      "answer": 2,
+      "explain": "套用對數律 ln(aⁿ)=n·ln a，這裡 n=2，所以 ln(x²)=2 ln x。注意不是 (ln x)²（那是先取 ln 再平方，完全不同）。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "ln(a + b) 可以化簡成 ln a + ln b。",
+      "answer": false,
+      "explain": "錯。對數律只對「相乘」成立：ln(ab)=ln a+ln b。對「相加」的 ln(a+b) 沒有化簡公式，這是最常見的扣分點。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "用對數律展開 ln(AB/C)（以 ln A、ln B、ln C 表示）。請填寫展開式。",
+      "answer": "ln A + ln B − ln C",
+      "explain": "先用乘變加：ln(AB)=ln A+ln B；再用除變減：減去 ln C。合起來 ln(AB/C)=ln A+ln B−ln C。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "把 D = D₀·e^(−Q/RT) 兩邊取 ln 並展開後，ln D 等於 ln D₀ 加上哪一項？（填那一項，含負號）",
+      "answer": "−Q/(RT)",
+      "explain": "逐步：①取 ln：ln D=ln(D₀·e^(−Q/RT))。②乘變加：=ln D₀+ln(e^(−Q/RT))。③ln(eˣ)=x 抵消：=ln D₀+(−Q/RT)。所以加的那一項是 −Q/(RT)。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "承上，ln D = ln D₀ − (Q/R)(1/T) 看成直線 y=c+mx 時，斜率 m 是？",
+      "options": [
+        "−Q/R",
+        "ln D₀",
+        "1/T",
+        "−Q/(RT)"
+      ],
+      "answer": 0,
+      "explain": "對照 y=c+mx：y=ln D、x=1/T、截距 c=ln D₀、斜率 m=−Q/R。斜率是「乘在變數 1/T 前面的常數」，即 −Q/R。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "challenge",
+      "q": "進階：已知 ln 2 ≈ 0.693、ln 3 ≈ 1.099。利用對數律求 ln 12 的近似值（取三位小數）。",
+      "answer": "2.485",
+      "explain": "答對不易，重點在學會「把真數拆成已知因數、再用對數律拼回來」。",
+      "strategy": "策略：把 12 拆成只含 2 和 3 的乘積，再用乘變加、次方掉下來。\n① 12 = 2² × 3。\n② ln 12 = ln(2² × 3) = ln(2²) + ln 3（乘變加，式2）。\n③ ln(2²) = 2 ln 2（次方掉下來，式4）。\n④ 代入：2×0.693 + 1.099 = 1.386 + 1.099 = 2.485。\n心法：對數運算題若沒給計算機，通常要你『把真數因式分解成已知的 ln 值再組合』。先找怎麼拆，再套式(2)(4)。"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "S91",
+  "stage": 2, "week": 6, "order": 91,
+  "title": "Arrhenius 計算",
+  "titleEn": "Arrhenius Calculation",
+  "platform": "callister",
+  "objective": "學會取 ln 把指數式線性化，做 4 題不同溫度下的 D 比值估算",
+  "isCore": true,
+  "status": "done",
+  "content": "## 計算工具：線性化 + 比值法\n\n### 方法一：直接代入\n\n$$D = D_0 e^{-Q/RT}$$\n\n代入已知值（注意 T 用 K）：\n\n$$D_{1073K} = 1.0 \\times 10^{-4} \\cdot e^{-80000/(8.314 \\times 1073)}$$\n$$= 1.0 \\times 10^{-4} \\cdot e^{-8.97} = 1.0 \\times 10^{-4} \\times 1.27 \\times 10^{-4}$$\n$$\\approx 1.27 \\times 10^{-8} \\text{ m}^2/\\text{s}$$\n\n### 方法二：比值法（快速估算）\n\n兩個溫度 $T_1$、$T_2$ 下的比值：\n\n$$\\frac{D_2}{D_1} = \\exp\\left[-\\frac{Q}{R}\\left(\\frac{1}{T_2} - \\frac{1}{T_1}\\right)\\right]$$\n\n**例**：$Q = 80$ kJ/mol，從 800K 升到 1000K，$D$ 變化多少倍？\n\n$$\\frac{D_{1000}}{D_{800}} = \\exp\\left[-\\frac{80000}{8.314}\\left(\\frac{1}{1000} - \\frac{1}{800}\\right)\\right]$$\n$$= \\exp\\left[-9617 \\times (-2.5 \\times 10^{-4})\\right] = e^{2.404} \\approx 11$$\n\n升溫 200K，$D$ 增加約 **11 倍**！\n\n### 計算步驟口訣\n\n1. 把 °C 換成 K（+273）\n2. 計算指數部分 $-Q/(RT)$\n3. 用計算機求 $e^{\\text{那個數字}}$\n4. 乘以 $D_0$",
+  "fieldLink": "現場估算：如果你知道某個製程在 260°C 的 IMC 生長速率，可以用 Arrhenius 比值法估算 270°C 時快多少——不需要實驗，理論預測。這是材料工程師的基本技能。",
+  "checkpoints": [
+    { "id": "c1", "text": "完成 4 題 Arrhenius 計算（至少 2 題用比值法）" },
+    { "id": "c2", "text": "確認每次把 °C 換成 K 的習慣" },
+    { "id": "c3", "text": "驗證：溫度升高 200K，Q=80kJ/mol 時，D 約增加幾倍？（答案約 11 倍）" }
+  ],
+  "resources": [],
+  "charts": [
+    {
+      "type": "arrhenius",
+      "title": "Arrhenius 圖：改變 Q 值看曲線斜率變化",
+      "params": { "D0": 1e-4, "Q": 80000, "Trange": [500, 1500] }
+    }
+  ],
+  "quiz": [
+    {
+      "type": "fill",
+      "q": "已知 Q = 83140 J/mol（≈10R），從 T₁=1000K 升到 T₂=500K（倒過來，降溫），D 會增加還是減少？輸入比值 D₂/D₁ 的數量級：e^(−Q/R × (1/500−1/1000)) ≈ e^(−10×(0.002−0.001)) = e^(−0.01) ≈ ?（小數，保留兩位）",
+      "answer": "0.99",
+      "tolerance": 0.02,
+      "explain": "降溫 D 減小。e^(-10×0.001) = e^(-0.01) ≈ 0.99。變化很小，因為溫差只有 -500K 的 (1/T) 變化很小。注意實際問題中溫差 +200K 影響更大。"
+    },
+    {
+      "type": "single",
+      "q": "使用 Arrhenius 比值法，Q = 100 kJ/mol，從 1000K 升到 1100K，D₂/D₁ 大約是多少？",
+      "options": ["約 1.1 倍（10%）", "約 3 倍", "約 10 倍", "約 100 倍"],
+      "answer": 1,
+      "explain": "ΔlnD ≈ (Q/R)×(1/1000−1/1100) × (−1) = 12028 × 9.09×10⁻⁵ ≈ 1.09，D₂/D₁ ≈ e^1.09 ≈ 3。"
+    }
+  ]
+}

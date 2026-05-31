@@ -1,0 +1,74 @@
+{
+  "id": "S6",
+  "stage": 1,
+  "week": 1,
+  "order": 6,
+  "title": "極限概念（二）",
+  "titleEn": "Limits II — Calculation",
+  "platform": "paul",
+  "objective": "學會三種求極限的標準手法：直接代入、0/0 型先因式分解再代入、以及辨認無窮極限",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "backbone",
+  "cognition": "calculation",
+  "prereq": ["S5"],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": ["general"],
+  "content": "<!-- backbone 計算節：求極限三法。承 S5，重點是 0/0 型化簡。 -->\n\n## 一、先講白話：求極限就是「先試代入，卡住再化簡」\n\n求極限其實有固定流程，像看病分診：先試最簡單的「直接代入」；如果代入得到乾淨的數，收工；如果代入撞到 $0/0$ 這種「未定型」，再動手化簡。掌握這個分流，極限題就不可怕。\n\n---\n\n## 二、方法一：直接代入（函數連續就用它）\n\n若 $f(x)$ 在 $a$ 點連續（多項式、$e^x$、$\\ln x$ 在定義域內都連續），極限就等於代入值：\n\n$$\\lim_{x \\to 2} x^{3} = 2^{3} = 8 \\quad\\text{（直接把 }x=2\\text{ 代入）} \\tag{1}$$\n\n九成的簡單極限題到這裡就結束。\n\n---\n\n## 三、方法二：0/0 型——先因式分解，約掉零因子再代入\n\n如果直接代入得到 $\\dfrac{0}{0}$，這叫<span class=\"term-zh\">未定型</span>（<span class=\"term-en\">indeterminate form</span>），**不代表極限不存在，只代表「還不能代、要先化簡」**。標準動作：分子分母因式分解，約掉造成 0 的那個公因子，再代入。\n\n> 範例：求 $\\displaystyle\\lim_{x \\to 3}\\frac{x^{2}-9}{x-3}$。\n\n第 1 步：先試直接代入，確認是不是 $0/0$\n\n$$\\frac{3^{2}-9}{3-3} = \\frac{0}{0} \\quad\\text{（撞到未定型，不能就此停手）}$$\n\n第 2 步：分子因式分解（$x^2-9$ 是平方差 $=(x+3)(x-3)$）\n\n$$\\frac{x^{2}-9}{x-3} = \\frac{(x+3)(x-3)}{x-3}$$\n\n第 3 步：約掉公因子 $x-3$（因為 $x\\to 3$ 但 $x\\neq 3$，這個因子不是 0，可以約）\n\n$$= x+3 \\quad(x\\neq 3)$$\n\n第 4 步：現在沒有破洞了，直接代入 $x=3$\n\n$$\\lim_{x \\to 3}\\frac{x^{2}-9}{x-3} = 3+3 = 6$$\n\n---\n\n## 四、方法三：認得無窮極限\n\n若代入時**分母趨近 0、但分子不趨近 0**（不是 $0/0$，而是「非零 ÷ 趨近 0」），結果會衝向無窮大：\n\n$$\\lim_{x \\to 0}\\frac{1}{x^{2}} = +\\infty \\quad\\text{（分母 }x^2\\to 0^+\\text{，分子固定為 1，整體爆大）} \\tag{2}$$\n\n注意 $x^2$ 永遠 $\\ge 0$，所以從兩側靠近都是 $+\\infty$。要小心區分這跟 $0/0$ 不一樣——$0/0$ 要化簡，「非零 ÷ 0」則是直接判斷趨向無窮。\n\n---\n\n## 五、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| 代入得 $0/0$ → 極限不存在？ | 不對。$0/0$ 是「未定型」，要先因式分解化簡，極限通常存在。 |\n| $0/0$ 與「非零$/0$」一樣處理？ | 不一樣。$0/0$ 要化簡；非零除以趨近 0 則趨向 $\\pm\\infty$。 |\n| 約掉 $x-3$ 不嚴謹？ | 合理。因為 $x\\to 3$ 時 $x\\neq 3$，$x-3\\neq 0$，可以放心約。 |\n\n> 本節無延伸。核心：三法的分流——先代入、卡 0/0 就因式分解、認得無窮極限。",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "能對連續函數用直接代入求極限" },
+    { "id": "c2", "text": "遇到 0/0 會先因式分解、約掉零因子再代入" },
+    { "id": "c3", "text": "能分辨 0/0（要化簡）與非零/0（趨向無窮）兩種情況" },
+    { "id": "c4", "text": "做 Paul 的 5 題多項式極限並訂正" },
+    { "id": "c5", "text": "三句話總結本節" }
+  ],
+  "resources": [
+    { "type": "link", "label": "Paul's Math Notes — Computing Limits", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ComputingLimits.aspx" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "fill",
+      "difficulty": "basic",
+      "q": "求 lim(x→2) x³ = ?（直接代入，填數字）",
+      "answer": "8",
+      "explain": "x³ 連續，直接代入 x=2：2³=8。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "對 lim(x→3) (x²−9)/(x−3)，直接代入會得到什麼？接著該怎麼做？",
+      "options": [
+        "得 0/0；因式分解約掉 (x−3) 再代入",
+        "得 6；直接就是答案，不必化簡",
+        "得 ∞；判定極限不存在",
+        "得 0；答案就是 0"
+      ],
+      "answer": 0,
+      "explain": "代入 x=3 得 (9−9)/(3−3)=0/0 未定型。要把分子 x²−9=(x+3)(x−3)，約掉 (x−3)，剩 x+3，再代入 x=3 得 6。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "求 lim(x→2) (x²−4)/(x−2) = ?（先因式分解，填數字）",
+      "answer": "4",
+      "explain": "代入得 0/0。分子 x²−4=(x+2)(x−2)，約掉 (x−2) 得 x+2，代入 x=2：2+2=4。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "lim(x→0) 1/x² 的結果是？",
+      "options": [
+        "+∞",
+        "0",
+        "1",
+        "−∞"
+      ],
+      "answer": 0,
+      "explain": "分母 x² 從兩側趨近 0 且恆為正（x²≥0），分子固定為 1，整體往 +∞ 爆大。這是「非零÷趨近0」的無窮極限，不是 0/0。"
+    }
+  ]
+}

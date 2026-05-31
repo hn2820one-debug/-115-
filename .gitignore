@@ -1,0 +1,13 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# Local scratch / temp checks
+_tmp_*
+*.log
+
+# Node (if ever used for tooling)
+node_modules/

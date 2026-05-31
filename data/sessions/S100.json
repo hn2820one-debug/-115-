@@ -1,0 +1,56 @@
+{
+  "id": "S100",
+  "stage": 2, "week": 7, "order": 100,
+  "title": "二元相圖（二）：讀圖",
+  "titleEn": "Binary Phase Diagram II — Reading",
+  "platform": "doitpoms",
+  "objective": "給定溫度與成分，能正確判斷有哪些相並用槓桿法則算比例",
+  "isCore": true,
+  "status": "done",
+  "content": "## 如何讀二元相圖\n\n### 三步法\n\n1. **找位置**：在相圖上標出（成分, 溫度）點\n2. **看區域**：確認落在哪個相區（L、α、β、L+α、L+β 等）\n3. **讀邊界**：若在兩相區，畫水平 tie line，讀兩端的成分\n\n### 相圖的區域解讀（以 Pb-Sn 系為例）\n\n```\n溫度\n  ↑      液相線（liquidus）\n  |  L（液相）\n  |........................................\n  |  L+α    ↑共晶點    L+β\n  |         183°C, 61.9%Sn\n  |----●------------------------●------\n  |  α（固相）  α+β（共晶）  β（固相）\n  ↓\n     0          成分（wt%Sn）        100\n```\n\n### 讀圖練習\n\n**例**：成分 = 40 wt%Sn，溫度 = 220°C\n1. 落在 L+α 兩相區（液相線以下、固相線以上）\n2. 畫 220°C 的等溫線（tie line）\n3. 左端（固相線）≈ 19 wt%Sn = α 相成分\n4. 右端（液相線）≈ 52 wt%Sn = L 相成分\n\n### 槓桿法則\n\n$$\\text{α 相比例} = \\frac{C_L - C_0}{C_L - C_\\alpha} \\qquad \\text{L 相比例} = \\frac{C_0 - C_\\alpha}{C_L - C_\\alpha}$$\n\n（分子是「另一端距離」，分母是「tie line 總長」）",
+  "fieldLink": "你在 ASMPT 的 Sn-Cu 焊料體系，就在 Pb-Sn 相圖的近共晶區。焊點凝固時溫度沿 bond profile 冷卻曲線下降，在相圖上就是一條垂直線往下走，穿越不同相區——每穿越一個邊界就有相的出現或消失。",
+  "checkpoints": [
+    { "id": "c1", "text": "能用「三步法」讀出任意點的相組成" },
+    { "id": "c2", "text": "理解液相線與固相線的意義" },
+    { "id": "c3", "text": "完成 4 題讀圖練習（含判斷相與槓桿法則計算）" },
+    { "id": "c4", "text": "現場連結：能把焊料冷卻路徑對應到相圖的相區變化" }
+  ],
+  "resources": [
+    { "type": "link", "label": "DoITPoMS Phase Diagrams TLP", "url": "https://www.doitpoms.ac.uk/tlplib/phase-diagrams/index.php" }
+  ],
+  "charts": [
+    {
+      "type": "phaseDiagram",
+      "title": "Pb-Sn 二元相圖",
+      "params": { "system": "Pb-Sn" }
+    }
+  ],
+  "quiz": [
+    {
+      "type": "single",
+      "q": "在 Pb-Sn 二元相圖中，處於液相線以上的任何成分，系統的狀態是？",
+      "options": ["完全固態（α 或 β）", "兩相混合（L+α 或 L+β）", "完全液態（L）", "三相共存"],
+      "answer": 2,
+      "explain": "液相線以上，溫度夠高，所有成分都是液態（L 相）。"
+    },
+    {
+      "type": "single",
+      "q": "槓桿法則中，計算液相（L）的比例，分子應該是？",
+      "options": [
+        "液相成分 C_L 到整體成分 C₀ 的距離",
+        "α 相成分 C_α 到整體成分 C₀ 的距離（= C₀ - C_α）",
+        "tie line 總長（C_L - C_α）",
+        "液相成分 C_L 的數值"
+      ],
+      "answer": 1,
+      "explain": "液相比例 = (C₀ - C_α)/(C_L - C_α)：分子是整體成分到固相成分的距離（靠近哪端，那個相就多）。"
+    },
+    {
+      "type": "fill",
+      "q": "在一個兩相區，tie line 的固相端成分 C_α = 20，液相端成分 C_L = 60，整體成分 C₀ = 30。液相的比例（%）是多少？",
+      "answer": "25",
+      "tolerance": 1,
+      "explain": "液相比例 = (C₀ - C_α)/(C_L - C_α) = (30-20)/(60-20) = 10/40 = 0.25 = 25%。"
+    }
+  ]
+}
