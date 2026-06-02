@@ -168,6 +168,93 @@ function defaultUserState() {
 }
 
 // ================================================================
+// 2b. STATE MERGE (防資料遺失：合併兩份進度，永不弄丟任何一邊)
+// ================================================================
+// 一個「空白」狀態（全新裝置）：沒有任何已完成節次、沒有學習分鐘、沒有成就/錯題。
+function isEmptyUserState(s) {
+  if (!s) return true;
+  const anyCompleted = Object.values(s.sessions || {}).some(v => v && v.completed);
+  return !anyCompleted
+    && !(s.totalMinutes > 0)
+    && !((s.achievements || []).length)
+    && !((s.wrongBook || []).length);
+}
+
+// 兩段文字衝突時，挑「較晚編輯 / 較長」的那一份（不直接丟棄）。
+function _pickText(x, y, xt, yt) {
+  x = x || ''; y = y || '';
+  if (!x) return y;
+  if (!y || x === y) return x;
+  if (xt && yt) return (xt >= yt) ? x : y;
+  return x.length >= y.length ? x : y;
+}
+
+// 陣列依 stringify 做聯集去重（保守、無損：最壞情況留下近似重複，但絕不弄丟）。
+function _unionArr(a, b) {
+  const map = new Map();
+  for (const it of (a || [])) map.set(JSON.stringify(it), it);
+  for (const it of (b || [])) { const k = JSON.stringify(it); if (!map.has(k)) map.set(k, it); }
+  return [...map.values()];
+}
+
+// 合併單一節次：完成狀態取 OR、檢核點取聯集、計數取最大、文字挑較新。
+function _mergeSession(a, b) {
+  if (!a) return b;
+  if (!b) return a;
+  const out = {};
+  out.completed = !!(a.completed || b.completed);
+  const dones = [a.completedAt, b.completedAt].filter(Boolean).sort();
+  if (dones.length) out.completedAt = dones[0];            // 最早完成時間
+  const touched = [a.lastTouched, b.lastTouched].filter(Boolean).sort();
+  if (touched.length) out.lastTouched = touched[touched.length - 1]; // 最後接觸時間
+  // 檢核點：每個 key 取 OR（已勾的永不變回未勾）
+  out.checkpoints = {};
+  const cpKeys = new Set([...Object.keys(a.checkpoints || {}), ...Object.keys(b.checkpoints || {})]);
+  for (const k of cpKeys) out.checkpoints[k] = !!(a.checkpoints?.[k] || b.checkpoints?.[k]);
+  // 答題計數：取最大（永不縮水）
+  out.quizAttempts = Math.max(a.quizAttempts || 0, b.quizAttempts || 0);
+  out.quizCorrect  = Math.max(a.quizCorrect  || 0, b.quizCorrect  || 0);
+  // 三句話總結：挑較新/較長
+  const sum = _pickText(a.summary, b.summary, a.lastTouched, b.lastTouched);
+  if (sum) out.summary = sum;
+  // 自由作答：逐題挑較新/較長
+  out.freeAnswers = {};
+  const faKeys = new Set([...Object.keys(a.freeAnswers || {}), ...Object.keys(b.freeAnswers || {})]);
+  for (const k of faKeys) out.freeAnswers[k] = _pickText(a.freeAnswers?.[k], b.freeAnswers?.[k], a.lastTouched, b.lastTouched);
+  return out;
+}
+
+// 合併兩份完整 userState：聯集所有進度，任何一邊有的都保留。順序無關。
+function mergeUserStates(a, b) {
+  a = a || defaultUserState();
+  b = b || defaultUserState();
+  const out = defaultUserState();
+
+  // sessions：聯集所有 id，逐節合併
+  const ids = new Set([...Object.keys(a.sessions || {}), ...Object.keys(b.sessions || {})]);
+  for (const id of ids) out.sessions[id] = _mergeSession(a.sessions?.[id], b.sessions?.[id]);
+
+  // streak：longest 取最大；current/lastStudyDate 取較近一次學習
+  out.streak.longest = Math.max(a.streak?.longest || 0, b.streak?.longest || 0);
+  const aD = a.streak?.lastStudyDate || '', bD = b.streak?.lastStudyDate || '';
+  if (aD >= bD) { out.streak.current = a.streak?.current || 0; out.streak.lastStudyDate = aD || null; }
+  else          { out.streak.current = b.streak?.current || 0; out.streak.lastStudyDate = bD || null; }
+
+  // 學習分鐘：取最大（避免重複裝置相加灌水，且永不縮水）
+  out.totalMinutes = Math.max(a.totalMinutes || 0, b.totalMinutes || 0);
+
+  // 清單類：聯集
+  out.wrongBook    = _unionArr(a.wrongBook,  b.wrongBook);
+  out.glossary     = _unionArr(a.glossary,   b.glossary);
+  out.todo         = _unionArr(a.todo,       b.todo);
+  out.achievements = [...new Set([...(a.achievements || []), ...(b.achievements || [])])];
+
+  // 設定：以 a（當前裝置）為主，缺的用 b 補
+  out.settings = Object.assign({}, b.settings, a.settings);
+  return out;
+}
+
+// ================================================================
 // 3. STORAGE ADAPTERS
 // ================================================================
 const MemoryStore = {
@@ -297,6 +384,11 @@ const DriveStore = (() => {
     if (el) el.innerHTML = _pub.configHtml();
   }
 
+  // 蓋上同步時間戳（不動原物件）
+  function _stamp(s) {
+    return Object.assign({}, s, { _meta: { updatedAt: new Date().toISOString() } });
+  }
+
   const _pub = {
     configured() { return !!_clientId(); },
     connected()  { return _tokenOk(); },
@@ -329,25 +421,40 @@ const DriveStore = (() => {
       showToast('已中斷 Google Drive 連接', 'info');
     },
 
+    // 載入＝把 Drive 的進度與本機進度「合併」，不是單向覆蓋。
     async load() {
-      if (!this.configured() || !this.connected()) return LocalStore.load();
+      const local = LocalStore.load();
+      if (!this.configured() || !this.connected()) return local;
       try {
         _setStatus('syncing');
         const id = await _findFile();
-        if (!id) { _setStatus('ok', new Date().toISOString()); return LocalStore.load(); }
-        const txt  = await _downloadFile(id);
-        const data = JSON.parse(txt);
-        LocalStore.save(data);
+        if (!id) {
+          // Drive 還沒有檔案：若本機有進度就建立並上傳，否則先不建立空檔
+          if (!isEmptyUserState(local)) await _createFile(_stamp(local));
+          _setStatus('ok', new Date().toISOString());
+          flog('STORAGE', 'DriveStore.load: no remote file, pushed local');
+          return local;
+        }
+        const remote = JSON.parse(await _downloadFile(id));
+        const merged = mergeUserStates(local, remote);   // ← 合併，永不弄丟
+        LocalStore.save(merged);
+        // 若合併後比 Drive 多（本機有額外進度），把合併結果寫回 Drive
+        await _updateFile(_stamp(merged));
         _setStatus('ok', new Date().toISOString());
-        flog('STORAGE', 'DriveStore.load: fetched from Drive');
-        return data;
+        flog('STORAGE', 'DriveStore.load: merged local+remote', {
+          localDone:  Object.values(local.sessions  || {}).filter(v => v.completed).length,
+          remoteDone: Object.values(remote.sessions || {}).filter(v => v.completed).length,
+          mergedDone: Object.values(merged.sessions || {}).filter(v => v.completed).length
+        });
+        return merged;
       } catch(e) {
-        flogErr('STORAGE', 'DriveStore.load failed', e);
+        flogErr('STORAGE', 'DriveStore.load merge failed', e);
         _setStatus('error');
-        return LocalStore.load();
+        return local;
       }
     },
 
+    // 儲存＝先寫本機，再（去抖動後）把「本機與 Drive 的合併結果」寫回 Drive。
     save(s) {
       LocalStore.save(s); // always local-first
       if (!this.configured() || !this.connected()) return;
@@ -356,10 +463,21 @@ const DriveStore = (() => {
         try {
           _setStatus('syncing');
           const id = await _findFile();
-          if (id) { await _updateFile(s); }
-          else    { await _createFile(s); }
+          if (!id) {
+            if (isEmptyUserState(s)) { _setStatus('idle'); return; } // 不為空狀態建立檔案
+            await _createFile(_stamp(s));
+          } else {
+            // 推送前先抓 Drive 現況合併，避免覆蓋其他裝置的進度
+            let remote = null;
+            try { remote = JSON.parse(await _downloadFile(id)); } catch {}
+            const merged = remote ? mergeUserStates(s, remote) : s;
+            // 安全閘：絕不用空白狀態覆蓋非空的 Drive
+            if (isEmptyUserState(merged)) { _setStatus('idle'); return; }
+            await _updateFile(_stamp(merged));
+            LocalStore.save(merged); // 本機也補上 Drive 端的額外進度（下次導航即顯示）
+          }
           _setStatus('ok', new Date().toISOString());
-          flog('STORAGE', 'DriveStore.save: synced', { fileId: _fileId });
+          flog('STORAGE', 'DriveStore.save: merged & synced', { fileId: _fileId });
         } catch(e) {
           flogErr('STORAGE', 'DriveStore.save failed', e);
           _setStatus('error');
@@ -2947,8 +3065,17 @@ function setStorageMode(mode) {
   if (mode === 'memory') appState.storage = MemoryStore;
   else if (mode === 'drive') appState.storage = DriveStore;
   else appState.storage = LocalStore;
-  save();
-  showToast(`儲存方式已切換為：${mode}`, 'info');
+  // 只寫本機保存「選擇」——絕不在此處推送，避免空白狀態覆蓋 Drive
+  LocalStore.save(userState);
+  if (mode === 'drive') {
+    if (DriveStore.connected()) {
+      driveSync();   // 立即合併，不覆蓋
+    } else {
+      showToast('已選 Google Drive；請按下方「連接 Google Drive」完成授權與合併', 'info', 5000);
+    }
+  } else {
+    showToast(`儲存方式已切換為：${mode}`, 'info');
+  }
   renderSettings();
 }
 
@@ -2969,11 +3096,20 @@ function driveSaveClientId() {
 async function driveConnect() {
   try {
     await DriveStore.connect();
-    // If drive mode selected, reload from Drive
-    if (appState.settings.storageMode === 'drive') {
-      showToast('正在從 Drive 載入最新記錄…', 'info');
-      userState = await DriveStore.load();
-    }
+    // 連接後一律「合併」Drive 與本機進度（雙向都不弄丟），並自動採用 drive 模式
+    showToast('正在與 Google Drive 合併進度…', 'info');
+    const merged = await DriveStore.load();        // load() 現在會合併並寫回 Drive
+    userState = merged;
+    appState.settings.storageMode = 'drive';
+    userState.settings = userState.settings || {};
+    userState.settings.storageMode = 'drive';
+    appState.storage = DriveStore;
+    LocalStore.save(userState);
+    flog('STORAGE', 'driveConnect: merged & adopted drive mode', {
+      done: Object.values(userState.sessions || {}).filter(v => v.completed).length
+    });
+    showToast('✓ 已連接並合併進度（不會覆蓋任何一邊的紀錄）', 'success', 4000);
+    if (appState.currentPage) navigate(appState.currentPage); // 讓合併後的進度立即顯示
     renderSettings();
   } catch(e) {
     flogErr('STORAGE', 'driveConnect failed', e);
@@ -2990,9 +3126,10 @@ function driveDisconnect() {
 async function driveSync() {
   if (!DriveStore.connected()) { showToast('請先連接 Google Drive', 'warn'); return; }
   try {
-    showToast('⟳ 同步中…', 'info');
-    userState = await DriveStore.load();
-    showToast('✓ 同步完成', 'success');
+    showToast('⟳ 合併同步中…', 'info');
+    userState = await DriveStore.load();   // 合併 Drive 與本機
+    showToast('✓ 同步完成（已合併兩邊進度）', 'success');
+    if (appState.currentPage) navigate(appState.currentPage); // 立即反映合併結果
     renderSettings();
   } catch(e) {
     flogErr('STORAGE', 'driveSync failed', e);
