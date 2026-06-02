@@ -743,6 +743,28 @@ input, textarea, select { font: inherit; color: inherit; }
 .quiz-badge.correct { background: rgba(76,175,110,0.15); color: var(--accent-green); }
 .quiz-badge.wrong   { background: rgba(240,96,96,0.1); color: var(--accent-red); }
 
+/* 信心選項列 */
+.conf-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; }
+.conf-label { font-size: 11px; color: var(--text-muted); margin-right: 2px; }
+.conf-btn {
+  font-size: 12px; padding: 4px 10px; border-radius: 14px;
+  border: 1px solid var(--border); background: var(--bg-input);
+  color: var(--text-secondary); cursor: pointer; transition: all 0.15s;
+}
+.conf-btn:hover { border-color: var(--border-light); }
+.conf-btn.active {
+  border-color: var(--accent-blue); color: var(--accent-blue);
+  background: rgba(74,158,255,0.12); font-weight: 600;
+}
+/* 作答後的後設認知提示 */
+.conf-hint {
+  margin-top: 8px; font-size: 12px; padding: 7px 11px; border-radius: 6px;
+  background: rgba(245,200,66,0.12); border: 1px solid var(--accent-gold);
+  color: var(--accent-gold); line-height: 1.5;
+}
+/* 填空輸入小提示 */
+.quiz-hint-tip { font-size: 11px; color: var(--text-muted); margin: 2px 0 8px; }
+
 /* ── 12. Progress Page ────────────────────────────────────────── */
 .progress-tabs {
   display: flex; gap: 4px;

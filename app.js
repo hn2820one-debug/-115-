@@ -163,6 +163,7 @@ function defaultUserState() {
     glossary: [],
     todo: [],
     achievements: [],
+    confidenceLog: [],
     settings: { theme: 'dark', lang: 'zh', storageMode: 'local' }
   };
 }
@@ -248,6 +249,15 @@ function mergeUserStates(a, b) {
   out.glossary     = _unionArr(a.glossary,   b.glossary);
   out.todo         = _unionArr(a.todo,       b.todo);
   out.achievements = [...new Set([...(a.achievements || []), ...(b.achievements || [])])];
+
+  // confidenceLog：依 sessionId+qi 去重，保留較新的一筆
+  const cmap = new Map();
+  for (const e of [...(a.confidenceLog || []), ...(b.confidenceLog || [])]) {
+    const k = e.sessionId + '|' + e.qi;
+    const prev = cmap.get(k);
+    if (!prev || (e.at || '') >= (prev.at || '')) cmap.set(k, e);
+  }
+  out.confidenceLog = [...cmap.values()];
 
   // 設定：以 a（當前裝置）為主，缺的用 b 補
   out.settings = Object.assign({}, b.settings, a.settings);
@@ -2336,6 +2346,89 @@ function renderCrystal3D(container, params = {}) {
 // ================================================================
 // 14. QUIZ ENGINE (M5)
 // ================================================================
+// ── 信心選項：作答前選信心，用來找出「有信心卻錯」「沒把握卻對」 ──
+function confRow() {
+  return `<div class="conf-row">
+    <span class="conf-label">作答前先選信心：</span>
+    <button type="button" class="conf-btn" data-conf="high" onclick="setConf(this)">😎 有信心</button>
+    <button type="button" class="conf-btn" data-conf="mid"  onclick="setConf(this)">🤔 普通</button>
+    <button type="button" class="conf-btn" data-conf="low"  onclick="setConf(this)">😰 沒把握</button>
+  </div>`;
+}
+function setConf(btn) {
+  const item = btn.closest('.quiz-item');
+  if (!item || item.dataset.answered) return; // 作答後不可改
+  qsa('.conf-btn', item).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  item.dataset.conf = btn.dataset.conf;
+}
+
+// 記錄每題作答（含信心），找出信心與正確性不一致的題目
+function recordAnswer(sessionId, qi, isCorrect, item, yourAns, correctAns) {
+  const conf  = (item && item.dataset.conf) || 'mid';
+  const qText = ((item && item.querySelector('.quiz-q')?.textContent) || '')
+                  .replace(/^Q\d+\.\s*/, '').replace(/^\[[^\]]*\]\s*/, '').slice(0, 90);
+  userState.confidenceLog = userState.confidenceLog || [];
+  const entry = {
+    sessionId, qi, isCorrect, confidence: conf, q: qText,
+    yourAnswer: String(yourAns ?? ''), correctAnswer: String(correctAns ?? ''),
+    at: new Date().toISOString()
+  };
+  const idx = userState.confidenceLog.findIndex(e => e.sessionId === sessionId && e.qi === qi);
+  if (idx >= 0) userState.confidenceLog[idx] = entry;
+  else userState.confidenceLog.push(entry);
+  if (userState.confidenceLog.length > 1000) userState.confidenceLog.shift();
+  flog('RECORD', `confidence: ${sessionId} Q${qi+1} conf=${conf} correct=${isCorrect}`);
+  save();
+
+  // 即時後設認知提示（最有價值的兩種不一致）
+  let hint = '';
+  if (conf === 'high' && !isCorrect) hint = '⚠ 有信心卻答錯——這是最危險的盲點，務必弄懂並記入重點';
+  else if (conf === 'low' && isCorrect) hint = '🍀 沒把握卻答對——可能是猜中的，建議回看確認真的懂了';
+  if (hint && item) {
+    const h = document.createElement('div');
+    h.className = 'conf-hint';
+    h.textContent = hint;
+    item.appendChild(h);
+  }
+}
+
+// ── 填空答案正規化：放寬上下標、大小寫、符號差異，減少誤判 ──
+const _SUP = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁺':'+','⁻':'-','ⁿ':'n','ˣ':'x'};
+const _SUB = {'₀':'0','₁':'1','₂':'2','₃':'3','₄':'4','₅':'5','₆':'6','₇':'7','₈':'8','₉':'9','₊':'+','₋':'-'};
+function _normFill(s) {
+  if (s == null) return '';
+  let t = String(s);
+  t = t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻ⁿˣ]/g, c => _SUP[c] || c);  // 上標 → 一般字元
+  t = t.replace(/[₀₁₂₃₄₅₆₇₈₉₊₋]/g, c => _SUB[c] || c);      // 下標 → 一般字元
+  t = t.replace(/\^/g, '');                                   // x^2 與 x² 統一成 x2
+  t = t.replace(/[−–—]/g, '-')                                // 各種減號 → -
+       .replace(/[×·∙*✕]/g, '')                              // 乘號移除（x·y → xy）
+       .replace(/[÷∕⁄]/g, '/')
+       .replace(/√/g, 'sqrt').replace(/π/g, 'pi')
+       .replace(/（/g, '(').replace(/）/g, ')').replace(/，/g, ',');
+  t = t.toLowerCase().replace(/\s+/g, '');                    // 小寫、去所有空白
+  return t;
+}
+// 判定填空是否正確（先正規化文字比對，再數值容差比對）
+function fillIsCorrect(val, correctStr, tolerance) {
+  const a = String(val).trim(), b = String(correctStr).trim();
+  if (!a) return false;
+  const na = _normFill(a), nb = _normFill(b);
+  if (na === nb) return true;
+  // 容許省略「變數＝」前綴（如答案「x = ln2」、使用者輸入「ln2」）
+  const stripEq = s => s.includes('=') ? s.slice(s.lastIndexOf('=') + 1) : s;
+  if (_normFill(stripEq(a)) === _normFill(stripEq(b))) return true;
+  // 純數字才走容差比對（避免「6x²…」被 parseFloat 誤判成 6）
+  const numRe = /^[+-]?\d*\.?\d+(e[+-]?\d+)?$/i;
+  const ca = a.replace(/[,\s]/g, ''), cb = b.replace(/[,\s]/g, '');
+  if (numRe.test(ca) && numRe.test(cb)) {
+    const nv = parseFloat(ca), nc = parseFloat(cb);
+    if (!isNaN(nv) && !isNaN(nc)) return Math.abs(nv - nc) <= Math.abs(nc * (tolerance || 0)) + 0.01;
+  }
+  return false;
+}
+
 function renderQuiz(container, quizArray, sessionId) {
   flog('QUIZ', `renderQuiz: ${quizArray.length} questions for ${sessionId}`, {
     types: quizArray.map(q => q.type)
@@ -2365,6 +2458,7 @@ function renderQuiz(container, quizArray, sessionId) {
 
 function renderSingleQuiz(item, q, qi, sessionId) {
   item.innerHTML = `<div class="quiz-q">Q${qi+1}. ${esc(q.q)}</div>
+    ${confRow()}
     <div class="quiz-opts">
       ${q.options.map((opt, i) =>
         `<div class="quiz-opt" data-idx="${i}" onclick="answerSingle('${sessionId}',${qi},${i},this.closest('.quiz-item'),${q.answer})">
@@ -2395,11 +2489,13 @@ function answerSingle(sessionId, qi, chosen, item, correct) {
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
 
+  recordAnswer(sessionId, qi, isCorrect, item, String.fromCharCode(65+chosen), String.fromCharCode(65+correct));
   if (!isCorrect) addToWrongBook(sessionId, qi, String.fromCharCode(65+chosen), String.fromCharCode(65+correct));
 }
 
 function renderMultiQuiz(item, q, qi, sessionId) {
   item.innerHTML = `<div class="quiz-q">Q${qi+1}. [多選] ${esc(q.q)}</div>
+    ${confRow()}
     <div class="quiz-opts">
       ${q.options.map((opt, i) =>
         `<div class="quiz-opt" data-idx="${i}" onclick="this.classList.toggle('selected')">
@@ -2428,11 +2524,14 @@ function answerMulti(sessionId, qi, item, correct) {
   item.appendChild(badge);
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
+  recordAnswer(sessionId, qi, isCorrect, item, selected.map(i=>String.fromCharCode(65+i)).join(','), correct.map(i=>String.fromCharCode(65+i)).join(','));
   if (!isCorrect) addToWrongBook(sessionId, qi, selected.join(','), correct.join(','));
 }
 
 function renderFillQuiz(item, q, qi, sessionId) {
   item.innerHTML = `<div class="quiz-q">Q${qi+1}. ${esc(q.q)}</div>
+    ${confRow()}
+    <div class="quiz-hint-tip">提示：可用一般鍵盤輸入，例如 x² 打成 x^2 或 x2 都算對；大小寫不限。</div>
     <div class="quiz-fill-row">
       <input class="quiz-fill-input" id="fill_${sessionId}_${qi}" placeholder="輸入答案…">
       <button class="quiz-confirm-btn" onclick="answerFill('${sessionId}',${qi},this.closest('.quiz-item'),'${esc(String(q.answer))}',${q.tolerance||0.05})">確認</button>
@@ -2445,15 +2544,8 @@ function answerFill(sessionId, qi, item, correctStr, tolerance) {
   const inputEl = el(`fill_${sessionId}_${qi}`);
   if (!inputEl) return;
   const val = inputEl.value.trim();
-  let isCorrect;
-  // logging happens after isCorrect is determined below
-  const numVal = parseFloat(val);
-  const numCorrect = parseFloat(correctStr);
-  if (!isNaN(numVal) && !isNaN(numCorrect)) {
-    isCorrect = Math.abs(numVal - numCorrect) <= Math.abs(numCorrect * tolerance) + 0.01;
-  } else {
-    isCorrect = val.toLowerCase() === correctStr.toLowerCase();
-  }
+  // 放寬判定：正規化文字（上下標、大小寫、符號）＋ 數值容差
+  const isCorrect = fillIsCorrect(val, correctStr, tolerance);
   item.dataset.answered = '1';
   flog('QUIZ', `answer: fill Q${qi+1} in ${sessionId}`, { input: val, correct: correctStr, isCorrect });
   inputEl.style.borderColor = isCorrect ? 'var(--accent-green)' : 'var(--accent-red)';
@@ -2463,11 +2555,13 @@ function answerFill(sessionId, qi, item, correctStr, tolerance) {
   item.appendChild(badge);
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
+  recordAnswer(sessionId, qi, isCorrect, item, val, correctStr);
   if (!isCorrect) addToWrongBook(sessionId, qi, val, correctStr);
 }
 
 function renderTFQuiz(item, q, qi, sessionId) {
   item.innerHTML = `<div class="quiz-q">Q${qi+1}. [是非] ${esc(q.q)}</div>
+    ${confRow()}
     <div class="quiz-tf-row">
       <button class="quiz-tf-btn" onclick="answerTF('${sessionId}',${qi},true,this.closest('.quiz-item'),${q.answer})">✓ 是 (True)</button>
       <button class="quiz-tf-btn" onclick="answerTF('${sessionId}',${qi},false,this.closest('.quiz-item'),${q.answer})">✗ 否 (False)</button>
@@ -2487,6 +2581,7 @@ function answerTF(sessionId, qi, chosen, item, correct) {
   });
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
+  recordAnswer(sessionId, qi, isCorrect, item, chosen ? 'True' : 'False', correct ? 'True' : 'False');
   if (!isCorrect) addToWrongBook(sessionId, qi, chosen ? 'True' : 'False', correct ? 'True' : 'False');
 }
 
@@ -2503,6 +2598,7 @@ function renderMatchQuiz(item, q, qi, sessionId) {
   const lefts  = pairs.map(p => p[0]);
   const rights = [...pairs.map(p => p[1])].sort(() => Math.random() - 0.5);
   item.innerHTML = `<div class="quiz-q">Q${qi+1}. [配對] ${esc(q.q)}</div>
+    ${confRow()}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
       <div>${lefts.map((l,i) => `<div class="quiz-opt match-left" data-li="${i}" onclick="matchSelectLeft(this,${qi})">${esc(l)}</div>`).join('')}</div>
       <div>${rights.map((r,i) => `<div class="quiz-opt match-right" data-ri="${i}" data-val="${esc(r)}" onclick="matchSelectRight(this,${qi})">${esc(r)}</div>`).join('')}</div>
@@ -2557,6 +2653,7 @@ function answerMatch(sessionId, qi, item, pairsStr) {
   item.appendChild(badge);
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
+  recordAnswer(sessionId, qi, allCorrect, item, made.map(m=>m.leftText+'→'+m.rightVal).join(','), correct.map(p=>p[0]+'→'+p[1]).join(','));
   if (!allCorrect) addToWrongBook(sessionId, qi, made.map(m=>m.leftText+'→'+m.rightVal).join(','), correct.map(p=>p[0]+'→'+p[1]).join(','));
 }
 
@@ -2692,12 +2789,14 @@ function renderProgress() {
       <button class="prog-tab active" onclick="switchProgTab('journal',this)">${t('journalTitle')}</button>
       <button class="prog-tab" onclick="switchProgTab('summaries',this)">${t('summaryList')}</button>
       <button class="prog-tab" onclick="switchProgTab('wrongbook',this)">${t('wrongBook')}</button>
+      <button class="prog-tab" onclick="switchProgTab('calibration',this)">🎯 信心校準</button>
       <button class="prog-tab" onclick="switchProgTab('heatmap',this)">學習熱力圖</button>
       <button class="prog-tab" onclick="switchProgTab('badges',this)">${t('achievementsTitle')}</button>
     </div>
     <div id="prog-journal" class="prog-tab-panel active"></div>
     <div id="prog-summaries" class="prog-tab-panel"></div>
     <div id="prog-wrongbook" class="prog-tab-panel"></div>
+    <div id="prog-calibration" class="prog-tab-panel"></div>
     <div id="prog-heatmap" class="prog-tab-panel"></div>
     <div id="prog-badges" class="prog-tab-panel"></div>`;
 
@@ -2710,11 +2809,78 @@ function switchProgTab(tab, btn) {
   btn.classList.add('active');
   el(`prog-${tab}`)?.classList.add('active');
 
-  if (tab === 'journal')   renderJournal();
-  if (tab === 'summaries') renderSummaries();
-  if (tab === 'wrongbook') renderWrongBook();
-  if (tab === 'heatmap')   renderHeatmap();
-  if (tab === 'badges')    renderBadges();
+  if (tab === 'journal')     renderJournal();
+  if (tab === 'summaries')   renderSummaries();
+  if (tab === 'wrongbook')   renderWrongBook();
+  if (tab === 'calibration') renderCalibration();
+  if (tab === 'heatmap')     renderHeatmap();
+  if (tab === 'badges')      renderBadges();
+}
+
+// 信心校準：找出「有信心卻錯」「沒把握卻對」，並列出各信心等級的正確率
+function renderCalibration() {
+  const area = el('prog-calibration');
+  if (!area) return;
+  const log = userState.confidenceLog || [];
+  if (!log.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div>
+      <p>還沒有作答記錄。</p>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">作答前先選「信心」，這裡就會幫你找出最該複習的盲點。</p></div>`;
+    return;
+  }
+  const confName = { high: '😎 有信心', mid: '🤔 普通', low: '😰 沒把握' };
+  const overconf  = log.filter(e => e.confidence === 'high' && !e.isCorrect);  // 過度自信
+  const underconf = log.filter(e => e.confidence === 'low'  &&  e.isCorrect);  // 低估自己
+
+  // 各信心等級正確率
+  const stat = lvl => {
+    const rows = log.filter(e => e.confidence === lvl);
+    const correct = rows.filter(e => e.isCorrect).length;
+    return { total: rows.length, correct, pct: rows.length ? Math.round(correct / rows.length * 100) : 0 };
+  };
+  const sHigh = stat('high'), sMid = stat('mid'), sLow = stat('low');
+
+  const titleOf = sid => appState.manifest?.sessionMeta?.[sid]?.title || sid;
+  const card = (e, tone) => `
+    <div class="card card-sm" style="margin-bottom:8px;border-left:3px solid var(--accent-${tone});">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:4px;">
+        <span><a href="#" onclick="navigate('pg-lesson',{id:'${e.sessionId}'});return false;" style="color:var(--accent-blue);">${esc(e.sessionId)}</a> ${esc(titleOf(e.sessionId))} · Q${e.qi+1}</span>
+        <span>${confName[e.confidence] || e.confidence}</span>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:4px;">${esc(e.q || '')}</p>
+      <div style="font-size:11px;color:var(--text-muted);">你的答案：<span style="color:var(--accent-${tone});">${esc(e.yourAnswer||'—')}</span> ｜ 正解：${esc(e.correctAnswer||'—')}</div>
+    </div>`;
+
+  area.innerHTML = `
+    <div class="card" style="margin-bottom:14px;">
+      <div class="settings-title">各信心等級的實際正確率</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+        <div style="flex:1;min-width:90px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-muted);">😎 有信心</div>
+          <div style="font-size:22px;font-weight:800;color:${sHigh.pct>=80?'var(--accent-green)':'var(--accent-red)'};">${sHigh.total?sHigh.pct+'%':'—'}</div>
+          <div style="font-size:10px;color:var(--text-muted);">${sHigh.correct}/${sHigh.total} 題</div>
+        </div>
+        <div style="flex:1;min-width:90px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-muted);">🤔 普通</div>
+          <div style="font-size:22px;font-weight:800;color:var(--accent-gold);">${sMid.total?sMid.pct+'%':'—'}</div>
+          <div style="font-size:10px;color:var(--text-muted);">${sMid.correct}/${sMid.total} 題</div>
+        </div>
+        <div style="flex:1;min-width:90px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-muted);">😰 沒把握</div>
+          <div style="font-size:22px;font-weight:800;color:var(--accent-teal);">${sLow.total?sLow.pct+'%':'—'}</div>
+          <div style="font-size:10px;color:var(--text-muted);">${sLow.correct}/${sLow.total} 題</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">理想情況：「有信心」正確率應該很高。若它偏低，代表你的「自我感覺」和「實際掌握」有落差，下面兩區就是要修正的地方。</p>
+    </div>
+
+    <div class="settings-title" style="color:var(--accent-red);">⚠ 有信心卻答錯（${overconf.length}）—— 最危險的盲點，優先複習</div>
+    <p style="font-size:12px;color:var(--text-muted);margin:4px 0 10px;">你以為懂了、其實沒懂。這類錯誤考試最容易踩。</p>
+    ${overconf.length ? overconf.slice().reverse().map(e => card(e, 'red')).join('') : '<p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">目前沒有——很好，你的自信沒有騙你。</p>'}
+
+    <div class="settings-title" style="color:var(--accent-teal);margin-top:16px;">🍀 沒把握卻答對（${underconf.length}）—— 可能是猜的，回看鞏固</div>
+    <p style="font-size:12px;color:var(--text-muted);margin:4px 0 10px;">這次對了不代表真的會，把它變成「有信心也對」。</p>
+    ${underconf.length ? underconf.slice().reverse().map(e => card(e, 'teal')).join('') : '<p style="font-size:12px;color:var(--text-muted);">目前沒有。</p>'}`;
 }
 
 function renderJournal() {
