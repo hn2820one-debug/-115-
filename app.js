@@ -164,6 +164,7 @@ function defaultUserState() {
     todo: [],
     achievements: [],
     confidenceLog: [],
+    srs: {},
     settings: { theme: 'dark', lang: 'zh', storageMode: 'local' }
   };
 }
@@ -259,9 +260,58 @@ function mergeUserStates(a, b) {
   }
   out.confidenceLog = [...cmap.values()];
 
+  // srs：依 sessionId 合併，保留較近一次複習的排程
+  out.srs = {};
+  const srsIds = new Set([...Object.keys(a.srs || {}), ...Object.keys(b.srs || {})]);
+  for (const id of srsIds) {
+    const ea = a.srs?.[id], eb = b.srs?.[id];
+    if (!ea) out.srs[id] = eb;
+    else if (!eb) out.srs[id] = ea;
+    else out.srs[id] = (ea.lastReview || '') >= (eb.lastReview || '') ? ea : eb;
+  }
+
   // 設定：以 a（當前裝置）為主，缺的用 b 補
   out.settings = Object.assign({}, b.settings, a.settings);
   return out;
+}
+
+// ── #6 間隔複習（SRS，SM-2 簡化版）──────────────────────────────
+function srsSeed(id, dueToday) {
+  userState.srs = userState.srs || {};
+  if (userState.srs[id]) return;
+  const d = new Date(); d.setDate(d.getDate() + (dueToday ? 0 : 1));
+  userState.srs[id] = { interval: 1, ease: 2.3, reps: 0, due: d.toISOString().slice(0, 10), lastReview: null };
+}
+function srsReview(id, grade) {  // grade: 'again' | 'good' | 'easy'
+  userState.srs = userState.srs || {};
+  const e = userState.srs[id] || { interval: 1, ease: 2.3, reps: 0 };
+  if (grade === 'again') {
+    e.reps = 0; e.interval = 1; e.ease = Math.max(1.3, (e.ease || 2.3) - 0.2);
+  } else {
+    if (e.reps === 0)      e.interval = grade === 'easy' ? 3 : 1;
+    else if (e.reps === 1) e.interval = grade === 'easy' ? 7 : 3;
+    else                   e.interval = Math.max(1, Math.round(e.interval * (grade === 'easy' ? (e.ease + 0.15) : e.ease)));
+    if (grade === 'easy') e.ease = Math.min(3.0, (e.ease || 2.3) + 0.15);
+    e.reps = (e.reps || 0) + 1;
+  }
+  const d = new Date(); d.setDate(d.getDate() + e.interval);
+  e.due = d.toISOString().slice(0, 10);
+  e.lastReview = new Date().toISOString();
+  userState.srs[id] = e;
+  flog('RECORD', `srs review: ${id} grade=${grade} → next ${e.due} (${e.interval}d)`);
+  save();
+}
+// 已完成但沒排程的節次，補種為「今天到期」，讓既有進度也進複習佇列
+function srsSeedCompleted() {
+  for (const [id, s] of Object.entries(userState.sessions || {})) {
+    if (s.completed && !userState.srs?.[id]) srsSeed(id, true);
+  }
+}
+function srsDueIds() {
+  const td = today();
+  return Object.keys(userState.srs || {})
+    .filter(id => (userState.srs[id].due || '') <= td && userState.sessions[id]?.completed)
+    .sort((a, b) => (userState.srs[a].due || '').localeCompare(userState.srs[b].due || ''));
 }
 
 // ================================================================
@@ -1762,6 +1812,7 @@ async function completeSession(id) {
 
   s.completed = true;
   s.completedAt = new Date().toISOString();
+  srsSeed(id);  // #6 排入間隔複習（明天首次到期）
 
   flog('RECORD', `complete: ${id}`, {
     streak: userState.streak?.current,
@@ -2992,21 +3043,25 @@ function renderProgress() {
   pg.innerHTML = `
     <h2 style="font-size:18px;font-weight:800;margin-bottom:16px;">${t('navProgress')}</h2>
     <div class="progress-tabs">
-      <button class="prog-tab active" onclick="switchProgTab('journal',this)">${t('journalTitle')}</button>
+      <button class="prog-tab active" onclick="switchProgTab('review',this)">🔁 今日複習</button>
+      <button class="prog-tab" onclick="switchProgTab('stats',this)">📈 統計</button>
+      <button class="prog-tab" onclick="switchProgTab('journal',this)">${t('journalTitle')}</button>
       <button class="prog-tab" onclick="switchProgTab('summaries',this)">${t('summaryList')}</button>
       <button class="prog-tab" onclick="switchProgTab('wrongbook',this)">${t('wrongBook')}</button>
       <button class="prog-tab" onclick="switchProgTab('calibration',this)">🎯 信心校準</button>
       <button class="prog-tab" onclick="switchProgTab('heatmap',this)">學習熱力圖</button>
       <button class="prog-tab" onclick="switchProgTab('badges',this)">${t('achievementsTitle')}</button>
     </div>
-    <div id="prog-journal" class="prog-tab-panel active"></div>
+    <div id="prog-review" class="prog-tab-panel active"></div>
+    <div id="prog-stats" class="prog-tab-panel"></div>
+    <div id="prog-journal" class="prog-tab-panel"></div>
     <div id="prog-summaries" class="prog-tab-panel"></div>
     <div id="prog-wrongbook" class="prog-tab-panel"></div>
     <div id="prog-calibration" class="prog-tab-panel"></div>
     <div id="prog-heatmap" class="prog-tab-panel"></div>
     <div id="prog-badges" class="prog-tab-panel"></div>`;
 
-  renderJournal();
+  renderReview();
 }
 
 function switchProgTab(tab, btn) {
@@ -3015,12 +3070,136 @@ function switchProgTab(tab, btn) {
   btn.classList.add('active');
   el(`prog-${tab}`)?.classList.add('active');
 
+  if (tab === 'review')      renderReview();
+  if (tab === 'stats')       renderStats();
   if (tab === 'journal')     renderJournal();
   if (tab === 'summaries')   renderSummaries();
   if (tab === 'wrongbook')   renderWrongBook();
   if (tab === 'calibration') renderCalibration();
   if (tab === 'heatmap')     renderHeatmap();
   if (tab === 'badges')      renderBadges();
+}
+
+// #6 今日複習：列出到期的節次，複習後依評分重新排程
+function renderReview() {
+  const area = el('prog-review');
+  if (!area) return;
+  srsSeedCompleted();             // 既有已完成節次補進複習佇列
+  const due = srsDueIds();
+  const totalScheduled = Object.keys(userState.srs || {}).length;
+  const titleOf = id => appState.manifest?.sessionMeta?.[id]?.title || id;
+
+  if (!due.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div>
+      <p>今天沒有要複習的節次了！</p>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">
+        ${totalScheduled ? `已排程 ${totalScheduled} 節，依遺忘曲線到期才會出現在這。` : '完成節次後會自動排入間隔複習。'}</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <div class="card" style="margin-bottom:14px;">
+      <div style="font-size:13px;color:var(--text-secondary);">今天有 <b style="color:var(--accent-gold);font-size:18px;">${due.length}</b> 節到期複習</div>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">複習方法：點「開啟複習」快速看一遍重點與題目，回來後誠實評分，系統會依遺忘曲線決定下次再考你的時間。</p>
+    </div>
+    ${due.map(id => {
+      const e = userState.srs[id];
+      return `<div class="card card-sm review-card" id="rev-${id}" style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+          <div>
+            <span style="font-size:11px;color:var(--accent-blue);">${esc(id)}</span>
+            <span style="font-size:13px;color:var(--text-primary);"> ${esc(titleOf(id))}</span>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px;">已複習 ${e.reps||0} 次</div>
+          </div>
+          <button class="setting-btn" onclick="navigate('pg-lesson',{id:'${id}'})">開啟複習 →</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;">
+          <button class="rev-btn rev-again" onclick="doReview('${id}','again')">😵 再來一次<br><span>1 天後</span></button>
+          <button class="rev-btn rev-good"  onclick="doReview('${id}','good')">🙂 普通<br><span>${_revPreview(id,'good')}</span></button>
+          <button class="rev-btn rev-easy"  onclick="doReview('${id}','easy')">😎 簡單<br><span>${_revPreview(id,'easy')}</span></button>
+        </div>
+      </div>`;
+    }).join('')}`;
+}
+function _revPreview(id, grade) {
+  const e = userState.srs?.[id] || { interval: 1, ease: 2.3, reps: 0 };
+  let iv;
+  if (e.reps === 0)      iv = grade === 'easy' ? 3 : 1;
+  else if (e.reps === 1) iv = grade === 'easy' ? 7 : 3;
+  else                   iv = Math.max(1, Math.round(e.interval * (grade === 'easy' ? (e.ease + 0.15) : e.ease)));
+  return iv >= 30 ? `${Math.round(iv/30)} 個月後` : `${iv} 天後`;
+}
+function doReview(id, grade) {
+  srsReview(id, grade);
+  const card = el('rev-' + id);
+  if (card) { card.style.transition = 'opacity .3s'; card.style.opacity = '0'; setTimeout(renderReview, 320); }
+  else renderReview();
+}
+
+// #8 學習統計儀表板
+function renderStats() {
+  const area = el('prog-stats');
+  if (!area) return;
+  const sessions = Object.values(userState.sessions || {});
+  const done = sessions.filter(s => s.completed).length;
+  const mins = userState.totalMinutes || 0;
+  const hrs = (mins / 60).toFixed(1);
+  const studyDays = new Set(sessions.filter(s => s.completedAt).map(s => fmtDate(s.completedAt))).size;
+  const cur = userState.streak?.current || 0, longest = userState.streak?.longest || 0;
+
+  // 正確率（用 confidenceLog）
+  const log = userState.confidenceLog || [];
+  const acc = log.length ? Math.round(log.filter(e => e.isCorrect).length / log.length * 100) : null;
+  const byDiff = { basic: [0, 0], standard: [0, 0], challenge: [0, 0] };
+  // 從 session quiz 對照難度（log 沒存難度，這裡用整體；難度細分需題庫，先用信心分級替代）
+  const byConf = { high: [0, 0], mid: [0, 0], low: [0, 0] };
+  for (const e of log) { const b = byConf[e.confidence] || byConf.mid; b[1]++; if (e.isCorrect) b[0]++; }
+
+  // 每階段完成
+  const stages = appState.manifest?.stages || [];
+  const stageRows = stages.map((st, i) => {
+    const ids = st.weeks.flatMap(w => w.sessionIds);
+    const c = ids.filter(id => userState.sessions[id]?.completed).length;
+    const color = i === 0 ? 'var(--stage-1-accent)' : i === 1 ? 'var(--stage-2-accent)' : 'var(--stage-3-accent)';
+    return `<div style="margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:3px;"><span>${esc(st.title)}</span><span>${c}/${ids.length}</span></div>
+      <div class="stage-bar-track"><div class="stage-bar-fill" style="width:${Math.round(c/ids.length*100)}%;background:${color};"></div></div>
+    </div>`;
+  }).join('');
+
+  const statCard = (label, val, sub, color) => `
+    <div class="card" style="flex:1;min-width:120px;text-align:center;padding:14px 10px;">
+      <div style="font-size:11px;color:var(--text-muted);">${label}</div>
+      <div style="font-size:24px;font-weight:800;color:${color||'var(--text-primary)'};margin:2px 0;">${val}</div>
+      <div style="font-size:10px;color:var(--text-muted);">${sub||''}</div>
+    </div>`;
+  const confBar = (lvl, name, color) => {
+    const [c, tt] = byConf[lvl];
+    const pct = tt ? Math.round(c / tt * 100) : 0;
+    return `<div style="margin-bottom:6px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);"><span>${name}</span><span>${tt ? pct + '% (' + c + '/' + tt + ')' : '—'}</span></div>
+      <div class="stage-bar-track"><div class="stage-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+    </div>`;
+  };
+
+  area.innerHTML = `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+      ${statCard('已完成', done + '<span style="font-size:13px;color:var(--text-muted)">/192</span>', Math.round(done/192*100)+'%', 'var(--accent-blue)')}
+      ${statCard('學習時數', hrs, mins + ' 分鐘', 'var(--accent-teal)')}
+      ${statCard('學習天數', studyDays, '天', 'var(--accent-purple)')}
+      ${statCard('連續天數', cur + ' 🔥', '最長 ' + longest, 'var(--accent-gold)')}
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="settings-title">各階段進度</div>
+      <div style="margin-top:8px;">${stageRows}</div>
+    </div>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="settings-title">作答正確率</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin:6px 0 10px;">整體 ${acc !== null ? `<b style="font-size:18px;color:${acc>=70?'var(--accent-green)':'var(--accent-gold)'}">${acc}%</b>（${log.length} 題）` : '尚無作答記錄'}</div>
+      ${log.length ? `<div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">依作答前信心分組：</div>
+        ${confBar('high','😎 有信心','var(--accent-green)')}
+        ${confBar('mid','🤔 普通','var(--accent-gold)')}
+        ${confBar('low','😰 沒把握','var(--accent-teal)')}` : ''}
+    </div>`;
 }
 
 // 信心校準：找出「有信心卻錯」「沒把握卻對」，並列出各信心等級的正確率
@@ -3175,14 +3354,22 @@ function renderWrongBook() {
     area.innerHTML = `<div class="empty-state"><div class="empty-icon">🎉</div><p>${t('noWrong')}</p></div>`;
     return;
   }
-  area.innerHTML = `<div class="wrong-book-list">` + wb.map((w, i) => {
+  const log = userState.confidenceLog || [];
+  const wasConfident = (sid, qi) => log.some(e => e.sessionId === sid && e.qi === qi && e.confidence === 'high' && !e.isCorrect);
+
+  area.innerHTML = `
+    <input type="text" class="todo-input" style="width:100%;margin-bottom:10px;"
+      placeholder="搜尋節次/題目…" oninput="filterResList('wrongbook-list',this.value)">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">共 ${wb.length} 題。訂正流程：返回本節重看講解 → 弄懂後「已記住，移除」。標 ⚠ 的是你當時「有信心卻答錯」，最該優先弄懂。</div>
+    <div id="wrongbook-list" class="wrong-book-list">` + wb.map((w, i) => {
     const meta = appState.manifest?.sessionMeta?.[w.sessionId];
-    return `<div class="wrong-book-item" id="wb-item-${i}">
-      <div class="wb-meta">${esc(w.sessionId)} · ${esc(meta?.title||'')} · 第 ${w.qi+1} 題 · ${fmtDate(w.addedAt)}</div>
+    const conf = wasConfident(w.sessionId, w.qi);
+    return `<div class="wrong-book-item res-card" id="wb-item-${i}"${conf ? ' style="border-left:3px solid var(--accent-red);"' : ''}>
+      <div class="wb-meta">${esc(w.sessionId)} · ${esc(meta?.title||'')} · 第 ${w.qi+1} 題 · ${fmtDate(w.addedAt)}${conf ? ' <span style="color:var(--accent-red);font-weight:700;">⚠ 當時有信心</span>' : ''}</div>
       <div class="wb-your">${t('yourAnswer')}：${esc(String(w.yourAnswer))}</div>
       <div class="wb-ans">${t('correctAnswer')}：${esc(String(w.correctAnswer))}</div>
       <div style="display:flex;gap:8px;margin-top:8px;">
-        <button class="wb-retry" onclick="navigate('pg-lesson',{id:'${w.sessionId}'})">→ 返回本節</button>
+        <button class="wb-retry" onclick="navigate('pg-lesson',{id:'${w.sessionId}'})">→ 返回本節重看</button>
         <button class="wb-retry" onclick="wbMarkResolved(${i})"
           style="color:var(--accent-green);border-color:rgba(76,175,110,0.3);">✓ 已記住，移除</button>
       </div>

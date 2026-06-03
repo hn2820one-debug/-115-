@@ -840,6 +840,19 @@ input, textarea, select { font: inherit; color: inherit; }
 .term-card.flipped .tc-hint { display: none; }
 .term-card.flipped { background: var(--bg-card-hover); border-color: var(--accent-teal); }
 
+/* #6 SRS 複習評分按鈕 */
+.rev-btn {
+  flex: 1; padding: 8px 4px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; font-weight: 600; line-height: 1.3; text-align: center;
+  border: 1px solid var(--border); background: var(--bg-input); color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.rev-btn span { font-size: 10px; font-weight: 400; color: var(--text-muted); }
+.rev-btn:hover { transform: translateY(-1px); }
+.rev-again:hover { border-color: var(--accent-red);   color: var(--accent-red); }
+.rev-good:hover  { border-color: var(--accent-gold);  color: var(--accent-gold); }
+.rev-easy:hover  { border-color: var(--accent-green); color: var(--accent-green); }
+
 /* ── 12. Progress Page ────────────────────────────────────────── */
 .progress-tabs {
   display: flex; gap: 4px;
