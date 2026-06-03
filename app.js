@@ -165,6 +165,7 @@ function defaultUserState() {
     achievements: [],
     confidenceLog: [],
     srs: {},
+    milestones: {},
     settings: { theme: 'dark', lang: 'zh', storageMode: 'local' }
   };
 }
@@ -271,6 +272,14 @@ function mergeUserStates(a, b) {
     if (!ea) out.srs[id] = eb;
     else if (!eb) out.srs[id] = ea;
     else out.srs[id] = (ea.lastReview || '') >= (eb.lastReview || '') ? ea : eb;
+  }
+
+  // milestones：聯集，保留較早通過時間
+  out.milestones = {};
+  const msKeys = new Set([...Object.keys(a.milestones || {}), ...Object.keys(b.milestones || {})]);
+  for (const k of msKeys) {
+    const va = a.milestones?.[k], vb = b.milestones?.[k];
+    out.milestones[k] = (va && vb) ? (va < vb ? va : vb) : (va || vb);
   }
 
   // 設定：以 a（當前裝置）為主，缺的用 b 補
@@ -1234,7 +1243,14 @@ function renderCourseMap() {
     st.weeks.map(wk => `<option value="map-week-${wk.id}">Week ${wk.id} — ${wk.title.slice(0,18)}</option>`)
   ).join('');
 
+  // #13 下一個該讀的節次（依順序第一個未完成）
+  const nextId = getAllSessionIds().find(id => !userState.sessions[id]?.completed);
+  const nextMeta = nextId ? appState.manifest?.sessionMeta?.[nextId] : null;
+
   let html = `
+  ${nextId ? `<button class="map-next-banner" onclick="navigate('pg-lesson',{id:'${nextId}'})">
+      👉 下一個該讀：<b>${esc(nextId)}</b> ${esc(nextMeta?.title || '')} <span style="margin-left:auto;">開始 →</span>
+    </button>` : ''}
   <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
     <div>
       <h2 style="font-size:18px;font-weight:800;margin:0;">課程地圖</h2>
@@ -1311,6 +1327,12 @@ function renderCourseMap() {
       const block = pg.querySelector(`.map-week-block[data-wid="${wk.id}"]`);
       if (block) block.id = `map-week-${wk.id}`;
     }
+
+  // #13 標記「下一個該讀」節點
+  if (nextId) {
+    const nd = pg.querySelector(`.node[data-id="${nextId}"]`);
+    if (nd) nd.classList.add('node-next');
+  }
 
   // Restore scroll position
   if (appState.mapScrollY > 0) {
@@ -1456,6 +1478,14 @@ async function renderLesson(id) {
       <h1 class="lesson-title-zh">${esc(session.title || id)}</h1>
       <p class="lesson-title-en">${esc(session.titleEn || '')}</p>
       ${session.objective ? `<div class="lesson-objective"><span style="font-size:11px;color:var(--accent-blue);font-weight:700;margin-right:6px;">${t('objective')}</span>${esc(session.objective)}</div>` : ''}
+      ${(session.prereq && session.prereq.length) ? `<div class="prereq-row">
+        <span class="prereq-label">先備：</span>
+        ${session.prereq.map(pid => {
+          const pdone = userState.sessions[pid]?.completed;
+          return `<button class="prereq-chip${pdone ? ' done' : ''}" onclick="navigate('pg-lesson',{id:'${pid}'})" title="${esc(appState.manifest?.sessionMeta?.[pid]?.title || pid)}">${pdone ? '✓ ' : ''}${esc(pid)}</button>`;
+        }).join('')}
+        <span class="prereq-hint">沒把握的話先點回去複習</span>
+      </div>` : ''}
       ${platform.url ? `<a class="lesson-platform-btn" href="${esc(platform.url)}" target="_blank">
         ${esc(platform.name || session.platform)} ${t('toPlatform')}
       </a>` : ''}
@@ -3139,9 +3169,113 @@ function renderPractice(params = {}) {
     </div>
     <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">${t('selectScope')}</p>
     <div class="practice-scope">${scopeHTML}</div>
+
+    <!-- #5/#10 模擬考 + 里程碑檢定 -->
+    <div class="card" style="margin-top:16px;">
+      <div class="settings-title">📝 模擬考 / 里程碑檢定</div>
+      <p style="font-size:12px;color:var(--text-muted);margin:6px 0 10px;">依難度配比（4 易/5 中/1 難）抽 20 題、計時 30 分鐘、按「交卷」評分；里程碑檢定達 <b>70%</b> 通過解鎖徽章。</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        ${stages.map((st, i) => {
+          const ids = st.weeks.flatMap(w => w.sessionIds);
+          const done = !!userState.milestones?.['stage' + st.id];
+          return `<button class="scope-btn${done ? '  active' : ''}"
+            onclick="startMockExam('第${st.id}階段檢定',${JSON.stringify(ids).replace(/"/g,"'").replace(/'/g,'&apos;')},'stage${st.id}',20)">
+            ${done ? '🏅 ' : ''}第${st.id}階段檢定</button>`;
+        }).join('')}
+        <button class="scope-btn" onclick="startMockExam('全範圍模擬考',${JSON.stringify(getAllSessionIds()).replace(/"/g,"'").replace(/'/g,'&apos;')},'',25)">🎯 全範圍模擬考</button>
+      </div>
+    </div>
+
     <div id="practice-content">
       <p class="text-muted" style="font-size:13px;padding:20px 0;">選擇範圍後點擊週按鈕開始練習。</p>
     </div>`;
+}
+
+// #5/#10 模擬考：依難度配比抽題、計時、交卷評分、里程碑 70% 通過
+let _examTimer = null;
+async function startMockExam(label, idsStr, milestoneKey, count) {
+  count = count || 20;
+  const ids = Array.isArray(idsStr) ? idsStr : JSON.parse(idsStr.replace(/&apos;/g, "'"));
+  const area = el('practice-content');
+  if (!area) return;
+  clearInterval(_examTimer); clearInterval(_practiceTimer);
+  area.innerHTML = `<div style="text-align:center;padding:40px;"><div class="loader-ring" style="margin:0 auto;"></div><p style="margin-top:12px;font-size:13px;color:var(--text-muted);">組卷中…</p></div>`;
+
+  const pool = [];
+  for (const id of ids) {
+    const s = await loadSession(id);
+    if (s.quiz?.length) s.quiz.forEach((q, qi) => { if (q.type !== 'free') pool.push({ ...q, sessionId: id, qi }); });
+  }
+  if (pool.length < 4) {
+    area.innerHTML = `<div class="card"><p class="text-muted text-center" style="padding:20px;">這個範圍可考題目還不夠（需先填充更多內容）。</p></div>`;
+    return;
+  }
+  const shuf = arr => arr.slice().sort(() => Math.random() - 0.5);
+  const byD = { basic: [], standard: [], challenge: [] };
+  pool.forEach(q => (byD[q.difficulty] || byD.standard).push(q));
+  const want = { basic: Math.round(count * 0.4), standard: Math.round(count * 0.5), challenge: Math.max(1, Math.round(count * 0.1)) };
+  let exam = [...shuf(byD.basic).slice(0, want.basic), ...shuf(byD.standard).slice(0, want.standard), ...shuf(byD.challenge).slice(0, want.challenge)];
+  if (exam.length < count) {
+    const rest = pool.filter(q => !exam.includes(q));
+    exam = exam.concat(shuf(rest).slice(0, count - exam.length));
+  }
+  exam = shuf(exam);
+
+  area.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <span style="font-size:13px;color:var(--text-secondary);">${esc(label)} — ${exam.length} 題</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div id="exam-timer" style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:15px;font-weight:700;color:var(--accent-gold);">30:00</div>
+        <button class="complete-btn" style="padding:8px 16px;margin:0;width:auto;" onclick="submitExam('${milestoneKey}',${exam.length})">交卷</button>
+      </div>
+    </div>
+    <div id="practice-quiz-area"></div>`;
+  renderQuiz(el('practice-quiz-area'), exam, 'exam');
+
+  let sec = 30 * 60;
+  const tick = () => {
+    const tEl = el('exam-timer');
+    if (!tEl) { clearInterval(_examTimer); return; }
+    const m = Math.floor(sec / 60), s = sec % 60;
+    tEl.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    if (sec <= 0) { clearInterval(_examTimer); submitExam(milestoneKey, exam.length); }
+    sec--;
+  };
+  _examTimer = setInterval(tick, 1000); tick();
+  flog('QUIZ', `mock exam started: ${label}`, { count: exam.length, milestoneKey });
+}
+
+function submitExam(milestoneKey, total) {
+  clearInterval(_examTimer);
+  const quizArea = el('practice-quiz-area');
+  if (!quizArea) return;
+  const correct = quizArea.querySelectorAll('.quiz-badge.correct').length;
+  const answered = quizArea.querySelectorAll('.quiz-item[data-answered]').length;
+  const pct = total ? Math.round(correct / total * 100) : 0;
+  const pass = pct >= 70;
+
+  let milestoneMsg = '';
+  if (milestoneKey && pass) {
+    userState.milestones = userState.milestones || {};
+    if (!userState.milestones[milestoneKey]) {
+      userState.milestones[milestoneKey] = new Date().toISOString();
+      save();
+      milestoneMsg = '🏅 恭喜通過里程碑檢定，已解鎖徽章！';
+      showToast(milestoneMsg, 'success', 5000);
+    } else milestoneMsg = '🏅 此里程碑先前已通過。';
+  }
+  flog('QUIZ', `exam submitted`, { correct, total, pct, pass, milestoneKey });
+
+  const banner = document.createElement('div');
+  banner.className = 'quiz-score-banner slide-in';
+  banner.style.borderColor = pass ? 'var(--accent-green)' : 'var(--accent-gold)';
+  banner.innerHTML = `
+    <div class="quiz-score-num" style="color:${pass ? 'var(--accent-green)' : 'var(--accent-gold)'};">${correct}/${total}</div>
+    <div class="quiz-score-label">${pct}% 正確 · ${answered} 題已作答 · ${pass ? '✓ 通過（≥70%）' : '未達 70%，再加油'}</div>
+    ${milestoneMsg ? `<div style="font-size:12px;color:var(--accent-green);margin-top:6px;">${milestoneMsg}</div>` : ''}
+    ${!pass ? `<div style="font-size:11px;color:var(--text-muted);margin-top:6px;">未答對的題目已自動進錯題本，可到「紀錄 → 錯題本」訂正。</div>` : ''}`;
+  quizArea.insertBefore(banner, quizArea.firstChild);
+  banner.scrollIntoView({ behavior: 'smooth' });
 }
 
 // U01: timed practice mode

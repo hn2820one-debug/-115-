@@ -915,6 +915,34 @@ input, textarea, select { font: inherit; color: inherit; }
 .pomo-tip { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 8px; }
 @media (max-width: 600px) { #fl-pomo-btn { bottom: 140px; } #fl-pomo-panel { bottom: 192px; } }
 
+/* #13 地圖「下一個該讀」橫幅 + 節點脈動 */
+.map-next-banner {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: linear-gradient(90deg, rgba(74,158,255,0.16), rgba(45,212,191,0.10));
+  border: 1px solid var(--accent-blue); border-radius: var(--radius-md);
+  padding: 12px 16px; margin-bottom: 14px; cursor: pointer;
+  font-size: 13.5px; color: var(--text-primary); text-align: left;
+}
+.map-next-banner:hover { background: linear-gradient(90deg, rgba(74,158,255,0.24), rgba(45,212,191,0.16)); }
+.map-next-banner b { color: var(--accent-blue); }
+.node.node-next { box-shadow: 0 0 0 3px var(--accent-blue); animation: nextPulse 1.6s ease-in-out infinite; }
+@keyframes nextPulse {
+  0%,100% { box-shadow: 0 0 0 3px rgba(74,158,255,0.7); }
+  50%     { box-shadow: 0 0 0 6px rgba(74,158,255,0.25); }
+}
+
+/* #4 先備節次 chips */
+.prereq-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.prereq-label { font-size: 11px; color: var(--text-muted); font-weight: 700; }
+.prereq-chip {
+  font-size: 11px; padding: 3px 9px; border-radius: 12px; cursor: pointer;
+  background: var(--bg-input); border: 1px solid var(--border); color: var(--accent-blue);
+  font-family: 'Fira Code', monospace;
+}
+.prereq-chip:hover { border-color: var(--accent-blue); }
+.prereq-chip.done { color: var(--accent-green); border-color: rgba(76,175,110,0.4); }
+.prereq-hint { font-size: 10px; color: var(--text-muted); }
+
 /* ── 12. Progress Page ────────────────────────────────────────── */
 .progress-tabs {
   display: flex; gap: 4px;
