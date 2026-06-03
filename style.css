@@ -656,6 +656,26 @@ input, textarea, select { font: inherit; color: inherit; }
 .chart-slider-group input[type=range] { accent-color: var(--accent-blue); width: 120px; }
 .chart-slider-val { color: var(--accent-blue); font-weight: 600; min-width: 60px; }
 
+/* functionPlot 可編輯係數輸入 */
+.fnplot-edit-wrap { padding: 4px 14px 12px; }
+.fnplot-edit-tip { font-size: 12px; color: var(--accent-teal); font-weight: 600; margin: 6px 0 8px; }
+.fnplot-edit { margin-bottom: 8px; }
+.fnplot-edit-head { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+.fnplot-edit-head b { color: var(--text-secondary); font-family: 'Fira Code', monospace; font-weight: 600; }
+.fnplot-edit-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fnplot-coef { font-size: 12px; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 4px; }
+.fnplot-coef input {
+  width: 60px; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 7px; color: var(--text-primary); font-size: 13px;
+  font-family: 'Fira Code', monospace;
+}
+.fnplot-coef input:focus { outline: none; border-color: var(--accent-blue); }
+.fnplot-reset {
+  font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+  background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+}
+.fnplot-reset:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
+
 /* ── 11. Quiz Engine ──────────────────────────────────────────── */
 .quiz-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
 

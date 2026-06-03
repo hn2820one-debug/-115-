@@ -1854,32 +1854,47 @@ function destroyChart(key) {
 }
 
 // Generic calculus function plotter (Week 1–2): linear / quadratic / cubic /
-// exp / ln / power / recip / sqrt, plus an optional tangent line driven by an
-// x₀ slider (for visualising the derivative = tangent slope).
+// exp / ln / power / recip / sqrt, plus an optional tangent line (x₀ slider)
+// and editable coefficient inputs so learners can type their own values.
 function renderFunctionPlot(container, params = {}) {
   const {
     curves = [{ fn: 'quadratic', a: 1, b: 0, c: 0, label: 'y = x²' }],
     xrange = [-5, 5],
     yrange = null,
     samples = 160,
-    tangent = null            // { curve: 0, x0: 1, adjustable: true }
+    tangent = null,           // { curve: 0, x0: 1, adjustable: true }
+    editable                  // true=全部可改 / false=都不可改 / undefined=自動（非參考線即可改）
   } = params;
 
   const palette = ['#4a9eff', '#2dd4bf', '#f5c842', '#a78bfa', '#f06060'];
+  const live = curves.map(c => ({ ...c }));   // 可變副本（不動到 manifest 原始物件）
+  const orig = curves.map(c => ({ ...c }));   // 原始值（重設用）
+  let x0cur = tangent ? (tangent.x0 ?? 1) : 1;
+
+  // 各函數型別的可調係數與公式標籤
+  const COEF = {
+    linear: ['a', 'b'], quadratic: ['a', 'b', 'c'], cubic: ['a', 'b', 'c', 'd'],
+    exp: ['a', 'k', 'b'], ln: ['a', 'b'], power: ['a', 'n'], recip: ['a'], sqrt: ['a']
+  };
+  const FORM = {
+    linear: 'y = a·x + b', quadratic: 'y = a·x² + b·x + c', cubic: 'y = a·x³ + b·x² + c·x + d',
+    exp: 'y = a·e^(k·x) + b', ln: 'y = a·ln x + b', power: 'y = a·xⁿ', recip: 'y = a / x', sqrt: 'y = a·√x'
+  };
+  const DEF = { a: 1, b: 0, c: 0, d: 0, k: 1, n: 2 };
 
   // Evaluate a named curve form at x (no eval — safe, fixed set of forms).
   const evalCurve = (cv, x) => {
     const a = cv.a ?? 1, b = cv.b ?? 0, c = cv.c ?? 0, d = cv.d ?? 0, n = cv.n ?? 2, k = cv.k ?? 1;
     switch (cv.fn) {
-      case 'linear':    return a * x + b;                       // a·x + b
-      case 'quadratic': return a * x * x + b * x + c;           // a·x² + b·x + c
-      case 'cubic':     return a*x*x*x + b*x*x + c*x + d;       // a·x³ + b·x² + c·x + d
-      case 'exp':       return a * Math.exp(k * x) + b;         // a·e^(k·x) + b
-      case 'ln':        return x > 0 ? a * Math.log(x) + b : NaN; // a·ln x + b
-      case 'power':     return a * Math.pow(x, n);              // a·xⁿ
-      case 'recip':     return x !== 0 ? a / x : NaN;           // a/x
-      case 'sqrt':      return x >= 0 ? a * Math.sqrt(x) : NaN; // a·√x
-      case 'identity':  return x;                               // y = x（參考線）
+      case 'linear':    return a * x + b;
+      case 'quadratic': return a * x * x + b * x + c;
+      case 'cubic':     return a*x*x*x + b*x*x + c*x + d;
+      case 'exp':       return a * Math.exp(k * x) + b;
+      case 'ln':        return x > 0 ? a * Math.log(x) + b : NaN;
+      case 'power':     return a * Math.pow(x, n);
+      case 'recip':     return x !== 0 ? a / x : NaN;
+      case 'sqrt':      return x >= 0 ? a * Math.sqrt(x) : NaN;
+      case 'identity':  return x;
       default:          return NaN;
     }
   };
@@ -1899,18 +1914,8 @@ function renderFunctionPlot(container, params = {}) {
   const canvas = makeCanvas(container, uid);
   const ctx = canvas.getContext('2d');
 
-  const datasets = curves.map((cv, i) => ({
-    label: cv.label || ('curve ' + (i + 1)),
-    data: buildPts(cv),
-    borderColor: cv.color || palette[i % palette.length],
-    backgroundColor: 'transparent',
-    borderWidth: cv.fn === 'identity' ? 1 : 2,
-    borderDash: cv.fn === 'identity' ? [3, 3] : [],
-    pointRadius: 0, tension: 0.2, fill: false
-  }));
-
-  // Tangent line via central-difference derivative (numeric, robust for all forms).
-  const tCurve = () => curves[(tangent && tangent.curve) || 0];
+  // Tangent line via central-difference derivative (uses live curve, so edits update it too).
+  const tCurve = () => live[(tangent && tangent.curve) || 0];
   const slopeAt = (x0v) => {
     const h = (xrange[1] - xrange[0]) / 2000;
     return (evalCurve(tCurve(), x0v + h) - evalCurve(tCurve(), x0v - h)) / (2 * h);
@@ -1930,7 +1935,20 @@ function renderFunctionPlot(container, params = {}) {
     borderColor: '#f5c842', backgroundColor: '#f5c842', pointRadius: 5, showLine: false
   });
 
-  if (tangent) datasets.push(tangentLine(tangent.x0 ?? 1), tangentDot(tangent.x0 ?? 1));
+  // 從 live 重建所有資料集（曲線 + 切線）
+  const buildDatasets = () => {
+    const ds = live.map((cv, i) => ({
+      label: cv.label || ('curve ' + (i + 1)),
+      data: buildPts(cv),
+      borderColor: cv.color || palette[i % palette.length],
+      backgroundColor: 'transparent',
+      borderWidth: cv.fn === 'identity' ? 1 : 2,
+      borderDash: cv.fn === 'identity' ? [3, 3] : [],
+      pointRadius: 0, tension: 0.2, fill: false
+    }));
+    if (tangent) ds.push(tangentLine(x0cur), tangentDot(x0cur));
+    return ds;
+  };
 
   destroyChart(uid);
   const yScale = { title: { display: true, text: 'y', color: '#8b93a8' }, ticks: { color: '#8b93a8' }, grid: { color: '#2e3447' } };
@@ -1938,7 +1956,7 @@ function renderFunctionPlot(container, params = {}) {
 
   appState._charts[uid] = new Chart(ctx, {
     type: 'line',
-    data: { datasets },
+    data: { datasets: buildDatasets() },
     options: {
       responsive: true, maintainAspectRatio: false, animation: { duration: 300 },
       scales: {
@@ -1953,6 +1971,57 @@ function renderFunctionPlot(container, params = {}) {
     }
   });
 
+  const redraw = () => { const ch = appState._charts[uid]; if (ch) { ch.data.datasets = buildDatasets(); ch.update(); } };
+
+  // 決定哪些曲線可編輯：true=全部、false=無、undefined=自動（非 identity 參考線即可改）
+  const editIdx = live
+    .map((cv, i) => ({ cv, i }))
+    .filter(o => COEF[o.cv.fn] && o.cv.fn !== 'identity')
+    .filter(() => editable !== false)
+    .map(o => o.i);
+
+  // 係數輸入框：自己填數值玩
+  if (editIdx.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'fnplot-edit-wrap';
+    wrap.innerHTML = `<div class="fnplot-edit-tip">🎛 自己填數值玩玩看（圖會即時更新）</div>` +
+      editIdx.map(idx => {
+        const cv = live[idx];
+        const inputs = (COEF[cv.fn] || []).map(name => {
+          const val = cv[name] ?? DEF[name] ?? 0;
+          return `<label class="fnplot-coef">${name} =
+            <input type="number" step="0.5" id="${uid}-c${idx}-${name}" data-idx="${idx}" data-coef="${name}" value="${val}"></label>`;
+        }).join('');
+        return `<div class="fnplot-edit">
+          <div class="fnplot-edit-head"><b>${FORM[cv.fn] || ''}</b></div>
+          <div class="fnplot-edit-row">${inputs}
+            <button type="button" class="fnplot-reset" data-idx="${idx}">↺ 重設</button>
+          </div>
+        </div>`;
+      }).join('');
+    container.appendChild(wrap);
+
+    qsa('input[type=number]', wrap).forEach(inp => {
+      inp.addEventListener('input', function () {
+        const idx = +this.dataset.idx, coef = this.dataset.coef;
+        const v = parseFloat(this.value);
+        live[idx][coef] = isNaN(v) ? (DEF[coef] ?? 0) : v;
+        redraw();
+      });
+    });
+    qsa('.fnplot-reset', wrap).forEach(btn => {
+      btn.addEventListener('click', function () {
+        const idx = +this.dataset.idx;
+        live[idx] = { ...orig[idx] };
+        (COEF[live[idx].fn] || []).forEach(name => {
+          const inp = el(`${uid}-c${idx}-${name}`);
+          if (inp) inp.value = live[idx][name] ?? DEF[name] ?? 0;
+        });
+        redraw();
+      });
+    });
+  }
+
   // x₀ slider — moves the tangent point so the slope updates live.
   if (tangent && tangent.adjustable) {
     const sid = uid + '-x0';
@@ -1961,20 +2030,14 @@ function renderFunctionPlot(container, params = {}) {
     ctrl.innerHTML = `
       <div class="chart-slider-group">
         <label>切點位置 x₀:</label>
-        <input type="range" id="${sid}" min="${xrange[0]}" max="${xrange[1]}" step="0.1" value="${tangent.x0 ?? 1}">
-        <span class="chart-slider-val" id="${sid}-val">x₀ = ${(tangent.x0 ?? 1).toFixed(1)}</span>
+        <input type="range" id="${sid}" min="${xrange[0]}" max="${xrange[1]}" step="0.1" value="${x0cur}">
+        <span class="chart-slider-val" id="${sid}-val">x₀ = ${x0cur.toFixed(1)}</span>
       </div>`;
     container.appendChild(ctrl);
     el(sid).addEventListener('input', function () {
-      const xv = parseFloat(this.value);
-      el(sid + '-val').textContent = 'x₀ = ' + xv.toFixed(1);
-      const ch = appState._charts[uid];
-      if (ch) {
-        const di = ch.data.datasets.length - 2; // tangent line + dot are the last two
-        ch.data.datasets[di] = tangentLine(xv);
-        ch.data.datasets[di + 1] = tangentDot(xv);
-        ch.update();
-      }
+      x0cur = parseFloat(this.value);
+      el(sid + '-val').textContent = 'x₀ = ' + x0cur.toFixed(1);
+      redraw();
     });
   }
 }
