@@ -2126,6 +2126,7 @@ function renderChart(container, type, params) {
   if (type === 'phaseDiagram') { renderPhaseDiagramChart(container, params); return; }
   if (type === 'freeEnergy')   { renderFreeEnergyChart(container, params); return; }
   if (type === 'crystal3d')    { renderCrystal3D(container, params); return; }
+  if (type === 'surface3d')    { renderSurface3D(container, params); return; }
   if (type === 'functionPlot') { renderFunctionPlot(container, params); return; }
 
   container.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-muted);font-size:13px;">
@@ -2159,6 +2160,7 @@ function renderFunctionPlot(container, params = {}) {
     yrange = null,
     samples = 160,
     tangent = null,           // { curve: 0, x0: 1, adjustable: true }
+    shade = null,             // { curve: 0, from: a, to: b, color, label } 曲線下面積填滿（積分視覺化）
     editable                  // true=全部可改 / false=都不可改 / undefined=自動（非參考線即可改）
   } = params;
 
@@ -2242,6 +2244,24 @@ function renderFunctionPlot(container, params = {}) {
       borderDash: cv.fn === 'identity' ? [3, 3] : [],
       pointRadius: 0, tension: 0.2, fill: false
     }));
+    // 曲線下面積填滿（積分視覺化）：另開一個只含 [from,to] 區段、填到 y=0 的資料集，畫在曲線後面
+    if (shade) {
+      const sc = live[shade.curve || 0];
+      const lo = Math.max(xrange[0], shade.from), hi = Math.min(xrange[1], shade.to);
+      const step = (xrange[1] - xrange[0]) / samples;
+      const pts = [];
+      for (let x = lo; x <= hi + 1e-9; x += step) {
+        const y = evalCurve(sc, x);
+        if (Number.isFinite(y)) pts.push({ x: +x.toFixed(4), y: +y.toFixed(4) });
+      }
+      ds.push({
+        label: shade.label || '積分面積（曲線下）',
+        data: pts,
+        borderColor: 'transparent',
+        backgroundColor: shade.color || 'rgba(74,158,255,0.28)',
+        fill: 'origin', pointRadius: 0, tension: 0.2, order: 10
+      });
+    }
     if (tangent) ds.push(tangentLine(x0cur), tangentDot(x0cur));
     return ds;
   };
@@ -2695,6 +2715,111 @@ function renderCrystal3D(container, params = {}) {
     camera.position.x = 3.5 * Math.sin(rotY) * Math.cos(rotX);
     camera.position.z = 3.5 * Math.cos(rotY) * Math.cos(rotX);
     camera.position.y = 3.5 * Math.sin(rotX) + 1;
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+  };
+  animate();
+  container._animId = animId;
+}
+
+// 多變數 z=f(x,y) 3D 曲面（Week 2 S17：先看整張曲面，再學「固定一變數＝切一刀」鋪 S18 偏微分）。
+// 白名單函數（無 eval）：paraboloid x²+y² / saddle x²−y² / plane a·x+b·y。滑鼠拖曳＋iPad 觸控可旋轉。
+function renderSurface3D(container, params = {}) {
+  if (typeof THREE === 'undefined') {
+    container.innerHTML = `<p style="text-align:center;padding:20px;color:var(--text-muted);">Three.js 載入失敗，請確認網路連線。</p>`;
+    return;
+  }
+  if (container._animId) cancelAnimationFrame(container._animId);
+
+  const fn = params.fn || 'paraboloid';
+  const A = params.a ?? 1, B = params.b ?? 1;
+  const RANGE = params.range || 2;            // x,y ∈ [−RANGE, RANGE]
+  const N = 40;                               // 格點解析度
+  const surf = (x, y) =>
+    fn === 'saddle' ? A*x*x - B*y*y :
+    fn === 'plane'  ? A*x + B*y :
+                      A*x*x + B*y*y;          // paraboloid 預設
+
+  container.innerHTML = '';
+  container.style.position = 'relative';
+  container.style.aspectRatio = '16/9';
+  let curW = container.clientWidth || 400, curH = curW * 9 / 16;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(curW, curH);
+  renderer.setClearColor(0x1f2330, 1);
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, curW / curH, 0.1, 100);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const dLight = new THREE.DirectionalLight(0xffffff, 0.7);
+  dLight.position.set(4, 8, 4);
+  scene.add(dLight);
+
+  // 用 PlaneGeometry 位移頂點建曲面；z（高度）置中並縮放到合理視覺比例
+  const geo = new THREE.PlaneGeometry(2 * RANGE, 2 * RANGE, N, N);
+  const pos = geo.attributes.position;
+  const zRaw = [];
+  let zMin = Infinity, zMax = -Infinity;
+  for (let i = 0; i < pos.count; i++) {
+    const z = surf(pos.getX(i), pos.getY(i));
+    zRaw.push(z);
+    if (z < zMin) zMin = z;
+    if (z > zMax) zMax = z;
+  }
+  const zScale = (zMax - zMin) > 1e-6 ? (RANGE * 1.0) / (zMax - zMin) : 1;
+  for (let i = 0; i < pos.count; i++) pos.setZ(i, (zRaw[i] - (zMin + zMax) / 2) * zScale);
+  geo.computeVertexNormals();
+
+  const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: 0x2dd4bf, side: THREE.DoubleSide }));
+  mesh.rotation.x = -Math.PI / 2;             // 讓高度朝上（世界 +Y）
+  scene.add(mesh);
+  const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo),
+    new THREE.LineBasicMaterial({ color: 0x4a9eff, transparent: true, opacity: 0.22 }));
+  wire.rotation.x = -Math.PI / 2;
+  scene.add(wire);
+  scene.add(new THREE.AxesHelper(RANGE * 1.3));
+
+  const FORM = { paraboloid: 'z = x² + y²（碗形）', saddle: 'z = x² − y²（馬鞍）', plane: 'z = a·x + b·y（平面）' };
+  const info = document.createElement('div');
+  info.style.cssText = 'position:absolute;top:8px;left:8px;background:rgba(20,23,30,0.85);border:1px solid #2e3447;border-radius:8px;padding:8px 12px;font-size:12px;color:#e4e8f0;pointer-events:none;';
+  info.innerHTML = `<strong>z = f(x, y)</strong><br>${FORM[fn] || ''}<br><span style="color:#8b93a8;font-size:10px;">拖曳旋轉 · 看曲面如何隨 x、y 起伏</span>`;
+  container.appendChild(info);
+
+  // orbit 互動：滑鼠 + iPad 觸控
+  let isDragging = false, lastX = 0, lastY = 0, rotX = 0.5, rotY = 0.6;
+  const down = (cx, cy) => { isDragging = true; lastX = cx; lastY = cy; };
+  const move = (cx, cy) => {
+    if (!isDragging) return;
+    rotY += (cx - lastX) * 0.01;
+    rotX = Math.max(-1.4, Math.min(1.4, rotX + (cy - lastY) * 0.01));
+    lastX = cx; lastY = cy;
+  };
+  const up = () => { isDragging = false; };
+  renderer.domElement.addEventListener('mousedown', e => down(e.clientX, e.clientY));
+  window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+  window.addEventListener('mouseup', up);
+  renderer.domElement.addEventListener('touchstart', e => { if (e.touches[0]) down(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+  renderer.domElement.addEventListener('touchmove', e => { if (e.touches[0]) { move(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); } }, { passive: false });
+  renderer.domElement.addEventListener('touchend', up);
+
+  const dist = RANGE * 3.4;
+  let animId;
+  const animate = () => {
+    animId = requestAnimationFrame(animate);
+    // 容器尺寸變動（響應式／全螢幕）時自動重算 renderer 與相機
+    const cw = container.clientWidth, ch = container.clientHeight;
+    if (cw && ch && (cw !== curW || ch !== curH)) {
+      curW = cw; curH = ch;
+      renderer.setSize(cw, ch);
+      camera.aspect = cw / ch;
+      camera.updateProjectionMatrix();
+    }
+    if (!isDragging) rotY += 0.004;
+    camera.position.x = dist * Math.sin(rotY) * Math.cos(rotX);
+    camera.position.z = dist * Math.cos(rotY) * Math.cos(rotX);
+    camera.position.y = dist * Math.sin(rotX) + RANGE;
     camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
   };
