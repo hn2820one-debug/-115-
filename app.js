@@ -214,9 +214,6 @@ function _mergeSession(a, b) {
   out.checkpoints = {};
   const cpKeys = new Set([...Object.keys(a.checkpoints || {}), ...Object.keys(b.checkpoints || {})]);
   for (const k of cpKeys) out.checkpoints[k] = !!(a.checkpoints?.[k] || b.checkpoints?.[k]);
-  // 答題計數：取最大（永不縮水）
-  out.quizAttempts = Math.max(a.quizAttempts || 0, b.quizAttempts || 0);
-  out.quizCorrect  = Math.max(a.quizCorrect  || 0, b.quizCorrect  || 0);
   // 三句話總結：挑較新/較長
   const sum = _pickText(a.summary, b.summary, a.lastTouched, b.lastTouched);
   if (sum) out.summary = sum;
@@ -984,10 +981,10 @@ function renderDashboard() {
     return `<div class="stage-bar-row">
       <div class="stage-bar-label">
         <span>${esc(st.title)}</span>
-        <span>${c}/64</span>
+        <span>${c}/${ids.length}</span>
       </div>
       <div class="stage-bar-track">
-        <div class="stage-bar-fill ${accentClass}" style="width:${Math.round(c/64*100)}%"></div>
+        <div class="stage-bar-fill ${accentClass}" style="width:${Math.round(c/ids.length*100)}%"></div>
       </div>
     </div>`;
   }).join('');
@@ -1201,7 +1198,7 @@ function _buildPacePrediction(done, total) {
   const dates = [...new Set(recent.map(s => fmtDate(s.completedAt)))];
   if (dates.length < 2) return '';
   const daysSpanned = Math.max(1, dates.length);
-  const rate = done / daysSpanned; // sessions per day
+  const rate = recent.length / daysSpanned; // 近期每「有讀書的日子」完成幾節（分子分母同窗口）
   const remaining = total - done;
   const daysNeeded = rate > 0 ? Math.ceil(remaining / rate) : null;
   if (!daysNeeded) return '';
@@ -1225,9 +1222,10 @@ function _buildPacePrediction(done, total) {
 function _getCurrentWeekIds() {
   if (!appState.manifest) return [];
   const allIds = getAllSessionIds();
-  const firstDone = Object.values(userState.sessions).filter(s=>s.completedAt).sort((a,b)=>a.completedAt>b.completedAt?1:-1)[0];
-  const startIdx = firstDone ? allIds.indexOf(Object.entries(userState.sessions).find(([,v])=>v.completedAt===firstDone.completedAt)?.[0]||'S1') : 0;
-  const weekStart = Math.floor(Math.max(0, startIdx) / 16) * 16;
+  // 「本週」= 你最近一次活動所在的 16 節課程週（隨進度前進，而非卡在第一次完成的那一週）
+  const lastId = getLastTouchedSession();
+  const idx = lastId ? allIds.indexOf(lastId) : 0;
+  const weekStart = Math.floor(Math.max(0, idx) / 16) * 16;
   return allIds.slice(weekStart, weekStart + 16);
 }
 
@@ -1377,7 +1375,7 @@ function renderNodeHTML(id) {
   // U05: partial completion arc — count checked checkpoints
   const ckState = s.checkpoints || {};
   const checkedCount = Object.values(ckState).filter(Boolean).length;
-  const totalCk = 3; // estimated default; actual known only after load
+  const totalCk = 6; // 每節通常 6 個檢核點；實際數量僅在載入該節後才知道
   const partialArc = (!s.completed && checkedCount > 0)
     ? _makeArc(checkedCount, totalCk) : '';
 
@@ -1400,7 +1398,8 @@ function renderNodeHTML(id) {
 function _makeArc(done, total) {
   if (!done || !total) return '';
   const r = 24, cx = 26, cy = 26;
-  const angle = (done / total) * 2 * Math.PI;
+  const ratio = Math.min(0.999, done / total);  // 夾住，弧度永不超過整圈（避免溢出或退化成空弧）
+  const angle = ratio * 2 * Math.PI;
   const x = cx + r * Math.sin(angle);
   const y = cy - r * Math.cos(angle);
   const large = angle > Math.PI ? 1 : 0;
@@ -1552,41 +1551,31 @@ async function renderLesson(id) {
   // U06: reading progress bar
   _attachReadingProgress();
 
-  // Render content
-  renderLessonContent(id, session);
+  // Render content (also mounts inline [CHART:type] charts and returns the set of
+  // chart specs consumed inline, so we don't render those again below)
+  const consumedInline = renderLessonContent(id, session) || new Set();
 
-  // Render charts
-  if ((session.charts || []).length > 0) {
+  // Render any remaining charts (not placed inline) in the bottom section
+  const bottomCharts = (session.charts || []).filter((_, i) => !consumedInline.has(i));
+  if (bottomCharts.length > 0) {
     const chartsArea = el('lesson-charts-area');
     chartsArea.innerHTML = `<div class="section-heading">互動圖表</div>`;
-    for (const chart of session.charts) {
+    for (const chart of bottomCharts) {
       const wrap = document.createElement('div');
-      wrap.className = 'chart-wrap';
       chartsArea.appendChild(wrap);
-      if (chart.title) {
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'chart-title';
-        titleDiv.textContent = chart.title;
-        chartsArea.insertBefore(titleDiv, wrap);
-      }
-      renderChart(wrap, chart.type, chart.params);
-      // #14 圖表全螢幕按鈕
-      const fsBtn = document.createElement('button');
-      fsBtn.className = 'chart-fs-btn';
-      fsBtn.textContent = '⛶';
-      fsBtn.title = '全螢幕';
-      fsBtn.addEventListener('click', () => toggleChartFullscreen(wrap));
-      wrap.appendChild(fsBtn);
+      _mountChart(wrap, chart);
     }
   }
 
   // U24: quiz accuracy stats before rendering quiz
   if ((session.quiz || []).length > 0) {
     const quizArea = el('lesson-quiz-area');
-    const attempts = (userState.sessions[id]?.quizAttempts || 0);
-    const correct  = (userState.sessions[id]?.quizCorrect  || 0);
-    const statsHTML = attempts > 0
-      ? `<span style="font-size:11px;color:var(--accent-teal);margin-left:auto;">歷史正確率 ${Math.round(correct/attempts*100)}%（${attempts} 次）</span>`
+    // 用 confidenceLog（逐題、每題一筆、含是非題）算正確率——與統計頁同源，
+    // 永遠是合法的 0–100%（先前用 quizCorrect/quizAttempts 會分子分母單位不一致而爆表）
+    const qlog = (userState.confidenceLog || []).filter(e => e.sessionId === id);
+    const correct = qlog.filter(e => e.isCorrect).length;
+    const statsHTML = qlog.length > 0
+      ? `<span style="font-size:11px;color:var(--accent-teal);margin-left:auto;">歷史正確率 ${Math.round(correct/qlog.length*100)}%（${qlog.length} 題）</span>`
       : '';
     quizArea.innerHTML = `<div class="section-heading">${appState.settings.lang==='zh'?'練習題':'Quiz'}${statsHTML}</div>`;
     renderQuiz(quizArea, session.quiz, id);
@@ -1697,12 +1686,29 @@ function renderLessonContent(id, session) {
       <p><strong>${t('contentInProgress')}</strong></p>
       <p style="font-size:12px;margin-top:6px;">${t('contentInProgressSub')}</p>
     </div>`;
-    return;
+    return new Set();
   }
 
   area.className = 'lesson-content';
   flog('CONTENT', `renderLessonContent: parsing Markdown for ${session.id}`, { chars: session.content.length });
-  area.innerHTML = marked.parse(session.content);
+
+  // Parse Markdown, then swap any inline [CHART:type] placeholders for real chart
+  // containers so the chart appears exactly where the text references it
+  // ("下方互動圖…") instead of showing the literal placeholder text. Charts matched
+  // here are returned so renderLesson() won't render them again in the bottom section.
+  const charts = session.charts || [];
+  const consumedCharts = new Set();
+  let html = marked.parse(session.content);
+  html = html.replace(/(?:<p>\s*)?\[CHART:([A-Za-z0-9_]+)\]\s*(?:<\/p>)?/g, (_m, type) => {
+    let idx = -1;
+    for (let i = 0; i < charts.length; i++) {
+      if (!consumedCharts.has(i) && charts[i].type === type) { idx = i; break; }
+    }
+    if (idx === -1) return '';            // no matching chart spec → drop placeholder
+    consumedCharts.add(idx);
+    return `<div class="chart-wrap inline-chart" data-chart-idx="${idx}"></div>`;
+  });
+  area.innerHTML = html;
 
   // Render KaTeX
   if (typeof renderMathInElement !== 'undefined') {
@@ -1746,6 +1752,15 @@ function renderLessonContent(id, session) {
 
   // U22: text selection → add to glossary
   area.addEventListener('mouseup', _onTextSelect);
+
+  // Mount inline charts now that markup + KaTeX are in place
+  qsa('.inline-chart', area).forEach(wrap => {
+    const idx = parseInt(wrap.dataset.chartIdx, 10);
+    const chart = charts[idx];
+    if (chart) _mountChart(wrap, chart);
+  });
+
+  return consumedCharts;
 }
 
 // U13: lightbox implementation
@@ -1789,10 +1804,22 @@ function _showFormulaOverlay(html, latex) {
 // #14 圖表全螢幕
 function toggleChartFullscreen(wrap) {
   if (document.fullscreenElement) { document.exitFullscreen?.(); return; }
-  (wrap.requestFullscreen ? wrap.requestFullscreen() : Promise.reject()).catch(() => {
-    // 不支援原生全螢幕時，退而用覆蓋層放大
+  const done = () => _resizeChartIn(wrap);
+  if (wrap.requestFullscreen) {
+    // 桌面：原生全螢幕；失敗則退回覆蓋層
+    wrap.requestFullscreen().then(done).catch(() => { wrap.classList.toggle('chart-pseudo-fs'); done(); });
+  } else {
+    // iOS Safari 不支援任意元素原生全螢幕 → 直接用覆蓋層放大
     wrap.classList.toggle('chart-pseudo-fs');
-  });
+    done();
+  }
+}
+
+// 切換全螢幕後版面改變，主動讓該圖的 Chart.js 重算尺寸（等兩個 frame 讓 flex 佈局先穩定）
+function _resizeChartIn(wrap) {
+  const cv = wrap.querySelector('canvas');
+  const ch = cv && appState._charts[cv.id];
+  if (ch) requestAnimationFrame(() => requestAnimationFrame(() => ch.resize()));
 }
 
 // #17 個人筆記（與三句話總結分開的自由筆記）
@@ -2038,16 +2065,6 @@ async function completeSession(id) {
     btn.textContent = t('alreadyDone') + ' · ' + fmtDate(s.completedAt);
   }
 
-  // U24: record quiz attempt counts
-  const qs_ = (appState.sessionCache[id]?.quiz || []).length;
-  if (qs_ > 0) {
-    if (!userState.sessions[id].quizAttempts) userState.sessions[id].quizAttempts = 0;
-    userState.sessions[id].quizAttempts++;
-    const correct = document.querySelectorAll('.quiz-badge.correct').length;
-    userState.sessions[id].quizCorrect = (userState.sessions[id].quizCorrect || 0) + correct;
-    save();
-  }
-
   showToast(`${t('completedMsg')} ${id}`, 'success');
 
   // U11: suggest next session
@@ -2076,6 +2093,27 @@ async function completeSession(id) {
 // ================================================================
 // 13. CHARTS (M4 — Arrhenius + Phase Diagram + Stress-Strain)
 // ================================================================
+// Mount one chart spec into `wrap`: chart body + optional title (prepended as a
+// sibling) + fullscreen button. Shared by inline content charts and the bottom
+// "互動圖表" section so both stay visually identical.
+function _mountChart(wrap, chart) {
+  wrap.classList.add('chart-wrap');
+  if (chart.title) {
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'chart-title';
+    titleDiv.textContent = chart.title;
+    wrap.parentNode.insertBefore(titleDiv, wrap);
+  }
+  renderChart(wrap, chart.type, chart.params);
+  // #14 圖表全螢幕按鈕
+  const fsBtn = document.createElement('button');
+  fsBtn.className = 'chart-fs-btn';
+  fsBtn.textContent = '⛶';
+  fsBtn.title = '全螢幕';
+  fsBtn.addEventListener('click', () => toggleChartFullscreen(wrap));
+  wrap.appendChild(fsBtn);
+}
+
 function renderChart(container, type, params) {
   flog('CONTENT', `renderChart: type=${type}`, params);
   container.style.background = 'var(--bg-input)';
@@ -2900,6 +2938,11 @@ function answerTF(sessionId, qi, chosen, item, correct) {
     if ((btnTrue && correct) || (!btnTrue && !correct)) btn.classList.add('correct');
     else if ((btnTrue && chosen) || (!btnTrue && !chosen)) btn.classList.add('wrong');
   });
+  // 與其他題型一致：作答後顯示 ✓/✗ 結果 badge
+  const badge = document.createElement('div');
+  badge.className = `quiz-badge ${isCorrect ? 'correct' : 'wrong'}`;
+  badge.textContent = isCorrect ? '✓ 正確' : '✗ 錯誤';
+  item.appendChild(badge);
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
   recordAnswer(sessionId, qi, isCorrect, item, chosen ? 'True' : 'False', correct ? 'True' : 'False');
@@ -3459,8 +3502,7 @@ function renderStats() {
   // 正確率（用 confidenceLog）
   const log = userState.confidenceLog || [];
   const acc = log.length ? Math.round(log.filter(e => e.isCorrect).length / log.length * 100) : null;
-  const byDiff = { basic: [0, 0], standard: [0, 0], challenge: [0, 0] };
-  // 從 session quiz 對照難度（log 沒存難度，這裡用整體；難度細分需題庫，先用信心分級替代）
+  // 難度細分需題庫對照（log 沒存難度），先用「作答前信心」分級替代
   const byConf = { high: [0, 0], mid: [0, 0], low: [0, 0] };
   for (const e of log) { const b = byConf[e.confidence] || byConf.mid; b[1]++; if (e.isCorrect) b[0]++; }
 
@@ -3739,7 +3781,7 @@ function renderHeatmap() {
         <div><div style="font-size:22px;font-weight:800;color:var(--accent-gold);">${userState.streak?.longest||0}</div><div style="font-size:11px;color:var(--text-muted);">最長連續天數</div></div>
       </div>
       <div style="overflow-x:auto;">
-        <div style="display:grid;grid-template-columns:repeat(${WEEKS},12px);grid-template-rows:repeat(7,12px);gap:2px;width:fit-content;">
+        <div style="display:grid;grid-auto-flow:column;grid-template-columns:repeat(${WEEKS},12px);grid-template-rows:repeat(7,12px);gap:2px;width:fit-content;">
           ${cellsHTML}
         </div>
       </div>

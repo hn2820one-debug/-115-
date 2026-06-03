@@ -672,6 +672,8 @@ input, textarea, select { font: inherit; color: inherit; }
   margin-bottom: 20px;
 }
 .chart-wrap canvas { width: 100% !important; height: 100% !important; }
+/* charts placed inline within lesson content (via [CHART:type] placeholder) */
+.inline-chart { margin-top: 18px; }
 .chart-title {
   font-size: 13px; font-weight: 600; color: var(--text-secondary);
   padding: 10px 14px 0;
@@ -861,10 +863,34 @@ input, textarea, select { font: inherit; color: inherit; }
   color: var(--text-secondary); font-size: 14px; line-height: 1;
 }
 .chart-fs-btn:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
-.chart-wrap:fullscreen { aspect-ratio: auto; padding: 24px; display: flex; flex-direction: column; justify-content: center; }
+/* 全螢幕（桌面原生 :fullscreen + iOS Safari 退回的 .chart-pseudo-fs）：
+   改用直欄 flex —— canvas 佔剩餘空間，下方係數輸入框／滑桿固定保留高度、永遠可見可點，
+   不再被「height:100% 的 canvas」擠出畫面外（先前 iPad 全螢幕無法修改參數的原因）。 */
+.chart-wrap:fullscreen,
 .chart-wrap.chart-pseudo-fs {
-  position: fixed; inset: 0; z-index: 9000; aspect-ratio: auto;
+  aspect-ratio: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;                 /* 控制項很多時仍可捲動到 */
+}
+.chart-wrap:fullscreen { padding: 24px; }
+.chart-wrap.chart-pseudo-fs {
+  position: fixed; inset: 0; z-index: 9000;
   width: 100vw; height: 100vh; border-radius: 0;
+  padding: 16px;
+}
+.chart-wrap:fullscreen > canvas,
+.chart-wrap.chart-pseudo-fs > canvas {
+  flex: 1 1 auto;
+  min-height: 45vh;                 /* 圖至少保留可讀高度 */
+  height: auto !important;
+  width: 100% !important;
+}
+.chart-wrap:fullscreen > .fnplot-edit-wrap,
+.chart-wrap:fullscreen > .chart-controls,
+.chart-wrap.chart-pseudo-fs > .fnplot-edit-wrap,
+.chart-wrap.chart-pseudo-fs > .chart-controls {
+  flex: 0 0 auto;                   /* 控制項保持自身高度，永遠在畫面內 */
 }
 
 /* #17 個人筆記框 */

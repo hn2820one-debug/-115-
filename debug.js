@@ -159,7 +159,7 @@ const FL_LOG = {
     // Quiz accuracy
     const quizAnswers = this._buf.filter(e => e.cat === 'QUIZ' && e.msg.startsWith('answer:'));
     if (quizAnswers.length) {
-      const correct = quizAnswers.filter(e => e.data?.correct).length;
+      const correct = quizAnswers.filter(e => e.data?.isCorrect).length;
       lines.push('Quiz Performance');
       lines.push('─'.repeat(30));
       lines.push(`  Answered : ${quizAnswers.length}`);
