@@ -1,0 +1,15 @@
+{
+  "name": "FoundationLearn 補底計劃",
+  "short_name": "FoundationLearn",
+  "description": "三個月入學前補底計劃 — 微積分、化學、材料科學、熱力學互動學習",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#14171e",
+  "theme_color": "#14171e",
+  "lang": "zh-Hant",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
