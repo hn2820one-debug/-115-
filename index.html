@@ -33,6 +33,7 @@
       <button class="nav-btn" data-page="pg-map"       data-i18n="navMap">課程地圖</button>
       <button class="nav-btn" data-page="pg-practice"  data-i18n="navPractice">練習</button>
       <button class="nav-btn" data-page="pg-progress"  data-i18n="navProgress">紀錄</button>
+      <button class="nav-btn" data-page="pg-resources" data-i18n="navResources">資源</button>
       <button class="nav-btn" data-page="pg-settings"  data-i18n="navSettings">設定</button>
     </div>
     <button id="lang-toggle" class="nav-btn lang-btn">EN</button>
@@ -56,6 +57,9 @@
     <!-- Progress / Records -->
     <section id="pg-progress" class="page"></section>
 
+    <!-- Resources: formulas / terms / field-links -->
+    <section id="pg-resources" class="page"></section>
+
     <!-- Settings -->
     <section id="pg-settings" class="page"></section>
 
@@ -74,6 +78,9 @@
     </button>
     <button class="bnav-btn" data-page="pg-progress" onclick="navigate('pg-progress')">
       <span class="bnav-icon">📊</span><span>紀錄</span>
+    </button>
+    <button class="bnav-btn" data-page="pg-resources" onclick="navigate('pg-resources')">
+      <span class="bnav-icon">📚</span><span>資源</span>
     </button>
     <button class="bnav-btn" data-page="pg-settings" onclick="navigate('pg-settings')">
       <span class="bnav-icon">⚙️</span><span>設定</span>

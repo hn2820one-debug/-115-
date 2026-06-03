@@ -44,6 +44,32 @@
   --transition: 0.2s ease;
 }
 
+/* 護眼淺色主題（body.theme-light 覆寫顏色變數） */
+body.theme-light {
+  --bg-base:        #f4f6fa;
+  --bg-nav:         #ffffff;
+  --bg-card:        #ffffff;
+  --bg-card-hover:  #eef1f6;
+  --bg-input:       #eef1f6;
+  --border:         #d8dee9;
+  --border-light:   #c2cad8;
+
+  --text-primary:   #1a1f2b;
+  --text-secondary: #4a5263;
+  --text-muted:     #8a93a6;
+
+  --accent-blue:    #2f73d8;
+  --accent-teal:    #0e9e8e;
+  --accent-gold:    #b88600;
+  --accent-red:     #d83a3a;
+  --accent-green:   #1f9d54;
+  --accent-purple:  #7a55e0;
+
+  --shadow:    0 1px 6px rgba(20,30,60,0.08);
+  --shadow-lg: 0 4px 18px rgba(20,30,60,0.12);
+}
+body.theme-light .term-zh { color: #5a6273; }
+
 /* ── 2. Reset & Base ──────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -784,6 +810,35 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 /* 填空輸入小提示 */
 .quiz-hint-tip { font-size: 11px; color: var(--text-muted); margin: 2px 0 8px; }
+
+/* 資源頁：公式 / 現場連結卡 */
+.res-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 10px;
+}
+.res-meta { font-size: 11px; color: var(--text-muted); }
+.res-formula { margin-top: 6px; overflow-x: auto; }
+.res-formula .katex-display { margin: 6px 0; }
+
+/* 術語字卡 */
+.term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.term-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 14px 12px; cursor: pointer;
+  text-align: center; min-height: 78px; display: flex; flex-direction: column;
+  justify-content: center; gap: 4px; transition: border-color 0.15s, background 0.15s;
+}
+.term-card:hover { border-color: var(--accent-teal); }
+.term-card .tc-zh { font-size: 14px; color: var(--text-primary); font-weight: 600; }
+.term-card .tc-en {
+  font-size: 13px; color: var(--accent-teal); font-weight: 700;
+  font-family: 'Fira Code', monospace; letter-spacing: 0.2px;
+  display: none;
+}
+.term-card .tc-hint { font-size: 10px; color: var(--text-muted); }
+.term-card.flipped .tc-en  { display: block; }
+.term-card.flipped .tc-hint { display: none; }
+.term-card.flipped { background: var(--bg-card-hover); border-color: var(--accent-teal); }
 
 /* ── 12. Progress Page ────────────────────────────────────────── */
 .progress-tabs {

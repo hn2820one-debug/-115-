@@ -112,6 +112,16 @@
       border: 1px solid var(--red);
       color: var(--red);
     }
+    .btn-backup {
+      background: linear-gradient(135deg, #14401f, #103016);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+    .btn-restore {
+      background: linear-gradient(135deg, #3a3410, #2a2608);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
     .btn-stop {
       background: var(--input);
       border: 1px solid var(--border);
@@ -220,6 +230,25 @@
         <span class="btn-desc">開啟學習網站並自動彈出 Log 面板</span>
       </span>
     </a>
+
+    <!-- Backup -->
+    <button class="btn btn-backup" id="btn-backup" onclick="doBackup()">
+      <span class="btn-icon">💾</span>
+      <span class="btn-text">
+        <span class="btn-label">下載進度備份</span>
+        <span class="btn-desc">把目前學習紀錄存成檔案（同步出包時可救援）</span>
+      </span>
+    </button>
+
+    <!-- Restore -->
+    <button class="btn btn-restore" id="btn-restore" onclick="document.getElementById('restore-file').click()">
+      <span class="btn-icon">📂</span>
+      <span class="btn-text">
+        <span class="btn-label">從備份還原</span>
+        <span class="btn-desc">用先前下載的備份檔覆蓋目前紀錄</span>
+      </span>
+    </button>
+    <input type="file" id="restore-file" accept=".json" style="display:none" onchange="doRestore(this)">
 
     <!-- Clear Data -->
     <button class="btn btn-clear" id="btn-clear" onclick="askClear()">
@@ -341,6 +370,37 @@
     document.getElementById('confirm-overlay').classList.remove('show');
     refreshStatus();
     toast('✓ 所有學習資料已清除');
+  }
+
+  // ── Backup / Restore ───────────────────────────────────────────
+  function doBackup() {
+    const raw = localStorage.getItem('fl_v1');
+    if (!raw) { toast('⚠ 目前沒有可備份的資料'); return; }
+    const blob = new Blob([raw], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'foundationlearn_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('💾 已下載進度備份');
+  }
+  function doRestore(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (typeof data !== 'object' || !('sessions' in data)) throw new Error('格式不符');
+        localStorage.setItem('fl_v1', JSON.stringify(data));
+        refreshStatus();
+        toast('✓ 已從備份還原，請重新開啟學習網站');
+      } catch (err) {
+        toast('✗ 還原失敗：檔案格式不正確');
+      }
+      input.value = '';
+    };
+    reader.readAsText(file);
   }
 
   // ── Toast ──────────────────────────────────────────────────────

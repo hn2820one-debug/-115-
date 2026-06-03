@@ -729,6 +729,7 @@ function navigate(pageId, params = {}) {
     case 'pg-lesson':    renderLesson(params.id); break;
     case 'pg-practice':  renderPractice(params); break;
     case 'pg-progress':  renderProgress(); break;
+    case 'pg-resources': renderResources(); break;
     case 'pg-settings':  renderSettings(); break;
   }
 }
@@ -2740,6 +2741,148 @@ function addToWrongBook(sessionId, qi, yourAns, correctAns) {
 }
 
 // ================================================================
+// 14b. RESOURCES PAGE (#1 公式總表 / #2 術語字卡 / #3 現場連結)
+// ================================================================
+let _resAllCache = null;
+async function _resLoadAll() {
+  if (_resAllCache) return _resAllCache;
+  const ids = getAllSessionIds();
+  const arr = await Promise.all(ids.map(id => loadSession(id).catch(() => null)));
+  _resAllCache = arr.filter(s => s && s.status !== 'draft' && (s.content || s.fieldLink))
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  flog('CONTENT', `resources: aggregated ${_resAllCache.length} sessions`);
+  return _resAllCache;
+}
+
+function renderResources() {
+  const pg = el('pg-resources');
+  pg.innerHTML = `
+    <h2 style="font-size:18px;font-weight:800;margin-bottom:6px;">📚 學習資源</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">自動彙整全部已建好節次的公式、術語與現場連結，考前一頁掃完。</p>
+    <div class="progress-tabs">
+      <button class="prog-tab active" onclick="switchResTab('formulas',this)">📐 公式總表</button>
+      <button class="prog-tab" onclick="switchResTab('terms',this)">🔤 術語字卡</button>
+      <button class="prog-tab" onclick="switchResTab('fields',this)">🏭 現場連結</button>
+    </div>
+    <div id="res-formulas" class="prog-tab-panel active"></div>
+    <div id="res-terms" class="prog-tab-panel"></div>
+    <div id="res-fields" class="prog-tab-panel"></div>`;
+  renderResFormulas();
+}
+
+function switchResTab(tab, btn) {
+  const pg = el('pg-resources');
+  qsa('.prog-tab', pg).forEach(b => b.classList.remove('active'));
+  qsa('.prog-tab-panel', pg).forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  el('res-' + tab)?.classList.add('active');
+  if (tab === 'formulas') renderResFormulas();
+  if (tab === 'terms')    renderResTerms();
+  if (tab === 'fields')   renderResFields();
+}
+
+function filterResList(listId, q) {
+  const list = el(listId);
+  if (!list) return;
+  q = (q || '').toLowerCase();
+  qsa('.res-card, .term-card', list).forEach(c => {
+    c.style.display = (!q || c.textContent.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+// #1 公式總表：抽出所有「已編號（\tag）」的核心公式
+async function renderResFormulas() {
+  const area = el('res-formulas');
+  if (!area) return;
+  area.innerHTML = `<p class="text-muted" style="font-size:13px;padding:14px 0;">整理全部公式中…</p>`;
+  const all = await _resLoadAll();
+  const rows = [];
+  for (const s of all) {
+    const blocks = [...(s.content || '').matchAll(/\$\$([\s\S]+?)\$\$/g)].map(m => m[1].trim());
+    const keyed = [...new Set(blocks.filter(f => /\\tag/.test(f)))];
+    for (const f of keyed) rows.push({ id: s.id, title: s.title, f });
+  }
+  if (!rows.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">📐</div><p>尚無已編號的公式。</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <input type="text" class="todo-input" style="width:100%;margin-bottom:12px;"
+      placeholder="搜尋公式或節次…" oninput="filterResList('res-formulas-list',this.value)">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">共 ${rows.length} 條核心公式（按節次順序）</div>
+    <div id="res-formulas-list">${rows.map(r => `
+      <div class="res-card">
+        <div class="res-meta"><a onclick="navigate('pg-lesson',{id:'${r.id}'})" style="color:var(--accent-blue);cursor:pointer;">${esc(r.id)}</a> · ${esc(r.title)}</div>
+        <div class="res-formula">$$${r.f}$$</div>
+      </div>`).join('')}</div>`;
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(area, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }], throwOnError: false });
+  }
+}
+
+// #2 術語字卡：抽出 term-zh / term-en，預設只露中文，點擊翻出英文
+async function renderResTerms() {
+  const area = el('res-terms');
+  if (!area) return;
+  area.innerHTML = `<p class="text-muted" style="font-size:13px;padding:14px 0;">整理全部術語中…</p>`;
+  const all = await _resLoadAll();
+  const map = new Map();
+  const re = /<span class="term-zh">([\s\S]*?)<\/span>（<span class="term-en">([\s\S]*?)<\/span>/g;
+  for (const s of all) {
+    let m;
+    while ((m = re.exec(s.content || ''))) {
+      const zh = m[1].replace(/<[^>]+>/g, '').trim();
+      const en = m[2].replace(/<[^>]+>/g, '').replace(/[，,].*$/, '').trim();
+      if (!en) continue;
+      const key = en.toLowerCase();
+      if (!map.has(key)) map.set(key, { zh, en, ids: new Set() });
+      map.get(key).ids.add(s.id);
+    }
+  }
+  const terms = [...map.values()].sort((a, b) => a.en.localeCompare(b.en));
+  if (!terms.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🔤</div><p>尚無術語。</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+      <input type="text" class="todo-input" style="flex:1;min-width:140px;"
+        placeholder="搜尋術語…" oninput="filterResList('res-terms-list',this.value)">
+      <button class="setting-btn" onclick="qsa('.term-card',el('res-terms-list')).forEach(c=>c.classList.add('flipped'))">全部翻面</button>
+      <button class="setting-btn" onclick="qsa('.term-card',el('res-terms-list')).forEach(c=>c.classList.remove('flipped'))">全部蓋回</button>
+    </div>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">共 ${terms.length} 個術語 · 點卡片翻出英文（練被動記憶）</div>
+    <div id="res-terms-list" class="term-grid">${terms.map(tm => `
+      <div class="term-card" onclick="this.classList.toggle('flipped')">
+        <div class="tc-zh">${esc(tm.zh)}</div>
+        <div class="tc-en">${esc(tm.en)}</div>
+        <div class="tc-hint">點擊看英文</div>
+      </div>`).join('')}</div>`;
+}
+
+// #3 現場連結：彙整每節 fieldLink（封裝現象 → 理論）
+async function renderResFields() {
+  const area = el('res-fields');
+  if (!area) return;
+  area.innerHTML = `<p class="text-muted" style="font-size:13px;padding:14px 0;">整理現場連結中…</p>`;
+  const all = await _resLoadAll();
+  const rows = all.filter(s => s.fieldLink && s.fieldLink.trim());
+  if (!rows.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🏭</div><p>尚無現場連結。</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <input type="text" class="todo-input" style="width:100%;margin-bottom:12px;"
+      placeholder="搜尋（如 IMC、bond、TEC）…" oninput="filterResList('res-fields-list',this.value)">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">把你的封裝現場經驗掛上理論鉤子——共 ${rows.length} 條，這是你比同學多的維度。</div>
+    <div id="res-fields-list">${rows.map(r => `
+      <div class="res-card" style="border-left:3px solid var(--accent-teal);">
+        <div class="res-meta"><a onclick="navigate('pg-lesson',{id:'${r.id}'})" style="color:var(--accent-blue);cursor:pointer;">${esc(r.id)}</a> · ${esc(r.title)}</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px;line-height:1.6;">${esc(r.fieldLink)}</div>
+      </div>`).join('')}</div>`;
+}
+
+// ================================================================
 // 15. PRACTICE PAGE
 // ================================================================
 function renderPractice(params = {}) {
@@ -3161,6 +3304,31 @@ function renderSettings() {
     </div>
 
     <div class="settings-section card" style="margin-top:16px;">
+      <div class="settings-title">外觀</div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">主題色</div>
+          <div class="setting-desc">長時間閱讀數學推導可切淺色護眼</div>
+        </div>
+        <div class="setting-control">
+          <button class="setting-btn${(userState.settings?.theme||'dark')==='dark'?' active':''}" onclick="setTheme('dark')">🌙 深色</button>
+          <button class="setting-btn${userState.settings?.theme==='light'?' active':''}" onclick="setTheme('light')">☀️ 淺色</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">閱讀字級</div>
+          <div class="setting-desc">放大整體畫面（目前 ${Math.round((userState.settings?.fontScale||1)*100)}%）</div>
+        </div>
+        <div class="setting-control">
+          <button class="setting-btn${(userState.settings?.fontScale||1)===1?' active':''}" onclick="setFontScale(1)">標準</button>
+          <button class="setting-btn${(userState.settings?.fontScale||1)===1.1?' active':''}" onclick="setFontScale(1.1)">大</button>
+          <button class="setting-btn${(userState.settings?.fontScale||1)===1.25?' active':''}" onclick="setFontScale(1.25)">特大</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section card" style="margin-top:16px;">
       <div class="settings-title">${t('storageModeTitle')}</div>
       <div class="setting-row">
         <div>
@@ -3285,6 +3453,32 @@ function setLang(lang) {
   document.getElementById('lang-toggle').textContent = lang === 'zh' ? 'EN' : '中';
   updateNavI18n();
   navigate(appState.currentPage);
+}
+
+// #11 外觀偏好：淺/深色主題 + 閱讀字級（用 #main zoom 整體縮放）
+function applyUiPrefs() {
+  const theme = userState.settings?.theme || 'dark';
+  document.body.classList.toggle('theme-light', theme === 'light');
+  const scale = userState.settings?.fontScale || 1;
+  const main = el('main');
+  if (main) main.style.zoom = String(scale);
+}
+function setTheme(theme) {
+  userState.settings = userState.settings || {};
+  userState.settings.theme = theme;
+  appState.settings.theme = theme;
+  applyUiPrefs();
+  save();
+  flog('UI', `setTheme: ${theme}`);
+  if (appState.currentPage === 'pg-settings') renderSettings();
+}
+function setFontScale(scale) {
+  userState.settings = userState.settings || {};
+  userState.settings.fontScale = scale;
+  applyUiPrefs();
+  save();
+  flog('UI', `setFontScale: ${scale}`);
+  if (appState.currentPage === 'pg-settings') renderSettings();
 }
 
 function setStorageMode(mode) {
@@ -3470,6 +3664,9 @@ async function initApp() {
     ? (await DriveStore.load())
     : appState.storage.load();
   appState.settings.lang = userState.settings?.lang || 'zh';
+
+  // #11 套用外觀偏好（主題 + 字級）
+  applyUiPrefs();
 
   // Language toggle
   const langBtn = el('lang-toggle');
