@@ -1,0 +1,147 @@
+{
+  "id": "S20",
+  "stage": 1,
+  "week": 2,
+  "order": 20,
+  "title": "偏微分練習",
+  "titleEn": "Partial Derivatives Practice",
+  "platform": "paul",
+  "objective": "養成偏微分『口語化』習慣：動筆前先講清『對誰偏微分、把誰當常數、用哪條規則』，並做混合練習（冪次/e/ln/常數係數分式）練到順、能自我檢查訂正。",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "medium",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S19"
+  ],
+  "assessWeight": "light",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- core 深講節（自足版，偏練習）：偏微分練習＋口語化。承 S19 計算，重點是養成「動筆前先講出在算什麼」的習慣並做混合練習。為 Week 2 後段積分鋪路。 -->\n\n## 一、先講白話：動筆前，先「講出來」\n\nS18–S19 你已經會算偏微分了。這一節不教新規則，而是養兩個會讓你少錯一半的習慣：\n\n1. **口語化**：動筆前先用嘴巴（或心裡）講一句——「我要對 $x$ 偏微分，所以把 $y$ 當數字」。把「誰在動、誰被固定」講清楚，手就不會亂。\n2. **混合練習**：把 S8–S11、S18–S19 的招式混在一起練，逼自己每題先判斷「這項該怎麼處理」。\n\n---\n\n## 二、口語化的標準句型\n\n每做一題偏微分，先填這個句子再動筆：\n\n> 「我要對 ___（變數）偏微分，所以把 ___（另一個變數）當常數；這一項是 ___（要微分／是常數），用 ___（哪條規則）。」\n\n範例：對 $g(x,y)=x^2 e^{y}$ 求 $\\partial g/\\partial x$，先講：「我要對 **x** 偏微分，所以把 **y** 當常數；$e^{y}$ 整包是常數係數，只對 $x^2$ 用**冪次法則**。」\n\n$$\\frac{\\partial g}{\\partial x} = e^{y}\\cdot 2x = 2x\\,e^{y} \\quad\\text{（e^y 當常數係數提出；x²→2x）}$$\n\n換成 $\\partial g/\\partial y$，先講：「對 **y** 偏微分，把 $x^2$ 當常數係數；$e^{y}$ 對 $y$ 微分還是 $e^{y}$。」\n\n$$\\frac{\\partial g}{\\partial y} = x^2\\cdot e^{y} = x^2 e^{y} \\quad\\text{（x² 當係數；d(e^y)/dy=e^y）}$$\n\n注意：$x^2 e^y$ 的兩個偏微分長得不一樣，正因為「被當常數的那一半」不同。\n\n---\n\n## 三、混合練習範例（先講、再算、最後檢查）\n\n題目：$h(x,y)=\\dfrac{x^3}{y} + \\ln x$，求 $\\partial h/\\partial x$。\n\n先講：「對 **x** 偏微分，把 **y** 當常數。第一項 $\\dfrac{x^3}{y}=\\dfrac1y\\cdot x^3$，$\\dfrac1y$ 是常數係數；第二項 $\\ln x$ 對 $x$ 微分是 $\\dfrac1x$（S9）。」\n\n第 1 步：改寫，把常數係數看清楚\n$$h = \\frac{1}{y}\\,x^3 + \\ln x \\quad\\text{（1/y 是對 x 而言的常數係數）}$$\n\n第 2 步：逐項對 $x$ 偏微分\n$$\\frac{\\partial h}{\\partial x} = \\frac{1}{y}\\cdot 3x^2 + \\frac{1}{x} \\quad\\text{（x³→3x²、係數 1/y 留著；d(ln x)/dx=1/x）}$$\n\n第 3 步：整理\n$$\\frac{\\partial h}{\\partial x} = \\frac{3x^2}{y} + \\frac{1}{x}$$\n\n檢查：每一項都只對 $x$ 動了手，$y$ 全程沒被微分——對。\n\n---\n\n## 四、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\dfrac{x^3}{y}$ 對 $x$ 偏微分要用除法規則？ | 不必。$\\dfrac1y$ 是常數係數，提出來只對 $x^3$ 微分最快。 |\n| 講「對 $x$ 偏微分」卻把 $y$ 也動了 | 口語化就是防這個：先講「$y$ 當常數」，手才不會碰 $y$。 |\n| $\\ln x$ 與 $\\ln y$ 對 $x$ 偏微分一樣？ | 不一樣。$\\partial(\\ln x)/\\partial x=1/x$；但 $\\ln y$ 對 $x$ 是常數，導數 0。 |\n\n> 本節無延伸。核心：動筆前先口語化講清「誰動、誰被當常數、用哪條規則」，再把 S8–S11／S18–S19 的招式混合練到順。",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "每做一題偏微分前，能先用標準句型講出『對誰偏微分、把誰當常數、這項用哪條規則』"
+    },
+    {
+      "id": "c2",
+      "text": "能把含常數係數的分式（如 x³/y 對 x）用『提常數係數』最快處理，不誤用除法規則"
+    },
+    {
+      "id": "c3",
+      "text": "能在混合題中逐項判斷每一項該微分還是當常數（如 ∂/∂x 時 ln y 是常數）"
+    },
+    {
+      "id": "c4",
+      "text": "能對同一函數算 ∂f/∂x 與 ∂f/∂y，並說明差異來自『被當常數的那半不同』"
+    },
+    {
+      "id": "c5",
+      "text": "能獨立完成 5 題混合偏微分（含冪次、e、ln、係數），每題先講再算並訂正"
+    },
+    {
+      "id": "c6",
+      "text": "三句話總結本節"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "（選看）Paul's Online Math Notes：Partial Derivatives 練習題",
+      "url": "https://tutorial.math.lamar.edu"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "偏微分『口語化』習慣的第一句要先講清楚什麼？",
+      "options": [
+        "對哪個變數偏微分、把哪個變數當常數",
+        "答案是多少",
+        "要不要用計算機",
+        "這題幾分"
+      ],
+      "answer": 0,
+      "explain": "先講清『誰在動、誰被固定（當常數）』，手就不會亂碰被固定的變數，能少錯一半。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "對 g(x,y)=x²e^y 求 ∂g/∂x，e^y 該怎麼處理？",
+      "options": [
+        "當常數係數，提出來不微分",
+        "對 x 微分成 e^y·y",
+        "微分成 e^x",
+        "設為 0"
+      ],
+      "answer": 0,
+      "explain": "對 x 偏微分時 y 是常數，e^y 整包是常數係數，提出來只對 x² 做：得 2x·e^y。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "ln y 對 x 偏微分的結果是 0。",
+      "answer": true,
+      "explain": "對 x 而言 ln y 不含 x、是常數，導數為 0（對比 ∂(ln x)/∂x=1/x）。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "∂/∂x(x²e^y) = ?",
+      "options": [
+        "2x e^y",
+        "x² e^y",
+        "2x e^y + x² e^y",
+        "2x e^x"
+      ],
+      "answer": 0,
+      "explain": "e^y 當常數係數，對 x² 用冪次法則得 2x，乘 e^y：2x·e^y。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "已知 h(x,y)=x³/y，∂h/∂x = ?",
+      "options": [
+        "3x²/y",
+        "3x²",
+        "x³/y²",
+        "3x²/y²"
+      ],
+      "answer": 0,
+      "explain": "1/y 是對 x 的常數係數：∂/∂x[(1/y)x³]=(1/y)·3x²=3x²/y。（x³/y² 與 ∂h/∂y 有關，不是 ∂h/∂x。）"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "對同一個 f(x,y)=x²e^y，為什麼 ∂f/∂x 與 ∂f/∂y 不同？",
+      "options": [
+        "因為被當成常數的那一半不同（一個固定 y、一個固定 x）",
+        "因為 x 比 y 大",
+        "因為偏微分本來就隨機",
+        "其實它們相同"
+      ],
+      "answer": 0,
+      "explain": "∂f/∂x=2xe^y（固定 y）、∂f/∂y=x²e^y（固定 x）。差別來自『哪個變數被當常數』。"
+    },
+    {
+      "type": "single",
+      "difficulty": "challenge",
+      "q": "進階：p(x,y)=x²y + ln x + y²。求 ∂p/∂x。",
+      "options": [
+        "2xy + 1/x",
+        "2xy + 1/x + 2y",
+        "2x + 1/x",
+        "2xy + 1/y"
+      ],
+      "answer": 0,
+      "explain": "答對不易，重點在逐項判斷哪些對 x 是常數。",
+      "strategy": "策略：對 x 偏微分，逐項，把 y 當常數。\n① x²y：y 當係數、x²→2x，得 2xy。\n② ln x：對 x 微分得 1/x（S9）。\n③ y²：對 x 是純常數，導數=0（選項二多加的 2y 就是把 ∂/∂y 的結果誤混進來）。\n合計：2xy + 1/x。\n心法：每一項先問『這項含不含正在動的變數 x？』不含就是常數、導數 0；含就照規則微分。"
+    }
+  ]
+}

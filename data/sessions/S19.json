@@ -1,0 +1,149 @@
+{
+  "id": "S19",
+  "stage": 1,
+  "week": 2,
+  "order": 19,
+  "title": "偏微分（二）：計算",
+  "titleEn": "Partial Derivatives II — Calculation",
+  "platform": "paul",
+  "objective": "熟練偏微分的機械操作：算 ∂/∂x 時把 y 當常數、套 Week 1 微分規則（冪次/e/ln），含 e^{xy} 等合成項用鏈鎖律乘內層，能對同一函數獨立算出 ∂f/∂x 與 ∂f/∂y。",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S8",
+    "S18"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general",
+    "thermo"
+  ],
+  "content": "<!-- core 深講節（自足版）：偏微分計算。承 S18 概念，專練「把其他變數當常數」的機械操作，含需要鏈鎖律的 e^{xy} 項。為 S20 練習鋪路。 -->\n\n## 一、先講白話：偏微分就是「裝瞎」微分\n\nS18 講了偏微分的意義（切片斜率）與捷徑（把其他變數當常數）。這一節專練「手要怎麼動」。\n\n口訣：**算 $\\partial/\\partial x$ 時，對 $y$「裝瞎」——把每個 $y$ 都看成像 3、像 7 那樣的純數字**，然後整題就退化成 S8–S11 的單變數微分。會 Week 1 的微分，就會偏微分。\n\n---\n\n## 二、會用到的 Week 1 規則（對「正在動的那個變數」用）\n\n把固定變數當常數後，剩下的就照這些做（都對「正在動的變數」操作）：\n\n$$\\frac{\\partial}{\\partial x}(x^n) = n\\,x^{\\,n-1} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $n$ | 冪次（指數） | 對「正在動的變數」$x$ 的次方 |\n| 常數係數 | 含被固定變數的因子 | 如 $\\partial/\\partial x(5y\\,x^3)=5y\\cdot3x^2$，$5y$ 整包當係數 |\n\n其餘常用（都來自 Week 1）：和差逐項微分、常數的導數為 0、$\\dfrac{\\partial}{\\partial x}e^{x}=e^{x}$（S9）、$\\dfrac{\\partial}{\\partial x}\\ln x=\\dfrac1x$（S9），以及合成要用<span class=\"term-zh\">鏈鎖律</span>（<span class=\"term-en\">chain rule</span>，S10–S11）。\n\n---\n\n## 三、完整範例：一次算兩個偏微分\n\n題目：$f(x,y) = x^3 y^2 + e^{xy}$，求 $\\partial f/\\partial x$ 與 $\\partial f/\\partial y$。\n\n### (a) $\\partial f/\\partial x$（把 $y$ 當常數）\n\n第 1 步：逐項、對 $x$ 微分\n$$\\frac{\\partial f}{\\partial x} = \\frac{\\partial}{\\partial x}(x^3 y^2) + \\frac{\\partial}{\\partial x}(e^{xy}) \\quad\\text{（和的偏微分＝逐項偏微分）}$$\n\n第 2 步：第一項，$y^2$ 是常數係數，對 $x^3$ 用冪次法則\n$$\\frac{\\partial}{\\partial x}(x^3 y^2) = y^2\\cdot 3x^2 = 3x^2 y^2 \\quad\\text{（y² 提出當係數；x³→3x²）}$$\n\n第 3 步：第二項 $e^{xy}$ 是合成（外層 $e^{(\\ )}$、內層 $xy$），用鏈鎖律：外層導數 × 內層對 $x$ 的導數\n$$\\frac{\\partial}{\\partial x}(e^{xy}) = e^{xy}\\cdot \\frac{\\partial}{\\partial x}(xy) = e^{xy}\\cdot y = y\\,e^{xy} \\quad\\text{（鏈鎖律；內層 xy 對 x 微分、y 當常數得 y）}$$\n\n第 4 步：合起來\n$$\\frac{\\partial f}{\\partial x} = 3x^2 y^2 + y\\,e^{xy}$$\n\n### (b) $\\partial f/\\partial y$（把 $x$ 當常數）\n\n第 1 步：逐項、對 $y$ 微分\n$$\\frac{\\partial f}{\\partial y} = \\frac{\\partial}{\\partial y}(x^3 y^2) + \\frac{\\partial}{\\partial y}(e^{xy})$$\n\n第 2 步：第一項，$x^3$ 是常數係數，對 $y^2$ 用冪次法則\n$$\\frac{\\partial}{\\partial y}(x^3 y^2) = x^3\\cdot 2y = 2x^3 y \\quad\\text{（x³ 當係數；y²→2y）}$$\n\n第 3 步：第二項，鏈鎖律，內層 $xy$ 對 $y$ 微分（$x$ 當常數）得 $x$\n$$\\frac{\\partial}{\\partial y}(e^{xy}) = e^{xy}\\cdot x = x\\,e^{xy} \\quad\\text{（鏈鎖律；內層 xy 對 y 微分得 x）}$$\n\n第 4 步：合起來\n$$\\frac{\\partial f}{\\partial y} = 2x^3 y + x\\,e^{xy}$$\n\n> 重點：同一個 $f$，$\\partial f/\\partial x$ 與 $\\partial f/\\partial y$ 結果不同——因為一個把 $y$ 當常數、一個把 $x$ 當常數。\n\n---\n\n## 四、常見錯誤\n\n| 錯誤 | 正確 |\n|---|---|\n| 對 $x$ 偏微分時把 $y^2$ 也微分成 $2y$ | $y^2$ 是常數，整包當係數不動：$\\partial/\\partial x(x^3y^2)=3x^2y^2$ |\n| $e^{xy}$ 對 $x$ 微分忘了乘內層 | 鏈鎖律：$e^{xy}\\cdot\\partial(xy)/\\partial x = y\\,e^{xy}$，別漏那個 $y$ |\n| 把純 $y$ 的項（如 $y^3$）對 $x$ 微分成非零 | 對 $x$ 而言純 $y$ 的項是常數，導數為 0 |\n\n> 本節無延伸。核心：偏微分計算就是「把固定變數當常數、對正在動的變數套 Week 1 規則」；含 $e^{xy}$ 等合成項要記得鏈鎖律乘內層。",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "能說出偏微分計算口訣：算 ∂/∂x 時把 y 當純數字，再套 Week 1 微分規則"
+    },
+    {
+      "id": "c2",
+      "text": "能對含常數係數的項偏微分（如 ∂/∂x(x³y²)=3x²y²，y² 整包當係數）"
+    },
+    {
+      "id": "c3",
+      "text": "能對 e^{xy} 這類合成項用鏈鎖律偏微分（記得乘內層：∂/∂x→×y、∂/∂y→×x）"
+    },
+    {
+      "id": "c4",
+      "text": "能對同一個函數獨立算出 ∂f/∂x 與 ∂f/∂y 兩個結果"
+    },
+    {
+      "id": "c5",
+      "text": "能指出常見錯誤（把常數當變數微分、漏乘鏈鎖律內層）並訂正"
+    },
+    {
+      "id": "c6",
+      "text": "三句話總結本節"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "（選看）Paul's Online Math Notes：Partial Derivatives",
+      "url": "https://tutorial.math.lamar.edu"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "算 ∂/∂x 的口訣是？",
+      "options": [
+        "把 y 當常數（純數字），再對 x 套 Week 1 微分規則",
+        "把 x 和 y 都微分",
+        "把 x 當常數",
+        "先積分再微分"
+      ],
+      "answer": 0,
+      "explain": "對 x 偏微分＝固定 y。把 y 看成數字後，整題退化成單變數微分，照 Week 1 規則做。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "∂/∂x(x³y²) = ?",
+      "options": [
+        "3x²y²",
+        "3x²·2y",
+        "2x³y",
+        "3x²"
+      ],
+      "answer": 0,
+      "explain": "y² 是常數係數整包不動，對 x³ 用冪次法則得 3x²，乘上 y²：3x²y²。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "對 x 偏微分時，純粹由 y 組成的項（例如 y³）會被當成常數，導數為 0。",
+      "answer": true,
+      "explain": "對 x 而言 y³ 不含 x、是常數，常數的導數為 0。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "∂/∂y(x³y²) = ?",
+      "options": [
+        "2x³y",
+        "3x²y²",
+        "x³",
+        "2xy"
+      ],
+      "answer": 0,
+      "explain": "對 y 偏微分把 x³ 當常數係數，對 y² 用冪次法則得 2y，乘 x³：2x³y。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "∂/∂x(e^{xy}) = ?（y 當常數）",
+      "options": [
+        "y·e^{xy}",
+        "e^{xy}",
+        "x·e^{xy}",
+        "e^{x}"
+      ],
+      "answer": 0,
+      "explain": "鏈鎖律：外層 e^{(內)} 導數＝e^{xy}，乘內層 xy 對 x 的導數＝y，得 y·e^{xy}。別漏乘內層的 y。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "f(x,y)=x²y³，∂f/∂x 與 ∂f/∂y 分別是？",
+      "options": [
+        "2xy³ 與 3x²y²",
+        "2xy³ 與 2x²y",
+        "x²y³ 與 x²y³",
+        "2x 與 3y²"
+      ],
+      "answer": 0,
+      "explain": "∂/∂x：y³ 當係數、x²→2x，得 2xy³。∂/∂y：x² 當係數、y³→3y²，得 3x²y²。"
+    },
+    {
+      "type": "single",
+      "difficulty": "challenge",
+      "q": "進階：f(x,y)=x²y + e^{2x} + y。求 ∂f/∂x。",
+      "options": [
+        "2xy + 2e^{2x}",
+        "2xy + e^{2x} + 1",
+        "2xy + 2e^{2x} + 1",
+        "x² + 2e^{2x}"
+      ],
+      "answer": 0,
+      "explain": "答對不易，重點在逐項、含鏈鎖律、且分清哪些對 x 是常數。",
+      "strategy": "策略：對 x 偏微分，逐項處理，把 y 當常數。\n① x²y：y 當係數、x²→2x，得 2xy。\n② e^{2x}：合成，鏈鎖律＝e^{2x}·(2x 對 x 的導數=2)=2e^{2x}。\n③ 純 y：對 x 是常數，導數=0（選項二、三多加的 1 就是把這項誤微分）。\n合計：2xy + 2e^{2x}。\n心法：偏微分先『逐項拆開』，每項各自判斷『對正在動的變數，這項是常數還是要微分』，合成項記得鏈鎖律乘內層。"
+    }
+  ]
+}

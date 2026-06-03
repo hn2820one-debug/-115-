@@ -1,0 +1,179 @@
+{
+  "id": "S18",
+  "stage": 1,
+  "week": 2,
+  "order": 18,
+  "title": "偏微分（一）：概念",
+  "titleEn": "Partial Derivatives I",
+  "platform": "ka",
+  "objective": "理解偏微分＝『固定其他變數、只對一個變數求導數』，能讀寫 ∂ 記號並分辨它與 d 的差別，能在切片互動圖上把『切線斜率』對應到 ∂f/∂x，並用『把固定變數當常數』的捷徑算簡單偏微分。",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "core",
+  "cognition": "concept",
+  "prereq": [
+    "S7",
+    "S17"
+  ],
+  "assessWeight": "heavy",
+  "extension": "field",
+  "gradCourse": [
+    "general",
+    "thermo"
+  ],
+  "content": "<!-- core 深講節★（自足版）：偏微分概念 ∂f/∂x。承 S17（固定一變數＝切一刀）與 S7（導數=切線斜率）。偏微分＝在一條切片上對單一變數的導數。為 S19 計算、Week 9 ∂G/∂T 鋪路。 -->\n\n## 一、先講白話：偏微分＝「凍結其他變數，只對一個微分」\n\nS17 最後留了一個畫面：在 3D 曲面上「固定一個變數＝切一刀」，切口是一條普通的 2D 曲線。\n\nS7 又學過：一條 2D 曲線在某點的<span class=\"term-zh\">導數</span>（<span class=\"term-en\">derivative</span>）就是那點<span class=\"term-zh\">切線</span>（<span class=\"term-en\">tangent line</span>）的斜率，代表「$y$ 隨 $x$ 變多快」。\n\n把這兩件事疊起來，就是<span class=\"term-zh\">偏微分</span>（<span class=\"term-en\">partial derivative</span>）：**先固定其他變數（切一刀得切片），再對你關心的那個變數求導數（量切片的斜率）**。一句話——「凍結其他變數，只對一個微分」。\n\n---\n\n## 二、正式定義與記號\n\n對 $x$ 的偏微分，定義成「把 $y$ 固定、只讓 $x$ 動一點點」時 $f$ 的變化率：\n\n$$\\frac{\\partial f}{\\partial x} = \\lim_{h \\to 0} \\frac{f(x+h,\\,y) - f(x,\\,y)}{h} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $\\dfrac{\\partial f}{\\partial x}$ | <span class=\"term-zh\">f 對 x 的偏微分</span>（<span class=\"term-en\">partial derivative of f w.r.t. x</span>） | 固定 $y$、只看 $x$ 變化時 $f$ 的變化率 |\n| $\\partial$ | <span class=\"term-zh\">偏微分符號</span>（<span class=\"term-en\">partial sign</span>），唸「partial」 | 圓體的 d，提醒你「還有別的變數被固定著」 |\n| $h$ | $x$ 的微小增量 | 趨近 0，與 S7 導數定義裡的 $h$ 同義 |\n| $f(x+h,\\,y)$ | 只把 $x$ 加了 $h$、$y$ 不動 | 注意第二格 $y$ 維持不變 |\n\n跟 S7 的導數定義 $\\lim_{h\\to0}\\dfrac{f(x+h)-f(x)}{h}$ 幾乎一模一樣，唯一差別是**第二個變數 $y$ 全程被按住不動**。所以才用「$\\partial$」這個圓圓的 d，而不是普通的「d」，提醒你「旁邊還有變數被固定」。\n\n常見簡寫：$\\dfrac{\\partial f}{\\partial x}$ 也寫成 $f_x$；同理對 $y$ 的偏微分是 $\\dfrac{\\partial f}{\\partial y}$（記成 $f_y$），定義時改成固定 $x$、只動 $y$。\n\n---\n\n## 三、看圖：偏微分就是「切片的斜率」\n\n下圖是 $f(x,y)=x^2+y^2$ 在固定 $y=1$ 時的切片，也就是 $z=x^2+1$ 這條拋物線。拖動切點 $x_0$，看切線斜率怎麼變。\n\n[CHART:functionPlot]\n\n**讀圖導引（這張圖怎麼看）**\n\n- **X 軸**：$x$（切片上唯一還在變的變數）。**Y 軸**：$z=f(x,1)=x^2+1$。\n- **這條拋物線**：是 3D 曲面在 $y=1$ 處「切一刀」的切口（S17 的招數）；$y$ 已被固定成 1。\n- **金色切線**：它的斜率就是偏微分 $\\partial f/\\partial x$ 在該點的值。\n- **拖動 $x_0$**：切線斜率隨位置改變——左邊負、過底部 0、右邊正。對 $x^2+1$ 來說斜率＝$2x$，所以 $\\partial f/\\partial x = 2x$。\n- **最容易看錯的地方**：這條切線量的是「沿著 $x$ 方向」的斜率，因為 $y$ 被釘在 1。若改固定 $x$、沿 $y$ 切一刀，量到的是另一個偏微分 $\\partial f/\\partial y$，是不同方向的變化率。\n\n---\n\n## 四、怎麼算：把固定的變數「當常數」\n\n定義式用來理解意義；實際計算偏微分有一個超好用的捷徑：**對 $x$ 偏微分時，把 $y$ 當成一個普通常數（數字），再照 Week 1 的微分規則做**。\n\n範例：$f(x,y)=3x^2 y$，求 $\\partial f/\\partial x$。\n\n第 1 步：對 $x$ 偏微分，把 $y$ 看成常數\n$$\\frac{\\partial f}{\\partial x} = \\frac{\\partial}{\\partial x}(3x^2 y) \\quad\\text{（y 視為常數）}$$\n\n第 2 步：常數 $3y$ 提到前面，只對 $x^2$ 微分\n$$= 3y \\cdot \\frac{\\partial}{\\partial x}(x^2) \\quad\\text{（3y 是常數係數，提出）}$$\n\n第 3 步：用冪次法則 $\\dfrac{d}{dx}x^2 = 2x$（S8）\n$$= 3y \\cdot 2x = 6xy \\quad\\text{（冪次法則：指數 2 搬下、次方減 1）}$$\n\n所以 $\\partial f/\\partial x = 6xy$。同一個 $f$，若改求 $\\partial f/\\partial y$（把 $x$ 當常數）：$\\dfrac{\\partial}{\\partial y}(3x^2 y)=3x^2\\cdot\\dfrac{\\partial}{\\partial y}(y)=3x^2\\cdot1=3x^2$。\n\n---\n\n## 五、易混淆對比\n\n| 容易混 | 正確理解 |\n|---|---|\n| $\\partial$ 和 $d$ 一樣？ | 意義同是「變化率」，但 $\\partial$ 提醒「有其他變數被固定」。單變數用 $d$，多變數用 $\\partial$。 |\n| $\\partial f/\\partial x$ 時 $y$ 要不要一起動？ | 不動。對 $x$ 偏微分＝把 $y$ 釘成常數，只讓 $x$ 變。 |\n| $\\partial f/\\partial x$ 和 $\\partial f/\\partial y$ 是同一個數？ | 通常不同。一個量「沿 $x$」的斜率、一個量「沿 $y$」的斜率，是兩個方向的變化率。 |\n| 把 $y$ 當常數，$3x^2y$ 對 $x$ 微分得 $6x$？ | 漏了 $y$。$3y$ 是常數係數要留著：$3y\\cdot2x=6xy$。 |\n\n---\n\n## 六、延伸（接到現場：給有封裝背景的你）\n\n材料熱力學第一學期最常出現的式子之一是 $S = -\\left(\\dfrac{\\partial G}{\\partial T}\\right)_P$——<span class=\"term-zh\">熵</span>（<span class=\"term-en\">entropy</span>）等於「固定壓力下，<span class=\"term-zh\">Gibbs 自由能</span>（<span class=\"term-en\">Gibbs free energy</span>）對溫度的偏微分」。那個下標 $P$ 就是在說「壓力被固定」，$\\partial$ 就是在說「成分等其他變數也按住」。你現在學的 $\\partial f/\\partial x$，就是 Week 9 整章在算的東西。回到現場：「固定壓力與時間，溫度每升一度、bond 品質變化多少」＝ $\\partial(\\text{品質})/\\partial T$，也是同一招。\n\n> 本段為選配延伸。核心：式(1) 偏微分定義（固定其他變數的導數）、$\\partial$ 與 $d$ 的差別、以及計算捷徑「把固定的變數當常數」。",
+  "fieldLink": "熱力學 S=−(∂G/∂T)_P：熵＝固定壓力下 Gibbs 自由能對溫度的偏微分，下標 P 就是『壓力固定』、∂ 就是『其他變數按住』。等同現場『固定壓力與時間、看溫度每升一度品質變多少』＝∂(品質)/∂T。",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "能用一句話說偏微分＝『固定其他變數、只對一個變數求導數』（凍結其他、只動一個）"
+    },
+    {
+      "id": "c2",
+      "text": "看到 ∂f/∂x 能說出哪個變數在變、哪個被固定，並知道 ∂ 與 d 的差別"
+    },
+    {
+      "id": "c3",
+      "text": "能在切片互動圖上指出：切線斜率＝∂f/∂x，且斜率隨 x₀ 改變"
+    },
+    {
+      "id": "c4",
+      "text": "能用『把 y 當常數』的捷徑算簡單的 ∂f/∂x（如 3x²y 得 6xy）"
+    },
+    {
+      "id": "c5",
+      "text": "能對同一個 f 分別算 ∂f/∂x 與 ∂f/∂y，並說明兩者通常不同"
+    },
+    {
+      "id": "c6",
+      "text": "三句話總結本節"
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "label": "（選看）Khan Academy：偏導數導論",
+      "url": "https://www.khanacademy.org"
+    }
+  ],
+  "charts": [
+    {
+      "type": "functionPlot",
+      "title": "f(x,y)=x²+y² 在 y=1 的切片 z=x²+1：拖切點看 ∂f/∂x＝切片斜率",
+      "params": {
+        "curves": [
+          {
+            "fn": "quadratic",
+            "a": 1,
+            "b": 0,
+            "c": 1,
+            "label": "z = x²+1（固定 y=1 的切片）",
+            "color": "#2dd4bf"
+          }
+        ],
+        "xrange": [
+          -3,
+          3
+        ],
+        "yrange": [
+          -1,
+          10
+        ],
+        "tangent": {
+          "curve": 0,
+          "x0": 1,
+          "adjustable": true
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "「偏微分 ∂f/∂x」最精確的白話是？",
+      "options": [
+        "固定其他變數，只對 x 求導數（變化率）",
+        "同時讓 x 和 y 一起變",
+        "把 f 乘以 x",
+        "x 和 y 的平均"
+      ],
+      "answer": 0,
+      "explain": "偏微分＝凍結其他變數（這裡固定 y），只對你關心的變數 x 求導數，量的是 f 沿 x 方向的變化率。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "計算 ∂f/∂x 時，把變數 y 當成常數來處理。",
+      "answer": true,
+      "explain": "對 x 偏微分＝固定 y。把 y 看成普通數字（常數），再照單變數微分規則對 x 做。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "符號 ∂ 與 d 的差別是？",
+      "options": [
+        "∂ 用在多變數，提醒還有其他變數被固定；d 用在單變數",
+        "∂ 比 d 大",
+        "兩者完全一樣，可隨意互換",
+        "∂ 代表積分"
+      ],
+      "answer": 0,
+      "explain": "∂（圓體 d）用於多變數偏微分，提醒『旁邊有變數被固定』；單變數用普通 d。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "已知 f(x,y)=3x²y，∂f/∂x = ?",
+      "options": [
+        "6xy",
+        "3x²",
+        "6x",
+        "3x²y"
+      ],
+      "answer": 0,
+      "explain": "對 x 偏微分把 y 當常數：3y·(2x)=6xy。（選 3x² 那是 ∂f/∂y；選 6x 漏了 y。）"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "已知 f(x,y)=x²+y²，∂f/∂y = ?",
+      "options": [
+        "2y",
+        "2x",
+        "2x+2y",
+        "x²"
+      ],
+      "answer": 0,
+      "explain": "對 y 偏微分把 x²當常數（導數 0）：∂/∂y(x²+y²)=0+2y=2y。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "在 f(x,y)=x²+y² 的『固定 y=1』切片上，x=2 處的 ∂f/∂x 值是多少？",
+      "options": [
+        "4",
+        "2",
+        "5",
+        "0"
+      ],
+      "answer": 0,
+      "explain": "∂f/∂x=2x（與 y 無關），代 x=2 得 4。切片 z=x²+1 在 x=2 的切線斜率正是 4。"
+    },
+    {
+      "type": "single",
+      "difficulty": "challenge",
+      "q": "進階：f(x,y)=x²y + y³。下列哪一個正確？",
+      "options": [
+        "∂f/∂x = 2xy，且 ∂f/∂y = x² + 3y²",
+        "∂f/∂x = 2xy + 3y²",
+        "∂f/∂y = x²",
+        "∂f/∂x = x² + 3y²"
+      ],
+      "answer": 0,
+      "explain": "答對不易，重點在『分別固定不同變數』。",
+      "strategy": "策略：算兩個偏微分，各自把『另一個』變數當常數。\n① ∂f/∂x（把 y 當常數）：對 x²y，y 是常數係數 → 2xy；對 y³，整項對 x 是常數 → 0。合計 2xy。\n② ∂f/∂y（把 x 當常數）：對 x²y，x² 是常數係數 → x²；對 y³，用冪次法則 → 3y²。合計 x²+3y²。\n③ 選項一兩者都對；選項二把 3y²（那是 ∂/∂y 的）混進 ∂/∂x；選項三漏了 3y²；選項四把 ∂/∂y 的結果貼到 ∂/∂x。\n心法：偏微分一次只處理一個變數，另一個全程當數字；逐項做、別把兩個方向的結果混在一起。"
+    }
+  ]
+}
