@@ -219,6 +219,9 @@ function _mergeSession(a, b) {
   // 三句話總結：挑較新/較長
   const sum = _pickText(a.summary, b.summary, a.lastTouched, b.lastTouched);
   if (sum) out.summary = sum;
+  // 個人筆記：挑較新/較長
+  const nt = _pickText(a.note, b.note, a.lastTouched, b.lastTouched);
+  if (nt) out.note = nt;
   // 自由作答：逐題挑較新/較長
   out.freeAnswers = {};
   const faKeys = new Set([...Object.keys(a.freeAnswers || {}), ...Object.keys(b.freeAnswers || {})]);
@@ -1482,6 +1485,16 @@ async function renderLesson(id) {
     <!-- Quiz -->
     <div id="lesson-quiz-area"></div>
 
+    <!-- #17 個人筆記 -->
+    <details class="note-box"${userState.sessions[id]?.note ? ' open' : ''}>
+      <summary>📝 我的筆記（畫重點、寫想法，只有你看得到）
+        <span id="note-saved-label" style="font-size:10px;color:var(--accent-teal);margin-left:8px;"></span>
+      </summary>
+      <textarea class="note-textarea" id="note-textarea"
+        placeholder="在這裡寫下你的理解、卡住的地方、想記住的重點…（自動儲存，跟 Drive 同步）"
+        oninput="debouncedSaveNote('${id}',this.value)">${esc(userState.sessions[id]?.note || '')}</textarea>
+    </details>
+
     <!-- Summary -->
     <div class="section-heading" style="justify-content:flex-start;gap:8px;">
       ${t('summary')}
@@ -1527,6 +1540,13 @@ async function renderLesson(id) {
         chartsArea.insertBefore(titleDiv, wrap);
       }
       renderChart(wrap, chart.type, chart.params);
+      // #14 圖表全螢幕按鈕
+      const fsBtn = document.createElement('button');
+      fsBtn.className = 'chart-fs-btn';
+      fsBtn.textContent = '⛶';
+      fsBtn.title = '全螢幕';
+      fsBtn.addEventListener('click', () => toggleChartFullscreen(wrap));
+      wrap.appendChild(fsBtn);
     }
   }
 
@@ -1666,8 +1686,17 @@ function renderLessonContent(id, session) {
     });
   }
 
-  // U25: click KaTeX to copy LaTeX source
-  qsa('.katex-display, .katex', area).forEach(k => {
+  // U25 + #14: 點塊狀公式 → 全螢幕放大；行內公式 → 複製 LaTeX
+  qsa('.katex-display', area).forEach(k => {
+    k.style.cursor = 'zoom-in';
+    k.title = '點擊放大';
+    k.addEventListener('click', () => {
+      const src = k.closest('[data-orig]')?.dataset?.orig || k.textContent;
+      _showFormulaOverlay(k.innerHTML, src);
+    });
+  });
+  qsa('.katex', area).forEach(k => {
+    if (k.closest('.katex-display')) return; // 塊狀已處理
     k.style.cursor = 'pointer';
     k.title = '點擊複製 LaTeX';
     k.addEventListener('click', () => {
@@ -1704,6 +1733,153 @@ function _showLightbox(src, alt) {
   el('lb-img').src = src;
   el('lb-img').alt = alt || '';
   lb.style.display = 'flex';
+}
+
+// #14 公式全螢幕：點放大顯示，附複製 LaTeX
+function _showFormulaOverlay(html, latex) {
+  let ov = el('fl-formula-ov');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'fl-formula-ov';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(10,12,18,0.96);z-index:9100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;cursor:zoom-out;';
+    ov.addEventListener('click', e => { if (e.target === ov) ov.style.display = 'none'; });
+    document.body.appendChild(ov);
+  }
+  ov.innerHTML = `
+    <div style="font-size:1.9em;color:#e4e8f0;max-width:96vw;max-height:70vh;overflow:auto;text-align:center;">${html}</div>
+    <div style="display:flex;gap:10px;">
+      <button id="fl-fov-copy" style="background:var(--accent-blue);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;">複製 LaTeX</button>
+      <button id="fl-fov-close" style="background:var(--bg-input);color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;">關閉</button>
+    </div>`;
+  el('fl-fov-copy').onclick = () => { navigator.clipboard?.writeText(latex); showToast('LaTeX 已複製', 'info'); };
+  el('fl-fov-close').onclick = () => { ov.style.display = 'none'; };
+  ov.style.display = 'flex';
+}
+
+// #14 圖表全螢幕
+function toggleChartFullscreen(wrap) {
+  if (document.fullscreenElement) { document.exitFullscreen?.(); return; }
+  (wrap.requestFullscreen ? wrap.requestFullscreen() : Promise.reject()).catch(() => {
+    // 不支援原生全螢幕時，退而用覆蓋層放大
+    wrap.classList.toggle('chart-pseudo-fs');
+  });
+}
+
+// #17 個人筆記（與三句話總結分開的自由筆記）
+let _noteTimer = null;
+function debouncedSaveNote(id, val) {
+  clearTimeout(_noteTimer);
+  _noteTimer = setTimeout(() => {
+    if (!userState.sessions[id]) userState.sessions[id] = {};
+    userState.sessions[id].note = val;
+    userState.sessions[id].lastTouched = new Date().toISOString();
+    save();
+    const lbl = el('note-saved-label');
+    if (lbl) lbl.textContent = '已儲存 ' + new Date().toTimeString().slice(0, 5);
+  }, 600);
+}
+
+// #9 番茄鐘（持久浮動專注計時器）
+const FL_POMO = {
+  _sec: 25 * 60, _running: false, _timer: null, _mode: 'focus', _panel: null,
+  init() {
+    if (el('fl-pomo-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'fl-pomo-btn'; btn.title = '專注計時器'; btn.textContent = '⏱';
+    btn.addEventListener('click', () => this._panel.classList.toggle('open'));
+    document.body.appendChild(btn);
+
+    const p = document.createElement('div');
+    p.id = 'fl-pomo-panel';
+    p.innerHTML = `
+      <div class="pomo-head">🍅 專注計時器
+        <button id="pomo-x" title="收起">×</button>
+      </div>
+      <div class="pomo-mode">
+        <button id="pomo-focus" class="active">專注 25</button>
+        <button id="pomo-break">休息 5</button>
+      </div>
+      <div id="fl-pomo-time" class="pomo-time">25:00</div>
+      <div class="pomo-ctrl">
+        <button id="pomo-start" class="pomo-primary">開始</button>
+        <button id="pomo-reset">重設</button>
+      </div>
+      <div class="pomo-tip">完成一輪自動 +25 分鐘到學習時數</div>`;
+    document.body.appendChild(p);
+    this._panel = p;
+    el('pomo-x').addEventListener('click', () => p.classList.remove('open'));
+    el('pomo-focus').addEventListener('click', () => this.setMode('focus'));
+    el('pomo-break').addEventListener('click', () => this.setMode('break'));
+    el('pomo-start').addEventListener('click', () => this.start());
+    el('pomo-reset').addEventListener('click', () => this.reset());
+    this._render();
+  },
+  _render() {
+    const m = Math.floor(this._sec / 60), s = this._sec % 60;
+    const t = el('fl-pomo-time'); if (t) t.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const b = el('pomo-start'); if (b) b.textContent = this._running ? '暫停' : '開始';
+    el('pomo-focus')?.classList.toggle('active', this._mode === 'focus');
+    el('pomo-break')?.classList.toggle('active', this._mode === 'break');
+  },
+  start() {
+    if (this._running) { this.pause(); return; }
+    this._running = true; this._render();
+    this._timer = setInterval(() => {
+      this._sec--;
+      if (this._sec <= 0) this._done();
+      this._render();
+    }, 1000);
+  },
+  pause() { this._running = false; clearInterval(this._timer); this._render(); },
+  reset() { this.pause(); this._sec = (this._mode === 'focus' ? 25 : 5) * 60; this._render(); },
+  setMode(m) { this._mode = m; this.reset(); },
+  _done() {
+    this.pause();
+    if (this._mode === 'focus') {
+      userState.totalMinutes = (userState.totalMinutes || 0) + 25;
+      save();
+      flog('RECORD', 'pomodoro: focus block done (+25 min)');
+      showToast('🍅 完成一個專注番茄鐘（+25 分鐘）！休息一下吧', 'success', 4500);
+      this.setMode('break');
+    } else {
+      showToast('☕ 休息結束，繼續加油！', 'info');
+      this.setMode('focus');
+    }
+  }
+};
+
+// #18 每日提醒（本機，App 開著時於設定時間提醒今天還沒讀書）
+function setReminder(enabled, time) {
+  userState.settings = userState.settings || {};
+  userState.settings.reminder = { enabled, time: time || userState.settings.reminder?.time || '20:00' };
+  if (enabled && 'Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().catch(() => {});
+  }
+  save();
+  applyDailyReminder();
+  flog('UI', `setReminder: ${enabled} @ ${userState.settings.reminder.time}`);
+  if (appState.currentPage === 'pg-settings') renderSettings();
+}
+function applyDailyReminder() {
+  clearTimeout(appState._reminderTimer);
+  const r = userState.settings?.reminder;
+  if (!r || !r.enabled) return;
+  const [hh, mm] = (r.time || '20:00').split(':').map(Number);
+  const now = new Date(), target = new Date();
+  target.setHours(hh || 20, mm || 0, 0, 0);
+  let delay = target - now;
+  if (delay < 0) delay += 24 * 3600 * 1000;
+  appState._reminderTimer = setTimeout(() => {
+    if (userState.streak?.lastStudyDate !== today()) _fireReminder();
+    applyDailyReminder();
+  }, Math.min(delay, 24 * 3600 * 1000));
+}
+function _fireReminder() {
+  const msg = '📚 今天還沒讀書喔！花 25 分鐘做一節吧。';
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try { new Notification('FoundationLearn 提醒', { body: msg, icon: 'icon.svg' }); } catch (e) {}
+  }
+  showToast(msg, 'warn', 6000);
 }
 
 // U22: text selection → glossary
@@ -3513,6 +3689,19 @@ function renderSettings() {
           <button class="setting-btn${(userState.settings?.fontScale||1)===1.25?' active':''}" onclick="setFontScale(1.25)">特大</button>
         </div>
       </div>
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">每日讀書提醒</div>
+          <div class="setting-desc">App 開著時，到設定時間若今天還沒讀書會提醒你</div>
+        </div>
+        <div class="setting-control">
+          <input type="time" value="${userState.settings?.reminder?.time||'20:00'}"
+            onchange="setReminder(true,this.value)"
+            style="background:var(--bg-input);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text-primary);font-size:13px;">
+          <button class="setting-btn${userState.settings?.reminder?.enabled?' active':''}"
+            onclick="setReminder(${!userState.settings?.reminder?.enabled})">${userState.settings?.reminder?.enabled?'已開':'開啟'}</button>
+        </div>
+      </div>
     </div>
 
     <div class="settings-section card" style="margin-top:16px;">
@@ -3854,6 +4043,9 @@ async function initApp() {
 
   // #11 套用外觀偏好（主題 + 字級）
   applyUiPrefs();
+  // #9 番茄鐘 + #18 每日提醒
+  FL_POMO.init();
+  applyDailyReminder();
 
   // Language toggle
   const langBtn = el('lang-toggle');

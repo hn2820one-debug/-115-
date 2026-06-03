@@ -853,6 +853,68 @@ input, textarea, select { font: inherit; color: inherit; }
 .rev-good:hover  { border-color: var(--accent-gold);  color: var(--accent-gold); }
 .rev-easy:hover  { border-color: var(--accent-green); color: var(--accent-green); }
 
+/* #14 圖表全螢幕按鈕 */
+.chart-fs-btn {
+  position: absolute; top: 8px; right: 8px; z-index: 5;
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  background: rgba(20,23,30,0.7); border: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 14px; line-height: 1;
+}
+.chart-fs-btn:hover { color: var(--accent-blue); border-color: var(--accent-blue); }
+.chart-wrap:fullscreen { aspect-ratio: auto; padding: 24px; display: flex; flex-direction: column; justify-content: center; }
+.chart-wrap.chart-pseudo-fs {
+  position: fixed; inset: 0; z-index: 9000; aspect-ratio: auto;
+  width: 100vw; height: 100vh; border-radius: 0;
+}
+
+/* #17 個人筆記框 */
+.note-box {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 12px 14px; margin: 18px 0;
+}
+.note-box > summary {
+  cursor: pointer; font-size: 13px; font-weight: 600; color: var(--accent-gold);
+  list-style: none; display: flex; align-items: center;
+}
+.note-box > summary::-webkit-details-marker { display: none; }
+.note-textarea {
+  width: 100%; min-height: 90px; margin-top: 10px; resize: vertical;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  color: var(--text-primary); font-size: 13.5px; line-height: 1.6; font-family: inherit;
+}
+.note-textarea:focus { outline: none; border-color: var(--accent-gold); }
+
+/* #9 番茄鐘浮動計時器 */
+#fl-pomo-btn {
+  position: fixed; left: 16px; bottom: 80px; z-index: 880;
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  color: var(--accent-gold); font-size: 20px; box-shadow: var(--shadow);
+}
+#fl-pomo-btn:hover { transform: scale(1.05); }
+#fl-pomo-panel {
+  position: fixed; left: 16px; bottom: 132px; z-index: 880;
+  width: 200px; background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+  padding: 14px; display: none;
+}
+#fl-pomo-panel.open { display: block; }
+.pomo-head { font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; }
+.pomo-head button { margin-left: auto; background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+.pomo-mode { display: flex; gap: 6px; margin: 10px 0; }
+.pomo-mode button {
+  flex: 1; font-size: 11px; padding: 5px; border-radius: 6px; cursor: pointer;
+  background: var(--bg-input); border: 1px solid var(--border); color: var(--text-secondary);
+}
+.pomo-mode button.active { border-color: var(--accent-gold); color: var(--accent-gold); }
+.pomo-time { font-size: 38px; font-weight: 800; text-align: center; color: var(--text-primary); font-variant-numeric: tabular-nums; margin: 6px 0; }
+.pomo-ctrl { display: flex; gap: 6px; }
+.pomo-ctrl button { flex: 1; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; border: 1px solid var(--border); background: var(--bg-input); color: var(--text-secondary); }
+.pomo-primary { background: var(--accent-gold) !important; color: #14171e !important; border: none !important; }
+.pomo-tip { font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 8px; }
+@media (max-width: 600px) { #fl-pomo-btn { bottom: 140px; } #fl-pomo-panel { bottom: 192px; } }
+
 /* ── 12. Progress Page ────────────────────────────────────────── */
 .progress-tabs {
   display: flex; gap: 4px;
