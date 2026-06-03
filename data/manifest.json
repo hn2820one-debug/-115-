@@ -134,7 +134,7 @@
     "S14": {"title":"Week 1 整理","titleEn":"Week 1 Summary","platform":"self","isCore":false},
     "S15": {"title":"Week 1 綜合練習（計時）","titleEn":"Week 1 Mixed Practice (Timed)","platform":"paul","isCore":false},
     "S16": {"title":"Week 1 檢討","titleEn":"Week 1 Review","platform":"self","isCore":false},
-    "S17": {"title":"多變數函數概念","titleEn":"Multivariable Functions","platform":"ka","isCore":false},
+    "S17": {"title":"多變數函數概念","titleEn":"Multivariable Functions","platform":"ka","isCore":true},
     "S18": {"title":"偏微分（一）：概念","titleEn":"Partial Derivatives I","platform":"ka","isCore":false},
     "S19": {"title":"偏微分（二）：計算","titleEn":"Partial Derivatives II — Calculation","platform":"paul","isCore":false},
     "S20": {"title":"偏微分練習","titleEn":"Partial Derivatives Practice","platform":"paul","isCore":false},
