@@ -2080,6 +2080,33 @@ function _calcFmt(n) {
   return parseFloat(n.toPrecision(12)).toString();
 }
 
+// 令浮動面板可由標題列拖動（手指／滑鼠／Apple Pencil 都得），避免擋住答題位
+function _makeDraggable(panel, handle) {
+  if (!panel || !handle) return;
+  let sx, sy, sl, st, dragging = false;
+  handle.addEventListener('pointerdown', e => {
+    if (e.target.closest('.pad-x')) return;            // 喺關閉掣度唔當拖動
+    dragging = true;
+    const r = panel.getBoundingClientRect();
+    panel.style.left = r.left + 'px'; panel.style.top = r.top + 'px';
+    panel.style.bottom = 'auto'; panel.style.right = 'auto';   // 由 bottom 定位切換成 top/left
+    sx = e.clientX; sy = e.clientY; sl = r.left; st = r.top;
+    try { handle.setPointerCapture(e.pointerId); } catch (x) {}
+    e.preventDefault();
+  });
+  handle.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const pw = panel.offsetWidth, ph = panel.offsetHeight;
+    let nl = sl + (e.clientX - sx), nt = st + (e.clientY - sy);
+    nl = Math.max(4, Math.min(nl, window.innerWidth  - pw - 4));
+    nt = Math.max(4, Math.min(nt, window.innerHeight - ph - 4));
+    panel.style.left = nl + 'px'; panel.style.top = nt + 'px';
+  });
+  const end = () => { dragging = false; };
+  handle.addEventListener('pointerup', end);
+  handle.addEventListener('pointercancel', end);
+}
+
 const FL_CALC = {
   _toks: [], _done: false, _err: false, _panel: null,
   init() {
@@ -2090,7 +2117,7 @@ const FL_CALC = {
     document.body.appendChild(btn);
     const p = document.createElement('div'); p.id = 'fl-calc-panel';
     p.innerHTML = `
-      <div class="pad-head">🧮 計算機 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">三角＝弧度</span>
+      <div class="pad-head">🧮 計算機 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">弧度·拖標題可移</span>
         <button class="pad-x" title="收起" onclick="FL_CALC.close()">×</button>
       </div>
       <div class="calc-display" id="fl-calc-display">0</div>
@@ -2107,6 +2134,10 @@ const FL_CALC = {
         <button class="calc-op" onclick="FL_CALC.press('^')">xʸ</button>
         <button class="calc-fn" onclick="FL_CALC.press('(')">(</button>
         <button class="calc-fn" onclick="FL_CALC.press(')')">)</button>
+        <button class="calc-var" onclick="FL_CALC.press('x')">x</button>
+        <button class="calc-var" onclick="FL_CALC.press('y')">y</button>
+        <button class="calc-var" onclick="FL_CALC.press('z')">z</button>
+        <button class="calc-var" onclick="FL_CALC.press('n')">n</button>
         <button onclick="FL_CALC.press('7')">7</button>
         <button onclick="FL_CALC.press('8')">8</button>
         <button onclick="FL_CALC.press('9')">9</button>
@@ -2129,6 +2160,7 @@ const FL_CALC = {
       <button class="calc-fill" onclick="FL_CALC.fill()">↧ 填入答題框</button>`;
     document.body.appendChild(p);
     this._panel = p;
+    _makeDraggable(p, p.querySelector('.pad-head'));
     this._render();
   },
   toggle() { this._panel.classList.contains('open') ? this.close() : this.open(); },
@@ -2155,9 +2187,12 @@ const FL_CALC = {
   },
   back() { this._toks.pop(); this._err = false; this._done = false; this._render(); },
   clear() { this._toks = []; this._err = false; this._done = false; this._render(); },
+  _hasVar() { return this._toks.some(t => t === 'x' || t === 'y' || t === 'z' || t === 'n'); },
   equals() {
     const expr = this._toks.join('');
     if (!expr) return;
+    // 含變數（代數式）不作數值計算——提示用「填入」直接填表達式
+    if (this._hasVar()) { showToast('呢條有變數，撳「↧填入答題框」直接填表達式', 'info', 3500); return; }
     try {
       const r = _calcEval(expr);
       if (!isFinite(r)) throw new Error('inf');
@@ -2166,15 +2201,14 @@ const FL_CALC = {
       this._render(rs);
     } catch (e) { this._err = true; this._render('錯誤'); }
   },
+  // 填入「畫面目前顯示」的內容：可以係代數式（如 2x^2、ln(x^3/2)）或計算結果（數字）
   fill() {
-    let val;
-    try { val = _calcFmt(_calcEval(this._toks.join(''))); }
-    catch (e) { showToast('先按 = 計出結果先', 'warn'); return; }
-    if (val === '錯誤') { showToast('先按 = 計出結果先', 'warn'); return; }
     const inp = qs('.practice-slot .quiz-fill-input') || qs('.quiz-fill-input');
     if (!inp) { showToast('附近冇填空題輸入框', 'warn'); return; }
-    inp.value = val; inp.focus();
-    showToast('已填入：' + val, 'success');
+    const text = (el('fl-calc-display')?.textContent || '').trim();
+    if (!text || text === '0' || text === '錯誤') { showToast('計算機暫時係空', 'warn'); return; }
+    inp.value = text; inp.focus();
+    showToast('已填入：' + text, 'success');
   }
 };
 
@@ -2189,7 +2223,7 @@ const FL_PAD = {
     document.body.appendChild(btn);
     const p = document.createElement('div'); p.id = 'fl-pad-panel';
     p.innerHTML = `
-      <div class="pad-head">✏️ 草稿畫布 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">即用即棄</span>
+      <div class="pad-head">✏️ 草稿畫布 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">即用即棄·拖標題可移</span>
         <button class="pad-x" title="收起" onclick="FL_PAD.close()">×</button>
       </div>
       <div class="pad-tools">
@@ -2209,6 +2243,7 @@ const FL_PAD = {
     const tc = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
     if (tc) this._color = tc;
     this._bindDraw();
+    _makeDraggable(p, p.querySelector('.pad-head'));
   },
   toggle() { this._panel.classList.contains('open') ? this.close() : this.open(); },
   open() { FL_CALC.close(); this._panel.classList.add('open'); this._fit(); },

@@ -1067,6 +1067,7 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 .calc-grid button:hover { background: var(--bg-card-hover); }
 .calc-grid .calc-fn { font-size: 13px; color: var(--accent-teal); }
+.calc-grid .calc-var { color: var(--accent-purple); font-weight: 700; font-style: italic; }
 .calc-grid .calc-op { color: var(--accent-blue); font-weight: 700; }
 .calc-grid .calc-act { color: var(--accent-red); font-weight: 700; }
 .calc-grid .calc-eq { grid-column: span 3; background: var(--accent-blue); color: #fff; border: none; font-weight: 800; }
@@ -1083,7 +1084,7 @@ input, textarea, select { font: inherit; color: inherit; }
   border-radius: var(--radius-md); box-shadow: var(--shadow-lg); padding: 12px; display: none;
 }
 #fl-pad-panel.open { display: block; }
-.pad-head { font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+.pad-head { font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px; cursor: move; touch-action: none; user-select: none; -webkit-user-select: none; }
 .pad-head .pad-x { margin-left: auto; background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; }
 .pad-tools { display: flex; align-items: center; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
 .pad-tools button {
