@@ -2002,6 +2002,263 @@ const FL_POMO = {
   }
 };
 
+// ================================================================
+// 浮動工具：科學計算機 + 草稿畫布（照番茄鐘的浮動掣＋面板模式）
+// 純前端、無新 library、離線可用、iPad 觸控／Apple Pencil 支援
+// ================================================================
+
+// 安全運算式求值（shunting-yard，不用 eval）：支援 + - * / ^、括號、
+// 一元負號、函式 sin/cos/tan/ln/log/sqrt/exp、常數 pi/e。三角用弧度。
+function _calcEval(expr) {
+  const toks = [];
+  let i = 0;
+  const isDig = c => (c >= '0' && c <= '9');
+  const isAl  = c => /[a-z]/i.test(c);
+  while (i < expr.length) {
+    const c = expr[i];
+    if (c === ' ') { i++; continue; }
+    if (isDig(c) || c === '.') {
+      let n = '';
+      while (i < expr.length && (isDig(expr[i]) || expr[i] === '.')) n += expr[i++];
+      toks.push({ t: 'num', v: parseFloat(n) });
+    } else if (isAl(c)) {
+      let id = '';
+      while (i < expr.length && isAl(expr[i])) id += expr[i++];
+      id = id.toLowerCase();
+      if (id === 'pi') toks.push({ t: 'num', v: Math.PI });
+      else if (id === 'e') toks.push({ t: 'num', v: Math.E });
+      else toks.push({ t: 'func', v: id });
+    } else if ('+-*/^'.includes(c)) { toks.push({ t: 'op', v: c }); i++; }
+    else if (c === '(') { toks.push({ t: 'lp' }); i++; }
+    else if (c === ')') { toks.push({ t: 'rp' }); i++; }
+    else { i++; }
+  }
+  const out = [], ops = [];
+  const prec = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3, 'neg': 4 };
+  const rAssoc = { '^': true, 'neg': true };
+  for (let k = 0; k < toks.length; k++) {
+    const tk = toks[k];
+    if (tk.t === 'num') out.push(tk);
+    else if (tk.t === 'func') ops.push(tk);
+    else if (tk.t === 'op') {
+      let op = tk.v;
+      const prev = toks[k - 1];
+      if (op === '-' && (!prev || prev.t === 'op' || prev.t === 'lp')) op = 'neg';
+      while (ops.length) {
+        const top = ops[ops.length - 1];
+        if (top.t === 'func') { out.push(ops.pop()); continue; }
+        if (top.t === 'op' && (prec[top.v] > prec[op] || (prec[top.v] === prec[op] && !rAssoc[op]))) { out.push(ops.pop()); continue; }
+        break;
+      }
+      ops.push({ t: 'op', v: op });
+    } else if (tk.t === 'lp') ops.push(tk);
+    else if (tk.t === 'rp') {
+      while (ops.length && ops[ops.length - 1].t !== 'lp') out.push(ops.pop());
+      if (ops.length && ops[ops.length - 1].t === 'lp') ops.pop();
+      if (ops.length && ops[ops.length - 1].t === 'func') out.push(ops.pop());
+    }
+  }
+  while (ops.length) { const o = ops.pop(); if (o.t === 'lp') throw new Error('括號不對'); out.push(o); }
+  const st = [];
+  const FN = { sin: Math.sin, cos: Math.cos, tan: Math.tan, ln: Math.log, log: Math.log10, sqrt: Math.sqrt, exp: Math.exp };
+  for (const tk of out) {
+    if (tk.t === 'num') st.push(tk.v);
+    else if (tk.t === 'op') {
+      if (tk.v === 'neg') { const a = st.pop(); st.push(-a); }
+      else { const b = st.pop(), a = st.pop();
+        st.push(tk.v === '+' ? a + b : tk.v === '-' ? a - b : tk.v === '*' ? a * b : tk.v === '/' ? a / b : Math.pow(a, b)); }
+    } else if (tk.t === 'func') {
+      const f = FN[tk.v]; if (!f) throw new Error('未知函式 ' + tk.v);
+      st.push(f(st.pop()));
+    }
+  }
+  if (st.length !== 1) throw new Error('運算式不完整');
+  return st[0];
+}
+function _calcFmt(n) {
+  if (typeof n !== 'number' || !isFinite(n)) return '錯誤';
+  return parseFloat(n.toPrecision(12)).toString();
+}
+
+const FL_CALC = {
+  _toks: [], _done: false, _err: false, _panel: null,
+  init() {
+    if (el('fl-calc-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'fl-calc-btn'; btn.title = '計算機'; btn.textContent = '🧮';
+    btn.addEventListener('click', () => this.toggle());
+    document.body.appendChild(btn);
+    const p = document.createElement('div'); p.id = 'fl-calc-panel';
+    p.innerHTML = `
+      <div class="pad-head">🧮 計算機 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">三角＝弧度</span>
+        <button class="pad-x" title="收起" onclick="FL_CALC.close()">×</button>
+      </div>
+      <div class="calc-display" id="fl-calc-display">0</div>
+      <div class="calc-grid">
+        <button class="calc-fn" onclick="FL_CALC.press('sin(')">sin</button>
+        <button class="calc-fn" onclick="FL_CALC.press('cos(')">cos</button>
+        <button class="calc-fn" onclick="FL_CALC.press('tan(')">tan</button>
+        <button class="calc-act" onclick="FL_CALC.back()">⌫</button>
+        <button class="calc-fn" onclick="FL_CALC.press('ln(')">ln</button>
+        <button class="calc-fn" onclick="FL_CALC.press('log(')">log</button>
+        <button class="calc-fn" onclick="FL_CALC.press('sqrt(')">√</button>
+        <button class="calc-act" onclick="FL_CALC.clear()">C</button>
+        <button class="calc-fn" onclick="FL_CALC.press('exp(')">eˣ</button>
+        <button class="calc-op" onclick="FL_CALC.press('^')">xʸ</button>
+        <button class="calc-fn" onclick="FL_CALC.press('(')">(</button>
+        <button class="calc-fn" onclick="FL_CALC.press(')')">)</button>
+        <button onclick="FL_CALC.press('7')">7</button>
+        <button onclick="FL_CALC.press('8')">8</button>
+        <button onclick="FL_CALC.press('9')">9</button>
+        <button class="calc-op" onclick="FL_CALC.press('/')">÷</button>
+        <button onclick="FL_CALC.press('4')">4</button>
+        <button onclick="FL_CALC.press('5')">5</button>
+        <button onclick="FL_CALC.press('6')">6</button>
+        <button class="calc-op" onclick="FL_CALC.press('*')">×</button>
+        <button onclick="FL_CALC.press('1')">1</button>
+        <button onclick="FL_CALC.press('2')">2</button>
+        <button onclick="FL_CALC.press('3')">3</button>
+        <button class="calc-op" onclick="FL_CALC.press('-')">−</button>
+        <button onclick="FL_CALC.press('0')">0</button>
+        <button onclick="FL_CALC.press('.')">.</button>
+        <button class="calc-fn" onclick="FL_CALC.press('pi')">π</button>
+        <button class="calc-op" onclick="FL_CALC.press('+')">+</button>
+        <button class="calc-fn" onclick="FL_CALC.press('e')">e</button>
+        <button class="calc-eq" onclick="FL_CALC.equals()">=</button>
+      </div>
+      <button class="calc-fill" onclick="FL_CALC.fill()">↧ 填入答題框</button>`;
+    document.body.appendChild(p);
+    this._panel = p;
+    this._render();
+  },
+  toggle() { this._panel.classList.contains('open') ? this.close() : this.open(); },
+  open() { FL_PAD.close(); this._panel.classList.add('open'); },
+  close() { this._panel && this._panel.classList.remove('open'); },
+  _fmtDisp(s) {
+    return s.replace(/sqrt\(/g, '√(').replace(/exp\(/g, 'e^(')
+            .replace(/pi/g, 'π').replace(/\*/g, '×').replace(/\//g, '÷');
+  },
+  _render(override) {
+    const d = el('fl-calc-display'); if (!d) return;
+    const expr = this._toks.join('');
+    d.textContent = override != null ? override : (expr ? this._fmtDisp(expr) : '0');
+  },
+  press(tok) {
+    if (this._err) { this._toks = []; this._err = false; }
+    if (this._done) {
+      const isOp = (tok.length === 1 && '+-*/^'.includes(tok));
+      this._done = false;
+      if (!isOp) this._toks = [];   // 計完後輸入數字／函式 → 重新開始
+    }
+    this._toks.push(tok);
+    this._render();
+  },
+  back() { this._toks.pop(); this._err = false; this._done = false; this._render(); },
+  clear() { this._toks = []; this._err = false; this._done = false; this._render(); },
+  equals() {
+    const expr = this._toks.join('');
+    if (!expr) return;
+    try {
+      const r = _calcEval(expr);
+      if (!isFinite(r)) throw new Error('inf');
+      const rs = _calcFmt(r);
+      this._toks = [rs]; this._done = true; this._err = false;
+      this._render(rs);
+    } catch (e) { this._err = true; this._render('錯誤'); }
+  },
+  fill() {
+    let val;
+    try { val = _calcFmt(_calcEval(this._toks.join(''))); }
+    catch (e) { showToast('先按 = 計出結果先', 'warn'); return; }
+    if (val === '錯誤') { showToast('先按 = 計出結果先', 'warn'); return; }
+    const inp = qs('.practice-slot .quiz-fill-input') || qs('.quiz-fill-input');
+    if (!inp) { showToast('附近冇填空題輸入框', 'warn'); return; }
+    inp.value = val; inp.focus();
+    showToast('已填入：' + val, 'success');
+  }
+};
+
+const FL_PAD = {
+  _panel: null, _canvas: null, _ctx: null, _drawing: false, _last: null,
+  _mode: 'pen', _color: '#e6e9f0', _fitted: false,
+  init() {
+    if (el('fl-pad-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'fl-pad-btn'; btn.title = '草稿畫布'; btn.textContent = '✏️';
+    btn.addEventListener('click', () => this.toggle());
+    document.body.appendChild(btn);
+    const p = document.createElement('div'); p.id = 'fl-pad-panel';
+    p.innerHTML = `
+      <div class="pad-head">✏️ 草稿畫布 <span style="font-size:10px;color:var(--text-muted);font-weight:400;">即用即棄</span>
+        <button class="pad-x" title="收起" onclick="FL_PAD.close()">×</button>
+      </div>
+      <div class="pad-tools">
+        <button data-act="pen" class="active" onclick="FL_PAD.tool(this,'pen')">✏️ 筆</button>
+        <button data-act="erase" onclick="FL_PAD.tool(this,'erase')">🧽 擦</button>
+        <span class="pad-colors">
+          <i data-col="default" class="active" style="background:var(--text-primary);" onclick="FL_PAD.color(this,'default')"></i>
+          <i data-col="#2dd4bf" style="background:#2dd4bf;" onclick="FL_PAD.color(this,'#2dd4bf')"></i>
+          <i data-col="#f5c842" style="background:#f5c842;" onclick="FL_PAD.color(this,'#f5c842')"></i>
+          <i data-col="#f06060" style="background:#f06060;" onclick="FL_PAD.color(this,'#f06060')"></i>
+        </span>
+        <button class="pad-clear" onclick="FL_PAD.clear()">🗑 清空</button>
+      </div>
+      <canvas id="fl-pad-canvas"></canvas>`;
+    document.body.appendChild(p);
+    this._panel = p; this._canvas = el('fl-pad-canvas');
+    const tc = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
+    if (tc) this._color = tc;
+    this._bindDraw();
+  },
+  toggle() { this._panel.classList.contains('open') ? this.close() : this.open(); },
+  open() { FL_CALC.close(); this._panel.classList.add('open'); this._fit(); },
+  close() { this._panel && this._panel.classList.remove('open'); },
+  _fit() {
+    const c = this._canvas;
+    const cssW = c.clientWidth, cssH = c.clientHeight;
+    if (!cssW || !cssH) return;
+    const dpr = window.devicePixelRatio || 1;
+    if (this._fitted && c.width === Math.round(cssW * dpr) && c.height === Math.round(cssH * dpr)) return;
+    c.width = Math.round(cssW * dpr); c.height = Math.round(cssH * dpr);
+    const ctx = c.getContext('2d');
+    ctx.scale(dpr, dpr); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    this._ctx = ctx; this._fitted = true;
+  },
+  _pos(e) { const r = this._canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; },
+  _bindDraw() {
+    const c = this._canvas;
+    c.addEventListener('pointerdown', e => { this._fit(); if (!this._ctx) return; this._drawing = true; this._last = this._pos(e); try { c.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    c.addEventListener('pointermove', e => { if (!this._drawing) return; const p = this._pos(e); this._stroke(this._last, p); this._last = p; e.preventDefault(); });
+    const end = () => { this._drawing = false; };
+    c.addEventListener('pointerup', end); c.addEventListener('pointercancel', end); c.addEventListener('pointerleave', end);
+  },
+  _stroke(a, b) {
+    const ctx = this._ctx; if (!ctx) return;
+    if (this._mode === 'erase') { ctx.globalCompositeOperation = 'destination-out'; ctx.lineWidth = 18; }
+    else { ctx.globalCompositeOperation = 'source-over'; ctx.strokeStyle = this._color; ctx.lineWidth = 2.5; }
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  },
+  tool(btn, mode) {
+    this._mode = mode;
+    this._panel.querySelectorAll('.pad-tools button[data-act]').forEach(x => x.classList.toggle('active', x === btn));
+  },
+  color(dot, v) {
+    this._color = (v === 'default')
+      ? (getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#e6e9f0') : v;
+    this._mode = 'pen';
+    this._panel.querySelectorAll('.pad-colors i').forEach(x => x.classList.toggle('active', x === dot));
+    this._panel.querySelectorAll('.pad-tools button[data-act]').forEach(x => x.classList.toggle('active', x.dataset.act === 'pen'));
+  },
+  clear() {
+    if (!this._ctx) return;
+    const c = this._canvas, dpr = window.devicePixelRatio || 1;
+    this._ctx.clearRect(0, 0, c.width / dpr, c.height / dpr);
+  }
+};
+// 掛上 window，確保 HTML inline onclick="FL_CALC.*/FL_PAD.*" 能解析（頂層 const 不會自動成為 window 屬性）
+window.FL_CALC = FL_CALC;
+window.FL_PAD = FL_PAD;
+
 // #18 每日提醒（本機，App 開著時於設定時間提醒今天還沒讀書）
 function setReminder(enabled, time) {
   userState.settings = userState.settings || {};
@@ -4743,8 +5000,10 @@ async function initApp() {
 
   // #11 套用外觀偏好（主題 + 字級）
   applyUiPrefs();
-  // #9 番茄鐘 + #18 每日提醒
+  // #9 番茄鐘 + #18 每日提醒 + 浮動計算機/草稿畫布
   FL_POMO.init();
+  FL_CALC.init();
+  FL_PAD.init();
   applyDailyReminder();
 
   // Language toggle
