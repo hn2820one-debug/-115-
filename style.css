@@ -840,6 +840,73 @@ input, textarea, select { font: inherit; color: inherit; }
 /* 填空輸入小提示 */
 .quiz-hint-tip { font-size: 11px; color: var(--text-muted); margin: 2px 0 8px; }
 
+/* ── 逐題練習小程式（stepper） ── */
+.practice-wrap { margin-top: 6px; }
+.practice-start-btn {
+  width: 100%; padding: 13px; border: none; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+  color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: opacity var(--transition); -webkit-tap-highlight-color: transparent;
+}
+.practice-start-btn:hover { opacity: 0.9; }
+.practice-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.practice-progress { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+.practice-timer { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.practice-nav { margin-top: 12px; }
+.practice-next-btn {
+  width: 100%; padding: 12px; border: none; border-radius: var(--radius-md);
+  background: var(--accent-blue); color: #fff; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: opacity var(--transition); -webkit-tap-highlight-color: transparent;
+}
+.practice-next-btn:hover { opacity: 0.88; }
+.practice-done-card {
+  text-align: center; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 16px;
+}
+.practice-done-title { font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+.practice-done-stats { display: flex; justify-content: center; gap: 20px; font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+.practice-done-stats b { color: var(--accent-teal); }
+.practice-restart-btn {
+  padding: 9px 18px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--bg-input); color: var(--text-secondary); font-size: 13px;
+  cursor: pointer; transition: all var(--transition);
+}
+.practice-restart-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+/* ── 答錯題的「我有異議」入口（畀 AI 覆核） ── */
+.challenge-box { margin-top: 10px; }
+.challenge-btn {
+  font-size: 12.5px; padding: 7px 13px; border-radius: 999px;
+  background: rgba(240,96,96,0.08); border: 1px solid rgba(240,96,96,0.4);
+  color: var(--accent-red); cursor: pointer; transition: all var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.challenge-btn:hover { background: rgba(240,96,96,0.15); }
+.challenge-form { margin-top: 8px; }
+.challenge-input {
+  width: 100%; min-height: 64px; resize: vertical;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 10px 12px;
+  font-size: 13px; color: var(--text-primary);
+}
+.challenge-input:focus { outline: none; border-color: var(--accent-red); }
+.challenge-submit {
+  margin-top: 8px; padding: 8px 16px; border: none; border-radius: var(--radius-sm);
+  background: var(--accent-red); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.challenge-submit:hover { opacity: 0.88; }
+.challenge-done { font-size: 12.5px; color: var(--accent-green); font-weight: 600; margin-top: 6px; }
+/* 記錄頁挑戰卡 */
+.challenge-card .ch-q { font-size: 13px; color: var(--text-primary); margin: 6px 0; }
+.challenge-card .ch-reason {
+  font-size: 12.5px; color: var(--accent-gold); margin-top: 8px; line-height: 1.5;
+  background: rgba(245,200,66,0.08); border-left: 3px solid var(--accent-gold);
+  padding: 6px 10px; border-radius: 4px;
+}
+
 /* 資源頁：公式 / 現場連結卡 */
 .res-card {
   background: var(--bg-card); border: 1px solid var(--border);

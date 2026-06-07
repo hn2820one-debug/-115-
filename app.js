@@ -78,6 +78,24 @@ const I18N = {
     draftSuffix: '建置中',
     coreSuffix: '★',
     weeks: '週',
+    startPractice2: '▶ 開始練習',
+    practiceProgress: '第',
+    practiceProgressUnit: '題',
+    practiceNextQ: '下一題 →',
+    practiceFinish: '完成練習 ✓',
+    practiceDoneTitle: '本次練習完成！',
+    practiceScore: '答對',
+    practiceTotalTime: '有效作答時間',
+    practiceRedo: '再做一次',
+    challengeBtn: '我有異議（畀 AI 覆核）',
+    challengePlaceholder: '寫低你點解覺得自己答啱（例：表達方式不同、單位寫法、等價形式…）。匯出後 Claude 會按呢個理由重新審視。',
+    challengeSubmit: '送出異議',
+    challengeRecorded: '已記錄，匯出後 AI 會覆核此題',
+    challengeNeedReason: '請先寫低異議理由',
+    challengeSavedToast: '🚩 已記錄異議，匯出時會帶畀 AI 覆核',
+    challengeTab: '挑戰/異議',
+    noChallenge: '尚無異議記錄。答錯題時撳「🚩 我有異議」即可記低，匯出畀 AI 覆核。',
+    challengeReason: '異議理由',
   },
   en: {
     navDashboard: 'Dashboard',
@@ -147,6 +165,24 @@ const I18N = {
     draftSuffix: 'draft',
     coreSuffix: '★',
     weeks: ' week',
+    startPractice2: '▶ Start Practice',
+    practiceProgress: 'Question',
+    practiceProgressUnit: '',
+    practiceNextQ: 'Next →',
+    practiceFinish: 'Finish ✓',
+    practiceDoneTitle: 'Practice complete!',
+    practiceScore: 'Correct',
+    practiceTotalTime: 'Active time',
+    practiceRedo: 'Redo',
+    challengeBtn: 'I dispute this (AI review)',
+    challengePlaceholder: 'Explain why you think your answer is right (e.g. different notation, units, equivalent form…). After export, Claude will re-review based on this.',
+    challengeSubmit: 'Submit dispute',
+    challengeRecorded: 'Recorded — AI will review this on export',
+    challengeNeedReason: 'Please write your reason first',
+    challengeSavedToast: '🚩 Dispute recorded; it will be sent to AI for review on export',
+    challengeTab: 'Disputes',
+    noChallenge: 'No disputes yet. On a wrong answer, tap "🚩 I dispute this" to record one for AI review.',
+    challengeReason: 'Reason',
   }
 };
 
@@ -197,6 +233,7 @@ function defaultUserState() {
     todo: [],
     achievements: [],
     confidenceLog: [],
+    challenges: [],
     srs: {},
     milestones: {},
     settings: { theme: 'dark', lang: 'zh', storageMode: 'local' }
@@ -299,6 +336,15 @@ function mergeUserStates(a, b) {
     if (!prev || (e.at || '') >= (prev.at || '')) cmap.set(k, e);
   }
   out.confidenceLog = [...cmap.values()];
+
+  // challenges（挑戰/異議）：依 sessionId+qi 去重，保留較新的一筆
+  const chmap = new Map();
+  for (const e of [...(a.challenges || []), ...(b.challenges || [])]) {
+    const k = e.sessionId + '|' + e.qi;
+    const prev = chmap.get(k);
+    if (!prev || (e.at || '') >= (prev.at || '')) chmap.set(k, e);
+  }
+  out.challenges = [...chmap.values()];
 
   // srs：依 sessionId 合併，保留較近一次複習的排程
   out.srs = {};
@@ -2919,18 +2965,31 @@ function recordAnswer(sessionId, qi, isCorrect, item, yourAns, correctAns) {
   const conf  = (item && item.dataset.conf) || 'mid';
   const qText = ((item && item.querySelector('.quiz-q')?.textContent) || '')
                   .replace(/^Q\d+\.\s*/, '').replace(/^\[[^\]]*\]\s*/, '').slice(0, 90);
+  // 練習計時：若在逐題練習模式且正答此題，停錶取得本題有效用時
+  let ms = 0;
+  if (_practice && _practice.sessionId === sessionId && String(_practice.idx) === String(qi)) {
+    ms = _practiceStopTimer();
+    _practice.lastElapsedMs = ms;
+  }
   userState.confidenceLog = userState.confidenceLog || [];
   const entry = {
     sessionId, qi, isCorrect, confidence: conf, q: qText,
     yourAnswer: String(yourAns ?? ''), correctAnswer: String(correctAns ?? ''),
+    ms,
     at: new Date().toISOString()
   };
   const idx = userState.confidenceLog.findIndex(e => e.sessionId === sessionId && e.qi === qi);
   if (idx >= 0) userState.confidenceLog[idx] = entry;
   else userState.confidenceLog.push(entry);
   if (userState.confidenceLog.length > 1000) userState.confidenceLog.shift();
-  flog('RECORD', `confidence: ${sessionId} Q${qi+1} conf=${conf} correct=${isCorrect}`);
+  // 答啱即自動移出錯題本（解決舊版誤判殘留：重做答啱即清走）
+  if (isCorrect && (userState.wrongBook || []).length) {
+    userState.wrongBook = userState.wrongBook.filter(w => !(w.sessionId === sessionId && String(w.qi) === String(qi)));
+  }
+  flog('RECORD', `confidence: ${sessionId} Q${qi+1} conf=${conf} correct=${isCorrect} ms=${ms}`);
   save();
+  // 通知逐題練習控制器：揭示「下一題」、累計分數與時間
+  if (_practice && _practice.sessionId === sessionId) _practiceOnAnswered(isCorrect);
 
   // 即時後設認知提示（最有價值的兩種不一致）
   let hint = '';
@@ -2980,31 +3039,201 @@ function fillIsCorrect(val, correctStr, tolerance) {
   return false;
 }
 
-function renderQuiz(container, quizArray, sessionId) {
-  flog('QUIZ', `renderQuiz: ${quizArray.length} questions for ${sessionId}`, {
-    types: quizArray.map(q => q.type)
-  });
+// ── 逐題練習控制器（練習小程式）──
+// renderQuiz 改成 stepper：撳「開始練習」後一次出一題、每題計時、答完先「下一題」、
+// 尾題出小結。共用此渲染器的三處（課堂/模擬考/練習頁）一致受惠。不鎖（不強制看完教學）。
+let _practice = null;
+let _practiceVisBound = false;
+
+// 渲染單一題目到指定 item（重用既有各題型渲染器）
+function _renderOneQuiz(item, q, qi, sessionId) {
+  switch (q.type) {
+    case 'single':    renderSingleQuiz(item, q, qi, sessionId); break;
+    case 'multi':     renderMultiQuiz(item, q, qi, sessionId); break;
+    case 'fill':      renderFillQuiz(item, q, qi, sessionId); break;
+    case 'truefalse': renderTFQuiz(item, q, qi, sessionId); break;
+    case 'free':      renderFreeQuiz(item, q, qi, sessionId); break;
+    case 'match':     renderMatchQuiz(item, q, qi, sessionId); break;
+    default:          item.innerHTML = `<p class="text-muted" style="font-size:13px;">題型 ${esc(q.type)} 暫不支援</p>`;
+  }
+}
+
+// 一次過列晒所有題（模擬考用：submitExam 靠掃描 DOM 上全部 .quiz-item 評分）
+function _renderQuizList(container, quizArray, sessionId) {
   const div = document.createElement('div');
   div.className = 'quiz-list';
   container.appendChild(div);
-
   quizArray.forEach((q, qi) => {
     const item = document.createElement('div');
     item.className = 'quiz-item';
     item.dataset.qi = qi;
-
-    switch (q.type) {
-      case 'single':    renderSingleQuiz(item, q, qi, sessionId); break;
-      case 'multi':     renderMultiQuiz(item, q, qi, sessionId); break;
-      case 'fill':      renderFillQuiz(item, q, qi, sessionId); break;
-      case 'truefalse': renderTFQuiz(item, q, qi, sessionId); break;
-      case 'free':      renderFreeQuiz(item, q, qi, sessionId); break;
-      case 'match':     renderMatchQuiz(item, q, qi, sessionId); break;
-      default:          item.innerHTML = `<p class="text-muted" style="font-size:13px;">題型 ${esc(q.type)} 暫不支援</p>`;
-    }
-
+    _renderOneQuiz(item, q, qi, sessionId);
     div.appendChild(item);
   });
+}
+
+function renderQuiz(container, quizArray, sessionId) {
+  flog('QUIZ', `renderQuiz: ${(quizArray||[]).length} questions for ${sessionId}`, {
+    types: (quizArray||[]).map(q => q.type)
+  });
+  _practiceTeardown();                         // 清掉上一次的計時器
+  if (!quizArray || !quizArray.length) return;
+  // 模擬考維持「一次過列晒 + 交卷掃描 DOM 評分」的舊行為（submitExam 依賴此）
+  if (sessionId === 'exam') { _practice = null; _renderQuizList(container, quizArray, sessionId); return; }
+  // 其餘（課堂、練習頁）：逐題練習小程式
+  _practice = {
+    sessionId, quiz: quizArray, idx: 0, wrap: null,
+    correctCount: 0, totalMs: 0, lastElapsedMs: 0,
+    qStartTs: null, intervalId: null
+  };
+  const unit = appState.settings.lang === 'en' ? 'questions' : '題';
+  const wrap = document.createElement('div');
+  wrap.className = 'practice-wrap';
+  wrap.innerHTML = `
+    <div class="practice-start">
+      <button class="practice-start-btn" onclick="practiceStart()">${esc(t('startPractice2'))}（${quizArray.length} ${unit}）</button>
+    </div>
+    <div class="practice-run" style="display:none;">
+      <div class="practice-bar">
+        <span class="practice-progress"></span>
+        <span class="practice-timer">⏱ 0s</span>
+      </div>
+      <div class="practice-slot"></div>
+      <div class="practice-nav">
+        <button class="practice-next-btn" style="display:none;" onclick="practiceNext()"></button>
+      </div>
+    </div>
+    <div class="practice-done" style="display:none;"></div>`;
+  container.appendChild(wrap);                  // append（保留上方標題），不清空 container
+  _practice.wrap = wrap;
+}
+
+function practiceStart() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  p.wrap.querySelector('.practice-start').style.display = 'none';
+  p.wrap.querySelector('.practice-run').style.display = '';
+  _practiceAttachVisibility();
+  _practiceShowQuestion(0);
+}
+
+function _practiceShowQuestion(idx) {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  p.idx = idx;
+  const q = p.quiz[idx];
+  if (typeof _matchState === 'object' && _matchState) delete _matchState[idx];  // 配對題重做時清舊狀態
+  const slot = p.wrap.querySelector('.practice-slot');
+  slot.innerHTML = '';
+  const item = document.createElement('div');
+  item.className = 'quiz-item';
+  item.dataset.qi = idx;
+  _renderOneQuiz(item, q, idx, p.sessionId);
+  slot.appendChild(item);
+
+  const prog = p.wrap.querySelector('.practice-progress');
+  if (prog) prog.textContent = appState.settings.lang === 'en'
+    ? `${t('practiceProgress')} ${idx+1} / ${p.quiz.length}`
+    : `${t('practiceProgress')} ${idx+1} / ${p.quiz.length} ${t('practiceProgressUnit')}`;
+
+  const nextBtn = p.wrap.querySelector('.practice-next-btn');
+  nextBtn.textContent = (idx >= p.quiz.length - 1) ? t('practiceFinish') : t('practiceNextQ');
+  nextBtn.style.display = (q.type === 'free') ? '' : 'none';   // 自由作答題不評分，直接可前進
+
+  _practiceStartTimer();
+}
+
+// 開始/重設本題計時（頁面隱藏時不起計，對應「按下開始後才重新計算」）
+function _practiceStartTimer() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  clearInterval(p.intervalId);
+  if (document.hidden) { p.qStartTs = null; return; }
+  p.qStartTs = Date.now();
+  _practiceTick();
+  p.intervalId = setInterval(_practiceTick, 1000);
+}
+function _practiceTick() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  const tEl = p.wrap.querySelector('.practice-timer');
+  if (!tEl || p.qStartTs == null) return;
+  tEl.textContent = `⏱ ${Math.floor((Date.now() - p.qStartTs) / 1000)}s`;
+}
+function _practiceStopTimer() {
+  const p = _practice;
+  if (!p) return 0;
+  clearInterval(p.intervalId);
+  p.intervalId = null;
+  const ms = (p.qStartTs != null) ? (Date.now() - p.qStartTs) : 0;
+  p.qStartTs = null;
+  return ms;
+}
+function _practiceTeardown() {
+  if (_practice && _practice.intervalId) clearInterval(_practice.intervalId);
+}
+function _practiceAttachVisibility() {
+  if (_practiceVisBound) return;
+  _practiceVisBound = true;
+  document.addEventListener('visibilitychange', _practiceOnVisibility);
+}
+// 離開（分頁隱藏）→ 暫停並作廢本題計時；回來 → 由 0 重新計（對應使用者的防呆要求）
+function _practiceOnVisibility() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  const run = p.wrap.querySelector('.practice-run');
+  if (!run || run.style.display === 'none') return;
+  const item = p.wrap.querySelector('.practice-slot .quiz-item');
+  if (!item || item.dataset.answered) return;        // 已答就唔再計
+  if (document.hidden) {
+    clearInterval(p.intervalId); p.intervalId = null; p.qStartTs = null;
+    const tEl = p.wrap.querySelector('.practice-timer');
+    if (tEl) tEl.textContent = '⏱ 0s';
+  } else {
+    _practiceStartTimer();
+  }
+}
+// 由 recordAnswer 在答題後呼叫：累計分數/時間、揭示「下一題」
+function _practiceOnAnswered(isCorrect) {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  if (isCorrect) p.correctCount++;
+  p.totalMs += p.lastElapsedMs || 0;
+  const nextBtn = p.wrap.querySelector('.practice-next-btn');
+  if (nextBtn) nextBtn.style.display = '';
+}
+function practiceNext() {
+  const p = _practice;
+  if (!p) return;
+  if (p.idx >= p.quiz.length - 1) { _practiceFinish(); return; }
+  _practiceShowQuestion(p.idx + 1);
+}
+function _practiceFinish() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  _practiceStopTimer();
+  p.wrap.querySelector('.practice-run').style.display = 'none';
+  const done = p.wrap.querySelector('.practice-done');
+  const graded = p.quiz.filter(q => q.type !== 'free').length;
+  const sec = Math.round(p.totalMs / 1000);
+  done.style.display = '';
+  done.innerHTML = `
+    <div class="practice-done-card">
+      <div class="practice-done-title">✅ ${esc(t('practiceDoneTitle'))}</div>
+      <div class="practice-done-stats">
+        <span>${esc(t('practiceScore'))}：<b>${p.correctCount} / ${graded}</b></span>
+        <span>${esc(t('practiceTotalTime'))}：<b>${sec}s</b></span>
+      </div>
+      <button class="practice-restart-btn" onclick="practiceRestart()">↻ ${esc(t('practiceRedo'))}</button>
+    </div>`;
+}
+function practiceRestart() {
+  const p = _practice;
+  if (!p || !p.wrap) return;
+  p.idx = 0; p.correctCount = 0; p.totalMs = 0; p.lastElapsedMs = 0;
+  p.wrap.querySelector('.practice-done').style.display = 'none';
+  p.wrap.querySelector('.practice-run').style.display = '';
+  _practiceShowQuestion(0);
 }
 
 function renderSingleQuiz(item, q, qi, sessionId) {
@@ -3041,7 +3270,7 @@ function answerSingle(sessionId, qi, chosen, item, correct) {
   if (exp) exp.classList.add('show');
 
   recordAnswer(sessionId, qi, isCorrect, item, String.fromCharCode(65+chosen), String.fromCharCode(65+correct));
-  if (!isCorrect) addToWrongBook(sessionId, qi, String.fromCharCode(65+chosen), String.fromCharCode(65+correct));
+  if (!isCorrect) markWrong(sessionId, qi, item, 'single', String.fromCharCode(65+chosen), String.fromCharCode(65+correct));
 }
 
 function renderMultiQuiz(item, q, qi, sessionId) {
@@ -3076,7 +3305,7 @@ function answerMulti(sessionId, qi, item, correct) {
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
   recordAnswer(sessionId, qi, isCorrect, item, selected.map(i=>String.fromCharCode(65+i)).join(','), correct.map(i=>String.fromCharCode(65+i)).join(','));
-  if (!isCorrect) addToWrongBook(sessionId, qi, selected.join(','), correct.join(','));
+  if (!isCorrect) markWrong(sessionId, qi, item, 'multi', selected.map(i=>String.fromCharCode(65+i)).join(','), correct.map(i=>String.fromCharCode(65+i)).join(','));
 }
 
 function renderFillQuiz(item, q, qi, sessionId) {
@@ -3107,7 +3336,7 @@ function answerFill(sessionId, qi, item, correctStr, tolerance) {
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
   recordAnswer(sessionId, qi, isCorrect, item, val, correctStr);
-  if (!isCorrect) addToWrongBook(sessionId, qi, val, correctStr);
+  if (!isCorrect) markWrong(sessionId, qi, item, 'fill', val, correctStr);
 }
 
 function renderTFQuiz(item, q, qi, sessionId) {
@@ -3138,7 +3367,7 @@ function answerTF(sessionId, qi, chosen, item, correct) {
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
   recordAnswer(sessionId, qi, isCorrect, item, chosen ? 'True' : 'False', correct ? 'True' : 'False');
-  if (!isCorrect) addToWrongBook(sessionId, qi, chosen ? 'True' : 'False', correct ? 'True' : 'False');
+  if (!isCorrect) markWrong(sessionId, qi, item, 'truefalse', chosen ? 'True' : 'False', correct ? 'True' : 'False');
 }
 
 function renderFreeQuiz(item, q, qi, sessionId) {
@@ -3210,7 +3439,7 @@ function answerMatch(sessionId, qi, item, pairsStr) {
   const exp = el(`qexp_${sessionId}_${qi}`);
   if (exp) exp.classList.add('show');
   recordAnswer(sessionId, qi, allCorrect, item, made.map(m=>m.leftText+'→'+m.rightVal).join(','), correct.map(p=>p[0]+'→'+p[1]).join(','));
-  if (!allCorrect) addToWrongBook(sessionId, qi, made.map(m=>m.leftText+'→'+m.rightVal).join(','), correct.map(p=>p[0]+'→'+p[1]).join(','));
+  if (!allCorrect) markWrong(sessionId, qi, item, 'match', made.map(m=>m.leftText+'→'+m.rightVal).join(','), correct.map(p=>p[0]+'→'+p[1]).join(','));
 }
 
 function saveFreeAnswer(sessionId, qi) {
@@ -3230,6 +3459,70 @@ function addToWrongBook(sessionId, qi, yourAns, correctAns) {
   if (existing >= 0) userState.wrongBook[existing] = entry;
   else userState.wrongBook.push(entry);
   save();
+}
+
+// ── 答錯統一入口：記錯題本 + 在該題下方掛「我有異議」入口 ──
+// 只在答錯題提供異議掣；撳完打理由，連題目脈絡存入 userState.challenges，
+// 匯出 JSON 時一併帶畀 AI 覆核。不即時改分。
+function markWrong(sessionId, qi, item, type, yourAns, correctAns) {
+  addToWrongBook(sessionId, qi, yourAns, correctAns);
+  if (!item) return;
+  const qText = (item.querySelector('.quiz-q')?.textContent || '')
+    .replace(/^Q\d+\.\s*/, '').replace(/^\[[^\]]*\]\s*/, '');
+  // 脈絡暫存於 item，submitChallenge 再讀
+  item.dataset.qtext = qText;
+  item.dataset.qtype = type || '';
+  item.dataset.youranswer = String(yourAns ?? '');
+  item.dataset.correctanswer = String(correctAns ?? '');
+
+  const box = document.createElement('div');
+  box.className = 'challenge-box';
+  const already = (userState.challenges || []).find(c => c.sessionId === sessionId && String(c.qi) === String(qi));
+  if (already) {
+    box.innerHTML = `<div class="challenge-done">✅ ${esc(t('challengeRecorded'))}</div>`;
+  } else {
+    box.innerHTML = `
+      <button class="challenge-btn" onclick="openChallenge('${sessionId}',${qi},this)">🚩 ${esc(t('challengeBtn'))}</button>
+      <div class="challenge-form" style="display:none;">
+        <textarea class="challenge-input" id="chal_${sessionId}_${qi}" placeholder="${esc(t('challengePlaceholder'))}"></textarea>
+        <button class="challenge-submit" onclick="submitChallenge('${sessionId}',${qi},this)">${esc(t('challengeSubmit'))}</button>
+      </div>`;
+  }
+  item.appendChild(box);
+}
+
+function openChallenge(sessionId, qi, btn) {
+  const box = btn.closest('.challenge-box');
+  if (!box) return;
+  btn.style.display = 'none';
+  const form = box.querySelector('.challenge-form');
+  if (form) form.style.display = '';
+  box.querySelector('.challenge-input')?.focus();
+}
+
+function submitChallenge(sessionId, qi, btn) {
+  const item = btn.closest('.quiz-item');
+  const box  = btn.closest('.challenge-box');
+  const reason = (el(`chal_${sessionId}_${qi}`)?.value || '').trim();
+  if (!reason) { showToast(t('challengeNeedReason'), 'warn'); return; }
+  userState.challenges = userState.challenges || [];
+  const entry = {
+    sessionId, qi,
+    type: item?.dataset.qtype || '',
+    q: item?.dataset.qtext || '',
+    yourAnswer: item?.dataset.youranswer || '',
+    correctAnswer: item?.dataset.correctanswer || '',
+    reason,
+    at: new Date().toISOString(),
+    status: 'open'
+  };
+  const idx = userState.challenges.findIndex(c => c.sessionId === sessionId && String(c.qi) === String(qi));
+  if (idx >= 0) userState.challenges[idx] = entry;
+  else userState.challenges.push(entry);
+  save();
+  flog('QUIZ', `challenge: ${sessionId} Q${qi+1}`, { reason });
+  if (box) box.innerHTML = `<div class="challenge-done">✅ ${esc(t('challengeRecorded'))}</div>`;
+  showToast(t('challengeSavedToast'), 'success');
 }
 
 // ================================================================
@@ -3593,6 +3886,7 @@ function renderProgress() {
       <button class="prog-tab" onclick="switchProgTab('journal',this)">${t('journalTitle')}</button>
       <button class="prog-tab" onclick="switchProgTab('summaries',this)">${t('summaryList')}</button>
       <button class="prog-tab" onclick="switchProgTab('wrongbook',this)">${t('wrongBook')}</button>
+      <button class="prog-tab" onclick="switchProgTab('challenges',this)">🚩 ${t('challengeTab')}</button>
       <button class="prog-tab" onclick="switchProgTab('calibration',this)">🎯 信心校準</button>
       <button class="prog-tab" onclick="switchProgTab('heatmap',this)">學習熱力圖</button>
       <button class="prog-tab" onclick="switchProgTab('badges',this)">${t('achievementsTitle')}</button>
@@ -3602,6 +3896,7 @@ function renderProgress() {
     <div id="prog-journal" class="prog-tab-panel"></div>
     <div id="prog-summaries" class="prog-tab-panel"></div>
     <div id="prog-wrongbook" class="prog-tab-panel"></div>
+    <div id="prog-challenges" class="prog-tab-panel"></div>
     <div id="prog-calibration" class="prog-tab-panel"></div>
     <div id="prog-heatmap" class="prog-tab-panel"></div>
     <div id="prog-badges" class="prog-tab-panel"></div>`;
@@ -3620,6 +3915,7 @@ function switchProgTab(tab, btn) {
   if (tab === 'journal')     renderJournal();
   if (tab === 'summaries')   renderSummaries();
   if (tab === 'wrongbook')   renderWrongBook();
+  if (tab === 'challenges')  renderChallenges();
   if (tab === 'calibration') renderCalibration();
   if (tab === 'heatmap')     renderHeatmap();
   if (tab === 'badges')      renderBadges();
@@ -3926,6 +4222,42 @@ function wbMarkResolved(i) {
   save();
   showToast('✓ 已從錯題本移除', 'success');
   renderWrongBook();
+}
+
+// 挑戰/異議清單：答錯題撳「🚩 我有異議」記低的題目＋理由，匯出 JSON 畀 AI 覆核
+function renderChallenges() {
+  const area = el('prog-challenges');
+  if (!area) return;
+  const ch = userState.challenges || [];
+  if (!ch.length) {
+    area.innerHTML = `<div class="empty-state"><div class="empty-icon">🚩</div><p>${t('noChallenge')}</p></div>`;
+    return;
+  }
+  area.innerHTML = `
+    <input type="text" class="todo-input" style="width:100%;margin-bottom:10px;"
+      placeholder="搜尋節次/題目/理由…" oninput="filterResList('challenges-list',this.value)">
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;">共 ${ch.length} 題異議。匯出學習記錄 JSON 後交畀 Claude，佢會按你嘅理由重新審視每題答案。</div>
+    <div id="challenges-list">` + ch.map((c, i) => {
+      const meta = appState.manifest?.sessionMeta?.[c.sessionId];
+      return `<div class="res-card challenge-card">
+        <div class="wb-meta">${esc(c.sessionId)} · ${esc(meta?.title || '')} · 第 ${(+c.qi) + 1} 題 · ${fmtDate(c.at)}</div>
+        ${c.q ? `<div class="ch-q">${esc(String(c.q))}</div>` : ''}
+        <div class="wb-your">${t('yourAnswer')}：${esc(String(c.yourAnswer))}</div>
+        <div class="wb-ans">${t('correctAnswer')}：${esc(String(c.correctAnswer))}</div>
+        <div class="ch-reason">🚩 ${t('challengeReason')}：${esc(String(c.reason))}</div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button class="wb-retry" onclick="navigate('pg-lesson',{id:'${c.sessionId}'})">→ 返回本節</button>
+          <button class="wb-retry" onclick="deleteChallenge(${i})" style="color:var(--accent-red);border-color:rgba(240,96,96,0.3);">✕ 移除</button>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+function deleteChallenge(i) {
+  (userState.challenges || []).splice(i, 1);
+  save();
+  showToast('✓ 已移除異議', 'success');
+  renderChallenges();
 }
 
 // U17: GitHub-style heatmap
