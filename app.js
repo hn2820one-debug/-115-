@@ -24,8 +24,10 @@ const I18N = {
     alreadyDone: '✓ 已完成',
     completedAt: '完成時間',
     checkpoints: '檢核點',
-    summary: '三句話總結',
-    summaryPlaceholder: '用自己的話寫下這節學到的三件事…',
+    summary: '本節評語',
+    summaryPlaceholder: '想補充嘅話寫低…（選填）',
+    reflectHint: '揀一個或幾個（可多選）：',
+    summaryOptional: '想補充？（選填）',
     fieldLink: '🏭 現場連結',
     resources: '學習資源',
     prevLesson: '← 上一節',
@@ -60,7 +62,7 @@ const I18N = {
     startPractice: '開始測驗',
     allSessions: '全部',
     journalTitle: '學習日誌',
-    summaryList: '三句話彙整',
+    summaryList: '評語彙整',
     achievementsTitle: '成就徽章',
     settingsTitle: '設定',
     storageModeTitle: '儲存方式',
@@ -72,7 +74,7 @@ const I18N = {
     storage_drive: 'Google Drive 同步',
     noWrong: '🎉 目前沒有錯題！繼續保持。',
     noJournal: '尚無學習記錄。完成第一節後這裡會出現日誌。',
-    noSummary: '尚無三句話總結。完成節次並填寫後會出現在這裡。',
+    noSummary: '尚無評語。完成節次並點選評語後會出現在這裡。',
     draftSuffix: '建置中',
     coreSuffix: '★',
     weeks: '週',
@@ -91,8 +93,10 @@ const I18N = {
     alreadyDone: '✓ Completed',
     completedAt: 'Completed at',
     checkpoints: 'Checkpoints',
-    summary: 'Three-Sentence Summary',
-    summaryPlaceholder: 'In your own words, write three things you learned today…',
+    summary: 'Lesson Reflection',
+    summaryPlaceholder: 'Add a note if you like… (optional)',
+    reflectHint: 'Tap one or more:',
+    summaryOptional: 'Add a note? (optional)',
     fieldLink: '🏭 Field Connection',
     resources: 'Resources',
     prevLesson: '← Previous',
@@ -139,7 +143,7 @@ const I18N = {
     storage_drive: 'Google Drive Sync',
     noWrong: '🎉 No wrong answers yet! Keep it up.',
     noJournal: 'No learning records yet. Complete your first session to see the journal.',
-    noSummary: 'No summaries yet. Write three-sentence summaries after completing sessions.',
+    noSummary: 'No reflections yet. Tap a reflection chip after completing a session.',
     draftSuffix: 'draft',
     coreSuffix: '★',
     weeks: ' week',
@@ -149,6 +153,35 @@ const I18N = {
 function t(key) {
   const lang = appState.settings.lang;
   return (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key;
+}
+
+// ----------------------------------------------------------------
+// 本節評語標籤（點選式，取代手打三句總結）
+// 選中的 key 存進 userState.sessions[id].summaryTags（陣列）
+// ----------------------------------------------------------------
+const REFLECT_CHIPS = [
+  { key: 'got',    zh: '✅ 完全懂咗', en: '✅ Fully understood', color: 'var(--accent-green)' },
+  { key: 'mostly', zh: '🙂 大致明',   en: '🙂 Mostly clear',     color: 'var(--accent-blue)' },
+  { key: 'stuck',  zh: '🤔 有位卡住', en: '🤔 Got stuck',        color: 'var(--accent-gold)' },
+  { key: 'review', zh: '🔁 要再複習', en: '🔁 Need review',      color: 'var(--accent-purple)' },
+];
+function reflectChipLabel(key) {
+  const c = REFLECT_CHIPS.find(x => x.key === key);
+  if (!c) return key;
+  return appState.settings.lang === 'en' ? c.en : c.zh;
+}
+// 把一節的評語（標籤＋選填補充）組成顯示字串，供日誌/彙整用
+function reflectSummaryText(s) {
+  if (!s) return '';
+  const parts = [];
+  const tags = (s.summaryTags || []).map(reflectChipLabel);
+  if (tags.length) parts.push(tags.join(' · '));
+  if (s.summary && s.summary.trim()) parts.push(s.summary.trim());
+  return parts.join('　—　');
+}
+// 一節是否有任何評語（標籤或補充文字）
+function hasReflect(s) {
+  return !!(s && (((s.summaryTags || []).length) || (s.summary && s.summary.trim())));
 }
 
 // ================================================================
@@ -214,9 +247,15 @@ function _mergeSession(a, b) {
   out.checkpoints = {};
   const cpKeys = new Set([...Object.keys(a.checkpoints || {}), ...Object.keys(b.checkpoints || {})]);
   for (const k of cpKeys) out.checkpoints[k] = !!(a.checkpoints?.[k] || b.checkpoints?.[k]);
-  // 三句話總結：挑較新/較長
+  // 三句話總結（選填補充文字）：挑較新/較長
   const sum = _pickText(a.summary, b.summary, a.lastTouched, b.lastTouched);
   if (sum) out.summary = sum;
+  // 評語標籤：兩邊都有就取較新一側（比 lastTouched），只有一邊有就取嗰邊
+  const aTags = a.summaryTags || [], bTags = b.summaryTags || [];
+  const mergedTags = (aTags.length && bTags.length)
+    ? (((a.lastTouched || '') >= (b.lastTouched || '')) ? aTags : bTags)
+    : (aTags.length ? aTags : bTags);
+  if (mergedTags.length) out.summaryTags = mergedTags;
   // 個人筆記：挑較新/較長
   const nt = _pickText(a.note, b.note, a.lastTouched, b.lastTouched);
   if (nt) out.note = nt;
@@ -1524,16 +1563,28 @@ async function renderLesson(id) {
         oninput="debouncedSaveNote('${id}',this.value)">${esc(userState.sessions[id]?.note || '')}</textarea>
     </details>
 
-    <!-- Summary -->
+    <!-- Reflection: 點選評語標籤（取代手打三句總結） + 選填補充 -->
     <div class="section-heading" style="justify-content:flex-start;gap:8px;">
       ${t('summary')}
       <span id="summary-saved-label" style="font-size:10px;color:var(--accent-teal);margin-left:auto;"></span>
     </div>
-    <div class="summary-wrap">
-      <textarea class="summary-textarea" id="summary-textarea"
-        placeholder="${t('summaryPlaceholder')}"
-        oninput="debouncedSaveSummary('${id}',this.value)"
-      >${esc(userState.sessions[id]?.summary || '')}</textarea>
+    <div class="reflect-wrap">
+      <div class="reflect-hint">${t('reflectHint')}</div>
+      <div class="reflect-chips">
+        ${REFLECT_CHIPS.map(c => {
+          const sel = (userState.sessions[id]?.summaryTags || []).includes(c.key);
+          return `<button type="button" class="reflect-chip${sel ? ' selected' : ''}"
+            data-chipkey="${c.key}" style="--chip:${c.color};"
+            onclick="toggleReflectChip('${id}','${c.key}',this)">${appState.settings.lang === 'en' ? c.en : c.zh}</button>`;
+        }).join('')}
+      </div>
+      <details class="reflect-note"${userState.sessions[id]?.summary ? ' open' : ''}>
+        <summary>${t('summaryOptional')}</summary>
+        <textarea class="summary-textarea" id="summary-textarea"
+          placeholder="${t('summaryPlaceholder')}"
+          oninput="debouncedSaveSummary('${id}',this.value)"
+        >${esc(userState.sessions[id]?.summary || '')}</textarea>
+      </details>
     </div>
 
     <!-- Complete Button -->
@@ -2019,10 +2070,26 @@ function debouncedSaveSummary(id, val) {
   _summaryTimer = setTimeout(() => {
     if (!userState.sessions[id]) userState.sessions[id] = {};
     userState.sessions[id].summary = val;
+    userState.sessions[id].lastTouched = new Date().toISOString();
     save();
     const lbl = el('summary-saved-label');
     if (lbl) lbl.textContent = `已儲存 ${new Date().toTimeString().slice(0,5)}`;
   }, 600);
+}
+
+// 點選式評語標籤：toggle 一個 key 入／出 summaryTags，即時儲存（無需打字）
+function toggleReflectChip(id, key, btn) {
+  if (!userState.sessions[id]) userState.sessions[id] = {};
+  const s = userState.sessions[id];
+  if (!Array.isArray(s.summaryTags)) s.summaryTags = [];
+  const i = s.summaryTags.indexOf(key);
+  if (i >= 0) s.summaryTags.splice(i, 1);
+  else s.summaryTags.push(key);
+  s.lastTouched = new Date().toISOString();
+  if (btn) btn.classList.toggle('selected', s.summaryTags.includes(key));
+  save();
+  const lbl = el('summary-saved-label');
+  if (lbl) lbl.textContent = `已儲存 ${new Date().toTimeString().slice(0,5)}`;
 }
 
 function toggleCheckpoint(sessionId, cpId, checked) {
@@ -2050,7 +2117,7 @@ async function completeSession(id) {
   flog('RECORD', `complete: ${id}`, {
     streak: userState.streak?.current,
     totalDone: countCompleted() + 1,
-    hasSummary: !!(s.summary?.trim()),
+    hasSummary: hasReflect(s),
     checkpointsDone: Object.values(s.checkpoints || {}).filter(Boolean).length
   });
 
@@ -3756,7 +3823,7 @@ function renderJournal() {
     const d = fmtDate(s.completedAt);
     if (!byDate[d]) byDate[d] = [];
     const meta = appState.manifest?.sessionMeta?.[id];
-    byDate[d].push({ id, title: meta?.title || id, time: fmtTime(s.completedAt), summary: s.summary });
+    byDate[d].push({ id, title: meta?.title || id, time: fmtTime(s.completedAt), summary: reflectSummaryText(s) });
   }
 
   const dates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
@@ -3787,11 +3854,11 @@ function renderSummaries() {
   if (!area) return;
   const allIds = getAllSessionIds();
   const items = allIds
-    .filter(id => userState.sessions[id]?.summary)
+    .filter(id => hasReflect(userState.sessions[id]))
     .map(id => ({
       id,
       title: appState.manifest?.sessionMeta?.[id]?.title || id,
-      summary: userState.sessions[id].summary,
+      summary: reflectSummaryText(userState.sessions[id]),
       date: fmtDate(userState.sessions[id].completedAt)
     }));
 

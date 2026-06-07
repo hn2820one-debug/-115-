@@ -635,6 +635,33 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 .summary-textarea:focus { outline: none; border-color: var(--accent-blue); }
 
+/* Lesson reflection chips (點選式評語，取代手打三句總結) */
+.reflect-wrap { margin-bottom: 20px; }
+.reflect-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.reflect-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.reflect-chip {
+  font-size: 13.5px; line-height: 1; padding: 9px 15px;
+  background: var(--bg-input); color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 999px;
+  cursor: pointer; transition: all var(--transition);
+  -webkit-tap-highlight-color: transparent;
+}
+.reflect-chip:hover { border-color: var(--chip, var(--accent-blue)); color: var(--text-primary); }
+.reflect-chip.selected {
+  background: rgba(74,158,255,0.15); /* fallback for browsers without color-mix */
+  background: color-mix(in srgb, var(--chip) 20%, transparent);
+  border-color: var(--chip); color: var(--text-primary); font-weight: 600;
+}
+.reflect-note { margin-top: 6px; }
+.reflect-note > summary {
+  font-size: 12px; color: var(--text-muted); cursor: pointer;
+  list-style: none; user-select: none; padding: 4px 0;
+}
+.reflect-note > summary::-webkit-details-marker { display: none; }
+.reflect-note > summary::before { content: '▸ '; }
+.reflect-note[open] > summary::before { content: '▾ '; }
+.reflect-note .summary-textarea { min-height: 70px; margin-top: 6px; }
+
 /* Complete button */
 .complete-btn {
   width: 100%;
