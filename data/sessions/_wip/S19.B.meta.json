@@ -1,0 +1,99 @@
+{
+  "objective": "熟練偏微分嘅機械操作：算 ∂/∂x 時把 y 當常數、套 Week 1 微分規則（冪次／eᵘ·u′／u′÷u），對同一函數獨立算出 ∂f/∂x 同 ∂f/∂y，並識讀二階記法 ∂²f/∂x²、∂²f/∂x∂y",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出口訣：求 ∂f/∂x 時 x 做主角、y 當常數；換主角即調返轉"
+    },
+    {
+      "id": "c2",
+      "text": "記住主公式 ∂/∂x(xⁿyᵐ)=n·xⁿ⁻¹yᵐ，並知對稱版 ∂/∂y(xⁿyᵐ)=m·xⁿyᵐ⁻¹"
+    },
+    {
+      "id": "c3",
+      "text": "對同一個 f 獨立算出兩個偏導 ∂f/∂x 同 ∂f/∂y，唔會求咗一個就停"
+    },
+    {
+      "id": "c4",
+      "text": "求 ∂/∂x 時識把純 y 項（如 2y、ln y）當常數變 0"
+    },
+    {
+      "id": "c5",
+      "text": "用 S9 內層版做 e^(xy)：∂/∂x 得 y·e^(xy)、∂/∂y 得 x·e^(xy)，內層只對主角求導"
+    },
+    {
+      "id": "c6",
+      "text": "獨立做一條混合題（如 x²y+e^(2x)+ln y），逐項當常數、邊項冇主角邊項清零"
+    },
+    {
+      "id": "c7",
+      "text": "識讀二階記法：∂²f/∂x² 係同變數兩次，∂²f/∂x∂y 係混合偏導"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "求 ∂f/∂x 嗰陣，y 應該當咩處理？",
+      "options": [
+        "當常數（即一個唔郁嘅數字）",
+        "當變數，照樣對佢微分",
+        "一律當 0",
+        "一律當 1"
+      ],
+      "answer": 0,
+      "explain": "偏微分嘅核心動作：鎖定主角 x，其餘變數 y 當常數（S18）。咁樣二元函數就塌返做單變數函數，再套 S8／S9 規則。把 y 當變數去微分係最常見嘅錯。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "∂/∂x(x²y³) 等於？",
+      "options": [
+        "2xy³",
+        "3x²y²",
+        "6xy²",
+        "x²y³"
+      ],
+      "answer": 0,
+      "explain": "套主公式 ∂/∂x(xⁿyᵐ)=n·xⁿ⁻¹yᵐ：y³ 當常數提出，對 x² 用冪次法則得 2x，再乘 y³ ＝ 2xy³。選 3x²y² 係錯把題目當咗求 ∂/∂y。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "求 ∂/∂x 時，∂(y³)/∂x = 3y²。",
+      "answer": false,
+      "explain": "錯。求 ∂/∂x 時 y 係常數，y³ 都係常數，常數導數 ＝ 0，所以 ∂(y³)/∂x = 0。3y² 係把 y 誤當咗變數先會出現。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "f = x²y³，求 ∂f/∂y。（答案用 unicode，如 3x²y²）",
+      "answer": "3x²y²",
+      "explain": "換主角：y 做主角、x 當常數。x² 當常數提出，對 y³ 用冪次法則得 3y²，再乘 x² ＝ 3x²y²。對核主公式 ∂/∂y(xⁿyᵐ)=m·xⁿyᵐ⁻¹ ＝ 3x²y²。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "f = e^(xy)，求 ∂f/∂x。（答案用 unicode，如 y·e^(xy)）",
+      "answer": "y·e^(xy)",
+      "explain": "套 S9 內層版 ∂/∂x(eᵘ)=eᵘ·u′。內層 u=xy，求 ∂/∂x 時 y 當常數係數，∂(xy)/∂x = y。外層 e^(xy) 唔變，乘內層導數 y ＝ y·e^(xy)。漏咗乘 y（淨係寫 e^(xy)）係最常見嘅錯。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "f = x²y + e^(2x) + ln y，求 ∂f/∂x。（答案用 unicode，如 2xy+2e^(2x)）",
+      "answer": "2xy+2e^(2x)",
+      "explain": "逐項當常數（S8 和差）：∂/∂x(x²y)=y·2x=2xy（y 當常數提出）；∂/∂x(e^(2x))=2e^(2x)（S9，內層 2x 對 x 導 ＝2）；∂/∂x(ln y)=0（冇 x，當常數）。砌埋 ＝ 2xy+2e^(2x)。ln y 整項清零係關鍵。"
+    },
+    {
+      "type": "fill",
+      "difficulty": "challenge",
+      "q": "f = x³y² + e^(xy)，求 ∂f/∂y。（答案用 unicode）",
+      "answer": "2x³y+x·e^(xy)",
+      "explain": "答案 ∂f/∂y = 2x³y + x·e^(xy)。第一項用主公式對稱版、第二項用 S9 內層版，內層 xy 對 y 導 ＝ x。",
+      "strategy": "策略：呢題一條式有兩種法則，要逐項拆開、逐項鎖主角。換主角求 ∂/∂y → y 做主角、x 當常數。\n① 和差逐項拆開（S8）：∂f/∂y = ∂/∂y(x³y²) + ∂/∂y(e^(xy))。\n② 第一項（主公式對稱版 ∂/∂y(xⁿyᵐ)=m·xⁿyᵐ⁻¹）：x³ 當常數提出，對 y² 用冪次法則得 2y，再乘 x³ ＝ x³·2y = 2x³y。\n③ 第二項（S9 內層版 eᵘ·u′）：內層 u=xy，求 ∂/∂y 時 x 當常數係數，∂(xy)/∂y = x；所以 ∂/∂y(e^(xy)) = e^(xy)·x = x·e^(xy)。\n④ 兩項砌埋：∂f/∂y = 2x³y + x·e^(xy)。\n心法：(1) 鎖定主角 y、其餘當常數；(2) 逐項套對應法則（冪次／eᵘ·u′）；(3) 內層只對主角 y 求導，所以 ∂(xy)/∂y=x 而唔係 y。對 x 嗰個偏導會係 ∂f/∂x = 3x²y² + y·e^(xy)，啱啱反過嚟。"
+    }
+  ]
+}
