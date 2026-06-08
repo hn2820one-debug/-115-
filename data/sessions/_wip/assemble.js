@@ -10,19 +10,23 @@ const DIMS = {
   S17: { order: 17, title: '多變數函數概念', titleEn: 'Multivariable Functions', platform: 'ka',
     gradImportance: 'essential', tier: 'core', cognition: 'concept', prereq: ['S2', 'S8'],
     assessWeight: 'medium', extension: 'life', gradCourse: ['general'],
-    resources: [{ type: 'video', label: '（選看）Khan Academy：Multivariable functions', url: 'https://www.khanacademy.org' }] },
+    resources: [{ type: 'video', label: '（選看）Khan Academy：Multivariable functions', url: 'https://www.khanacademy.org' }],
+    chatPracticeHints: ['代值對位掉轉做咗 f(y,x)', '以為 f(x,y)=f(y,x)', '固定變數時冇當佢做常數'] },
   S18: { order: 18, title: '偏微分（一）：概念', titleEn: 'Partial Derivatives I: Concept', platform: 'ka',
-    gradImportance: 'essential', tier: 'core', cognition: 'concept', prereq: ['S17', 'S8'],
+    gradImportance: 'essential', tier: 'core', cognition: 'concept', prereq: ['S17', 'S8', 'S7', 'S9'],
     assessWeight: 'heavy', extension: 'none', gradCourse: ['general', 'thermo'],
-    resources: [{ type: 'video', label: '（選看）Khan Academy：Partial derivatives, introduction', url: 'https://www.khanacademy.org' }] },
+    resources: [{ type: 'video', label: '（選看）Khan Academy：Partial derivatives, introduction', url: 'https://www.khanacademy.org' }],
+    chatPracticeHints: ['求 ∂/∂x 時連 y 都微埋', '乘喺主角嘅 y 冇當係數提出', 'eˣ 亂套冪次法則'] },
   S19: { order: 19, title: '偏微分（二）：計算', titleEn: 'Partial Derivatives II: Calculation', platform: 'paul',
-    gradImportance: 'essential', tier: 'core', cognition: 'calculation', prereq: ['S18'],
+    gradImportance: 'essential', tier: 'core', cognition: 'calculation', prereq: ['S18', 'S9', 'S8'],
     assessWeight: 'heavy', extension: 'none', gradCourse: ['general', 'thermo'],
-    resources: [{ type: 'link', label: "（選做）Paul's Math Notes：Partial Derivatives", url: 'https://tutorial.math.lamar.edu/Classes/CalcIII/PartialDerivatives.aspx' }] },
+    resources: [{ type: 'link', label: "（選做）Paul's Math Notes：Partial Derivatives", url: 'https://tutorial.math.lamar.edu/Classes/CalcIII/PartialDerivatives.aspx' }],
+    chatPracticeHints: ['乘喺主角嘅 y³ 當咗 0', 'e^(xy) 漏乘內層偏導', '求咗 ∂x 就停漏埋 ∂y'] },
   S20: { order: 20, title: '偏微分練習', titleEn: 'Partial Derivatives Practice', platform: 'paul',
     gradImportance: 'essential', tier: 'core', cognition: 'calculation', prereq: ['S19'],
-    assessWeight: 'medium', extension: 'none', gradCourse: ['general'],
-    resources: [{ type: 'link', label: "（選做）Paul's Math Notes：Partial Derivatives（practice problems）", url: 'https://tutorial.math.lamar.edu/Classes/CalcIII/PartialDerivatives.aspx' }] },
+    assessWeight: 'medium', extension: 'none', gradCourse: ['general', 'thermo'],
+    resources: [{ type: 'link', label: "（選做）Paul's Math Notes：Partial Derivatives（practice problems）", url: 'https://tutorial.math.lamar.edu/Classes/CalcIII/PartialDerivatives.aspx' }],
+    chatPracticeHints: ['讀解漏講其他變數固定', 'e^(xy) 內層偏導當咗 1', '−e^(−t) 漏咗負負得正'] },
 };
 
 function coerceQuiz(q) {
@@ -55,6 +59,7 @@ function build(id) {
     resources: meta.resources || dim.resources || [],
     charts: meta.charts || [],
     quiz: (meta.quiz || []).map(coerceQuiz),
+    chatPracticeHints: meta.chatPracticeHints || dim.chatPracticeHints || [],
   };
   const json = JSON.stringify(session, null, 2);
   JSON.parse(json); // 驗證可解析
@@ -73,6 +78,7 @@ function build(id) {
   if (qn !== 7) warn.push('quiz 應 7 題，實為 ' + qn);
   if ((diff.basic || 0) !== 3 || (diff.standard || 0) !== 3 || (diff.challenge || 0) !== 1) warn.push('難度配比應 3/3/1');
   if (!session.quiz.some(q => q.type === 'challenge' || q.strategy)) warn.push('challenge 題缺 strategy');
+  if (!session.chatPracticeHints || session.chatPracticeHints.length < 2) warn.push('chatPracticeHints 應 2–3 條，實為 ' + (session.chatPracticeHints || []).length);
   if (warn.length) warn.forEach(w => console.log('  ⚠ ' + id + '：' + w));
   return warn.length === 0;
 }

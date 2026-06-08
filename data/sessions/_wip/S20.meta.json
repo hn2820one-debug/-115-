@@ -78,7 +78,7 @@
       "difficulty": "standard",
       "q": "f(x,y)=e^(xy)+ln x，求 ∂f/∂x。",
       "answer": "y·e^(xy)+1/x",
-      "explain": "逐項：e^(xy) 用鏈鎖律 e^u·u′，外層 e^(xy) 乘內層 xy 對 x 導數（y 當常數）得 y，所以係 y·e^(xy)（別漏個 y）；ln x 對 x 導數 1/x。砌埋 y·e^(xy)+1/x。讀返意義：固定 y，x 升一單位 f 大約升 y·e^(xy)+1/x。"
+      "explain": "逐項：e^(xy) 用鏈鎖律 e^u·u′，外層 e^(xy) 乘內層 xy 對 x 導數（y 當常數）得 y，所以係 y·e^(xy)（唔好漏咗個 y）；ln x 對 x 導數 1/x。砌埋 y·e^(xy)+1/x。讀返意義：固定 y，x 升一單位 f 大約升 y·e^(xy)+1/x。"
     },
     {
       "type": "fill",

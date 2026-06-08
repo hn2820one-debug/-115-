@@ -4,57 +4,62 @@
   "week": 2,
   "order": 19,
   "title": "偏微分（二）：計算",
-  "titleEn": "Partial Derivatives II — Calculation",
+  "titleEn": "Partial Derivatives II: Calculation",
   "platform": "paul",
-  "objective": "熟練偏微分的機械操作：算 ∂/∂x 時把 y 當常數、套 Week 1 微分規則（冪次/e/ln），含 e^{xy} 等合成項用鏈鎖律乘內層，能對同一函數獨立算出 ∂f/∂x 與 ∂f/∂y。",
+  "objective": "掌握偏導數嘅標準計算流程：揀一個變數做主角、其餘全部當常數，再套返 S8/S9 規則（含 eᵘ·u′、u′/u 內層版，內層只對主角變數求導）——做到對 3x²+2y、x²y³、e^(xy)、x²y+e^(2x)+ln y 呢類分別求 ∂f/∂x 同 ∂f/∂y，並識讀二階記法 ∂²f/∂x²、∂²f/∂x∂y",
   "isCore": true,
   "status": "done",
-  "gradImportance": "important",
+  "gradImportance": "essential",
   "tier": "core",
   "cognition": "calculation",
   "prereq": [
-    "S8",
-    "S18"
+    "S18",
+    "S9",
+    "S8"
   ],
-  "assessWeight": "medium",
+  "assessWeight": "heavy",
   "extension": "none",
   "gradCourse": [
     "general",
     "thermo"
   ],
-  "content": "<!-- core 深講節（自足版）：偏微分計算。承 S18 概念，專練「把其他變數當常數」的機械操作，含需要鏈鎖律的 e^{xy} 項。為 S20 練習鋪路。 -->\n\n## 一、先講白話：偏微分就是「裝瞎」微分\n\nS18 講了偏微分的意義（切片斜率）與捷徑（把其他變數當常數）。這一節專練「手要怎麼動」。\n\n口訣：**算 $\\partial/\\partial x$ 時，對 $y$「裝瞎」——把每個 $y$ 都看成像 3、像 7 那樣的純數字**，然後整題就退化成 S8–S11 的單變數微分。會 Week 1 的微分，就會偏微分。\n\n---\n\n## 二、會用到的 Week 1 規則（對「正在動的那個變數」用）\n\n把固定變數當常數後，剩下的就照這些做（都對「正在動的變數」操作）：\n\n$$\\frac{\\partial}{\\partial x}(x^n) = n\\,x^{\\,n-1} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $n$ | 冪次（指數） | 對「正在動的變數」$x$ 的次方 |\n| 常數係數 | 含被固定變數的因子 | 如 $\\partial/\\partial x(5y\\,x^3)=5y\\cdot3x^2$，$5y$ 整包當係數 |\n\n其餘常用（都來自 Week 1）：和差逐項微分、常數的導數為 0、$\\dfrac{\\partial}{\\partial x}e^{x}=e^{x}$（S9）、$\\dfrac{\\partial}{\\partial x}\\ln x=\\dfrac1x$（S9），以及合成要用<span class=\"term-zh\">鏈鎖律</span>（<span class=\"term-en\">chain rule</span>，S10–S11）。\n\n---\n\n## 三、完整範例：一次算兩個偏微分\n\n題目：$f(x,y) = x^3 y^2 + e^{xy}$，求 $\\partial f/\\partial x$ 與 $\\partial f/\\partial y$。\n\n### (a) $\\partial f/\\partial x$（把 $y$ 當常數）\n\n第 1 步：逐項、對 $x$ 微分\n$$\\frac{\\partial f}{\\partial x} = \\frac{\\partial}{\\partial x}(x^3 y^2) + \\frac{\\partial}{\\partial x}(e^{xy}) \\quad\\text{（和的偏微分＝逐項偏微分）}$$\n\n第 2 步：第一項，$y^2$ 是常數係數，對 $x^3$ 用冪次法則\n$$\\frac{\\partial}{\\partial x}(x^3 y^2) = y^2\\cdot 3x^2 = 3x^2 y^2 \\quad\\text{（y² 提出當係數；x³→3x²）}$$\n\n第 3 步：第二項 $e^{xy}$ 是合成（外層 $e^{(\\ )}$、內層 $xy$），用鏈鎖律：外層導數 × 內層對 $x$ 的導數\n$$\\frac{\\partial}{\\partial x}(e^{xy}) = e^{xy}\\cdot \\frac{\\partial}{\\partial x}(xy) = e^{xy}\\cdot y = y\\,e^{xy} \\quad\\text{（鏈鎖律；內層 xy 對 x 微分、y 當常數得 y）}$$\n\n第 4 步：合起來\n$$\\frac{\\partial f}{\\partial x} = 3x^2 y^2 + y\\,e^{xy}$$\n\n### (b) $\\partial f/\\partial y$（把 $x$ 當常數）\n\n第 1 步：逐項、對 $y$ 微分\n$$\\frac{\\partial f}{\\partial y} = \\frac{\\partial}{\\partial y}(x^3 y^2) + \\frac{\\partial}{\\partial y}(e^{xy})$$\n\n第 2 步：第一項，$x^3$ 是常數係數，對 $y^2$ 用冪次法則\n$$\\frac{\\partial}{\\partial y}(x^3 y^2) = x^3\\cdot 2y = 2x^3 y \\quad\\text{（x³ 當係數；y²→2y）}$$\n\n第 3 步：第二項，鏈鎖律，內層 $xy$ 對 $y$ 微分（$x$ 當常數）得 $x$\n$$\\frac{\\partial}{\\partial y}(e^{xy}) = e^{xy}\\cdot x = x\\,e^{xy} \\quad\\text{（鏈鎖律；內層 xy 對 y 微分得 x）}$$\n\n第 4 步：合起來\n$$\\frac{\\partial f}{\\partial y} = 2x^3 y + x\\,e^{xy}$$\n\n> 重點：同一個 $f$，$\\partial f/\\partial x$ 與 $\\partial f/\\partial y$ 結果不同——因為一個把 $y$ 當常數、一個把 $x$ 當常數。\n\n---\n\n## 四、常見錯誤\n\n| 錯誤 | 正確 |\n|---|---|\n| 對 $x$ 偏微分時把 $y^2$ 也微分成 $2y$ | $y^2$ 是常數，整包當係數不動：$\\partial/\\partial x(x^3y^2)=3x^2y^2$ |\n| $e^{xy}$ 對 $x$ 微分忘了乘內層 | 鏈鎖律：$e^{xy}\\cdot\\partial(xy)/\\partial x = y\\,e^{xy}$，別漏那個 $y$ |\n| 把純 $y$ 的項（如 $y^3$）對 $x$ 微分成非零 | 對 $x$ 而言純 $y$ 的項是常數，導數為 0 |\n\n> 本節無延伸。核心：偏微分計算就是「把固定變數當常數、對正在動的變數套 Week 1 規則」；含 $e^{xy}$ 等合成項要記得鏈鎖律乘內層。",
+  "content": "<!-- S19 最終合成｜新規範（粵語書面語）｜tier: core｜cognition: calculation｜gradCourse: [\"general\",\"thermo\"] -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n偏微分計算冇新法則：**鎖定一個變數做主角，其餘全部當常數，跟住照搬返你 S8／S9 學嗰套單變數導數規則**。一句講晒——識微分，就識偏微分。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：S18（<span class=\"term-zh\">偏導數</span>（<span class=\"term-en\">partial derivative</span>）嘅概念同記號 $\\partial$——「凍結其他變數，只對一個變數微分」）、S8（基本導數規則：係數提出、和差逐項微分、冪次法則）、S9（指數對數導數，特別係內層函數版 $e^{u}\\cdot u'$ 同 $\\dfrac{u'}{u}$）。\n- **新內容同已學嘅關係**：S18 教你「偏導數係咩、$\\partial$ 點讀、點解可以把固定變數當常數」，係**概念**；呢節係佢嘅**計算落地版**——唔再講概念，淨係教你**手起刀落點計**。核心招式一招都唔新：你把「當常數嘅變數」當成 S8／S9 入面嘅普通數字，成個計算就塌返做你早就識嘅單變數微分。\n- **如果未掌握就先補**：例 3（內層型）會直接攞 S9 嘅式 $e^{u}\\cdot u'$ 同 $\\dfrac{u'}{u}$ 嚟用，而且**內層只對主角變數求導**。如果對「乘返內層導數」呢個動作仲未熟，建議先返去睇 S9 第七節；如果仲分唔清 $\\partial$ 同 $d$，先返 S18。\n\n---\n\n## 三、先講白話：當常數，即係當佢係一個數字\n\n想像你影緊一張全班大合照，但你淨係想知**阿明**一個人有幾高。其他同學企喺度郁唔郁你都唔理——你眼中得阿明一個係「會變」嘅，其餘全部當成佈景板（定咗、唔郁）。\n\n偏微分一模一樣。$f(x,y)$ 有兩個變數，但你一次只問一條問題：「**淨係 $x$ 郁、$y$ 釘住唔郁**嗰陣，$f$ 變幾快？」呢個就係 $\\dfrac{\\partial f}{\\partial x}$。既然 $y$ 釘咗唔郁，喺呢條數入面 $y$ 就同 $3$、$7$、$\\pi$ 呢啲死數一樣，係**常數**。咁樣一鎖，原本嘅二元函數即刻塌返做「淨係得 $x$ 一個變數」嘅普通函數，跟住你就照 S8／S9 嗰套單變數規則做，做完就係答案。換主角求 $\\dfrac{\\partial f}{\\partial y}$ 嗰陣調返轉：$y$ 做主角、$x$ 當常數。\n\n呢節要做嘅，就係把呢個「鎖一個、其餘當常數」嘅流程，配埋 S8／S9 嘅規則，練到一睇就計得出。\n\n---\n\n## 四、正式登場：偏微分計算嘅主公式\n\n偏微分計算最有代表性嘅一條式，就係冪次相乘型 $x^{n}y^{m}$ 對 $x$ 求偏導：\n\n$$\\boxed{\\,\\dfrac{\\partial}{\\partial x}\\left(x^{n}y^{m}\\right) = n\\,x^{n-1}y^{m}\\,} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $x,\\;y$ | 兩個<span class=\"term-zh\">自變數</span>（<span class=\"term-en\">independent variables</span>） | 求 $\\partial/\\partial x$ 時 $x$ 係主角、$y$ 當常數 |\n| $\\dfrac{\\partial}{\\partial x}$ | 對 $x$ 求<span class=\"term-zh\">偏導數</span>（<span class=\"term-en\">partial derivative</span>） | 圓圈 $\\partial$ 讀「partial」，見 S18 |\n| $x^{n}$ | 主角變數嘅冪次 | 用 S8 冪次法則：$\\dfrac{d}{dx}x^{n}=n\\,x^{n-1}$ |\n| $y^{m}$ | 旁觀變數嘅冪次 | 求 $\\partial/\\partial x$ 時**當常數，原封提出**，唔郁 |\n| $n\\,x^{n-1}y^{m}$ | 結果 | 只係 $x$ 嗰 part 跌一次冪、跌出個 $n$；$y^{m}$ 全程冇變 |\n\n**呢條式喺度講咩？** 對 $x$ 偏微分嗰陣，個 $y^{m}$ 由頭到尾係一嚿「常數係數」，照 S8「常數係數提出」嘅做法原封企喺度；真正郁嘅淨係 $x^{n}$，佢照冪次法則變成 $n\\,x^{n-1}$。所以結果就係 $n\\,x^{n-1}\\cdot y^{m}$。一句講晒：**主角照微分，旁觀者原封不動**。\n\n> **對稱嘅另一面：** 同一個 $x^{n}y^{m}$，如果改為對 $y$ 求偏導，角色就掉轉——今次 $x^{n}$ 當常數提出，$y^{m}$ 照冪次法則微分：\n> $$\\dfrac{\\partial}{\\partial y}\\left(x^{n}y^{m}\\right) = m\\,x^{n}y^{m-1} \\tag{1$'$}$$\n>\n> **式(1$'$) 符號**：同式(1) 完全一樣（$x,y$ 兩個自變數、$n,m$ 各自冪次），淨係主角同常數嘅角色 $x\\leftrightarrow y$ 對調——今次 $y$ 做主角、$x^{n}$ 當常數提出。詳細逐項意義見上面式(1) 符號表。\n\n---\n\n## 五、標準流程：三步走\n\n任何偏導數，都係呢三步：\n\n$$\\textbf{① 揀主角}\\;\\longrightarrow\\;\\textbf{② 其餘變數一律當常數}\\;\\longrightarrow\\;\\textbf{③ 套返 S8／S9 規則}$$\n\n| 步驟 | 做緊咩 | 對應已學 |\n|:--|:--|:--|\n| ① 揀主角 | 睇個 $\\partial$ 下面係 $x$ 定 $y$，嗰個就係主角 | S18 記號 |\n| ② 其餘當常數 | 把非主角變數**當成死數**（佢嘅冪、佢自己 $\\to$ 提出做係數；佢自己單獨成項 $\\to$ 導數係 $0$） | S8 常數規則 |\n| ③ 套規則 | 主角部分照冪次法則／$e^{u}\\cdot u'$／$\\dfrac{u'}{u}$ 微分 | S8、S9 |\n\n**②入面有兩個最常忘嘅細節（好緊要，啱啱相反）：**\n\n- 旁觀變數**單獨成一項**（例如 $f=3x+2y$ 入面個 $2y$）：對 $x$ 微分嗰陣，佢係「常數項」，導數 $=0$，**整項消失**。\n- 旁觀變數**乘喺主角度**（例如 $x^2y^3$ 入面個 $y^3$）：佢係「常數係數」，**原封提出企喺結果度，唔可以變 0、唔可以微分**。\n\n呢兩個情況啱啱相反，係偏微分最易撈亂嘅位，下面例題會逐個示範。\n\n---\n\n## 六、同一個 $f$，兩個偏導；與二階記法（輕帶）\n\n同一個 $f(x,y)$，你可以對 $x$ 求，又可以對 $y$ 求，得到**兩個唔同**嘅偏導數：$\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$。佢哋各自答緊一條問題：「淨係 $x$ 郁時變幾快」同「淨係 $y$ 郁時變幾快」，**求咗一個唔代表做完**，題目要邊個要睇清楚。做法對稱：\n\n- 求 $\\dfrac{\\partial f}{\\partial x}$：$x$ 做主角，$y$ 當常數。\n- 求 $\\dfrac{\\partial f}{\\partial y}$：$y$ 做主角，$x$ 當常數。\n\n偏導數本身又係一個函數，仲可以**再偏微分一次**，就得到<span class=\"term-zh\">二階偏導數</span>（<span class=\"term-en\">second-order partial derivative</span>）。你而家只需要識讀個記號：\n\n$$\\dfrac{\\partial^{2}f}{\\partial x^{2}} = \\dfrac{\\partial}{\\partial x}\\!\\left(\\dfrac{\\partial f}{\\partial x}\\right) \\quad\\text{（對 }x\\text{ 連續偏微分兩次）}$$\n\n$$\\dfrac{\\partial^{2}f}{\\partial x\\,\\partial y} = \\dfrac{\\partial}{\\partial x}\\!\\left(\\dfrac{\\partial f}{\\partial y}\\right) \\quad\\text{（先對 }y\\text{ 再對 }x\\text{，叫混合偏導）}$$\n\n呢條 $\\dfrac{\\partial^{2}f}{\\partial x\\,\\partial y}$ 就係<span class=\"term-zh\">混合偏導</span>（<span class=\"term-en\">mixed partial</span>）。\n\n> **呢度淨係要你識睇個記號**：$\\dfrac{\\partial^{2}f}{\\partial x^{2}}$ 係「同一個變數做兩次」，$\\dfrac{\\partial^{2}f}{\\partial x\\,\\partial y}$ 係「兩個唔同變數各做一次」。實際點計、同埋「混合偏導對 $x$ 先定對 $y$ 先結果一唔一樣」、有咩用（例如後面熱力學嘅 Maxwell 關係），留返後面專門節。本節集中練熟**一階偏導點計**。\n\n---\n\n## 七、Worked Examples（難度漸進，逐行，每步註明邊個當常數、每個數字溯源）\n\n> **本節難度梯級點定（對應 H8）**：H8 嗰個「線性→二次→高次→混合」內層階梯，原本係為**單變數 chain rule** 度身訂做。本節係偏微分計算，自然嘅難度升級唔再係「內層次方升高」，而係「**主角同常數點纏埋一齊**」呢個偏微分獨有嘅難點——所以四層喺本情境重定義為：**例1 多項式和（旁觀變數單獨成項→清零）→ 例2 冪次乘積（旁觀變數乘喺主角度→當常數係數提出）→ 例3 內層型 $e^{xy}$（S9 內層版，內層只對主角求導）→ 例4 混合（乘積＋$e^{u}$＋$\\ln$ 三種法則同時出）**。難度仍係嚴格遞增、最後一題仍係混合多法則，只係升級軸由「內層次方」換成「主角／常數嘅糾纏程度」，貼返偏微分嘅真實難點。\n\n### 例 1（易・多項式：分別求 $\\partial x$、$\\partial y$）：$f = 3x^{2} + 2y$\n\n> 求 $\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$。\n\n**(甲) 先求 $\\dfrac{\\partial f}{\\partial x}$**\n\n**第 1 步：揀主角、定常數**\n\n$$\\text{主角 }=x,\\quad y\\text{ 當常數} \\quad\\text{（個 }\\partial\\text{ 下面係 }x\\text{，所以 }x\\text{ 主角；}y\\text{ 釘住唔郁）}$$\n\n**第 2 步：和差逐項微分（S8），逐項處理**\n\n$$\\dfrac{\\partial f}{\\partial x} = \\dfrac{\\partial}{\\partial x}(3x^{2}) + \\dfrac{\\partial}{\\partial x}(2y) \\quad\\text{（和嘅偏導 $=$ 各項偏導相加，S8）}$$\n\n**第 3 步：第一項——主角項，套冪次法則**\n\n$$\\dfrac{\\partial}{\\partial x}(3x^{2}) = 3\\cdot 2x = 6x \\quad\\text{（係數 }3\\text{ 提出；}x^2\\text{ 導數 }2x\\text{，指數搬落、次方減 }1\\text{，S8）}$$\n\n**第 4 步：第二項——$2y$ 入面冇 $x$，對 $x$ 嚟講係常數**\n\n$$\\dfrac{\\partial}{\\partial x}(2y) = 0 \\quad\\text{（}2y\\text{ 當常數（因 }y\\text{ 當常數），常數嘅導數 }=0\\text{）}$$\n\n**第 5 步：砌返埋一齊**\n\n$$\\dfrac{\\partial f}{\\partial x} = 6x + 0 = 6x \\quad\\text{（把第 3、4 步相加）}$$\n\n> **(甲) 答案：$\\dfrac{\\partial f}{\\partial x}=6x$。** 個 $2y$ 因為冇 $x$，對 $x$ 求導時當常數，**整項消失**。\n\n**(乙) 再求 $\\dfrac{\\partial f}{\\partial y}$（主角換成 $y$）**\n\n**第 1 步：揀主角、定常數**\n\n$$\\text{主角 }=y,\\quad x\\text{ 當常數} \\quad\\text{（今次 }\\partial\\text{ 下面係 }y\\text{）}$$\n\n**第 2 步：逐項微分**\n\n$$\\dfrac{\\partial f}{\\partial y} = \\dfrac{\\partial}{\\partial y}(3x^{2}) + \\dfrac{\\partial}{\\partial y}(2y) \\quad\\text{（和差逐項，S8）}$$\n\n**第 3 步：第一項——$3x^{2}$ 入面冇 $y$，對 $y$ 嚟講係常數**\n\n$$\\dfrac{\\partial}{\\partial y}(3x^{2}) = 0 \\quad\\text{（}3x^2\\text{ 當常數（因 }x\\text{ 當常數），導數 }=0\\text{）}$$\n\n**第 4 步：第二項——主角項**\n\n$$\\dfrac{\\partial}{\\partial y}(2y) = 2 \\quad\\text{（係數 }2\\text{ 提出，}y\\text{ 導數 }=1\\text{，得 }2\\text{，S8）}$$\n\n**第 5 步：砌返埋一齊**\n\n$$\\dfrac{\\partial f}{\\partial y} = 0 + 2 = 2 \\quad\\text{（把第 3、4 步相加）}$$\n\n> **(乙) 答案：$\\dfrac{\\partial f}{\\partial y}=2$。** 留意同一個 $f$，對 $x$ 同對 $y$ 求出嚟係**兩個完全唔同**嘅結果（$6x$ vs $2$）——因為每次「邊個係主角、邊個當常數」都唔同。**邊個唔係主角，邊項就有機會清零。**\n\n---\n\n### 例 2（中・乘積：兩變數黐埋一齊）：$f = x^{2}y^{3}$\n\n> 求 $\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$。呢題重點係：旁觀變數**乘喺主角度**嗰陣，係「常數係數」要提出，**唔係變 0**。呢題正正係式(1) 嘅直接應用。\n\n**(甲) 先求 $\\dfrac{\\partial f}{\\partial x}$**\n\n**第 1 步：揀主角、定常數**\n\n$$\\text{主角 }=x,\\quad y^{3}\\text{ 當常數係數} \\quad\\text{（}y\\text{ 當常數，所以 }y^3\\text{ 都係常數，提出企喺前面）}$$\n\n**第 2 步：把 $y^{3}$ 當係數提出，淨低對 $x^{2}$ 微分**\n\n$$\\dfrac{\\partial f}{\\partial x} = y^{3}\\cdot\\dfrac{\\partial}{\\partial x}(x^{2}) \\quad\\text{（常數係數 }y^3\\text{ 提出，S8）}$$\n\n**第 3 步：對主角 $x^{2}$ 套冪次法則**\n\n$$\\dfrac{\\partial}{\\partial x}(x^{2}) = 2x \\quad\\text{（指數 }2\\text{ 搬落、次方減 }1\\text{，S8）}$$\n\n**第 4 步：乘返提出嘅 $y^{3}$**\n\n$$\\dfrac{\\partial f}{\\partial x} = y^{3}\\cdot 2x = 2x\\,y^{3} \\quad\\text{（把第 3 步結果乘返常數係數 }y^3\\text{）}$$\n\n> **(甲) 答案：$\\dfrac{\\partial f}{\\partial x}=2x\\,y^{3}$。** 個 $y^{3}$ **原封不動**留喺結果度（千祈唔好當佢變 0！），因為佢係乘喺主角度嘅常數係數。對照式(1)：$n=2,\\,m=3$，$\\dfrac{\\partial}{\\partial x}(x^2y^3)=2x^{1}y^{3}$，啱晒。\n\n**(乙) 再求 $\\dfrac{\\partial f}{\\partial y}$（角色掉轉）**\n\n**第 1 步：揀主角、定常數**\n\n$$\\text{主角 }=y,\\quad x^{2}\\text{ 當常數係數} \\quad\\text{（今次 }x\\text{ 當常數，}x^2\\text{ 提出）}$$\n\n**第 2 步：把 $x^{2}$ 當係數提出，淨低對 $y^{3}$ 微分**\n\n$$\\dfrac{\\partial f}{\\partial y} = x^{2}\\cdot\\dfrac{\\partial}{\\partial y}(y^{3}) \\quad\\text{（常數係數 }x^2\\text{ 提出，S8）}$$\n\n**第 3 步：對主角 $y^{3}$ 套冪次法則**\n\n$$\\dfrac{\\partial}{\\partial y}(y^{3}) = 3y^{2} \\quad\\text{（指數 }3\\text{ 搬落、次方減 }1\\text{，S8）}$$\n\n**第 4 步：乘返提出嘅 $x^{2}$**\n\n$$\\dfrac{\\partial f}{\\partial y} = x^{2}\\cdot 3y^{2} = 3x^{2}y^{2} \\quad\\text{（把第 3 步結果乘返常數係數 }x^2\\text{）}$$\n\n> **(乙) 答案：$\\dfrac{\\partial f}{\\partial y}=3x^{2}y^{2}$。** 同樣對照式(1$'$)：$m=3$，$\\dfrac{\\partial}{\\partial y}(x^2y^3)=3x^2y^{2}$，啱。**唔當主角嗰個變數，喺結果度完全保持原樣。**\n\n---\n\n### 例 3（難・內層型：用返 S9 內層版）：$f = e^{xy}$\n\n> 求 $\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$。呢題用 S9 式 $\\dfrac{\\partial}{\\partial x}e^{u}\\to e^{u}\\cdot u'$，但**內層 $u=xy$ 只對主角變數求導**，旁觀變數照當常數。\n\n**(甲) 先求 $\\dfrac{\\partial f}{\\partial x}$**\n\n**第 1 步：認外層同內層**\n\n$$\\text{外層 }e^{u},\\quad u = xy \\quad\\text{（個 }e\\text{ 嘅指數位係 }xy\\text{，呢嚿就係內層，S9）}$$\n\n**第 2 步：揀主角、求內層對主角嘅偏導**\n\n$$\\text{主角 }=x,\\ y\\text{ 當常數};\\qquad \\dfrac{\\partial u}{\\partial x} = \\dfrac{\\partial}{\\partial x}(xy) = y \\quad\\text{（}y\\text{ 當常數係數提出，}\\dfrac{\\partial}{\\partial x}x=1\\text{，得 }y\\cdot 1=y\\text{）}$$\n\n**第 3 步：套 S9 內層版 $e^{u}\\cdot u'$，個 $u'$ 用啱啱算嘅 $\\dfrac{\\partial u}{\\partial x}$**\n\n$$\\dfrac{\\partial f}{\\partial x} = e^{xy}\\cdot\\dfrac{\\partial u}{\\partial x} = e^{xy}\\cdot y \\quad\\text{（外層照樣 }e^{xy}\\text{，乘返內層偏導 }y\\text{，S9 式 }e^{u}\\cdot u'\\text{）}$$\n\n**第 4 步：整理寫法（純習慣，值唔變）**\n\n$$\\dfrac{\\partial f}{\\partial x} = y\\,e^{xy} \\quad\\text{（把 }y\\text{ 寫去前面）}$$\n\n> **(甲) 答案：$\\dfrac{\\partial f}{\\partial x}=y\\,e^{xy}$。** 關鍵就喺第 2 步：內層 $xy$ 對 $x$ 求偏導時，$y$ 當常數，所以 $\\dfrac{\\partial}{\\partial x}(xy)=y$（唔係 $1$、唔係 $xy$）。\n\n**(乙) 再求 $\\dfrac{\\partial f}{\\partial y}$（內層改對 $y$ 求）**\n\n**第 1 步：同一個外層內層**\n\n$$\\text{外層 }e^{u},\\quad u = xy \\quad\\text{（內層唔變）}$$\n\n**第 2 步：揀主角、求內層對主角嘅偏導**\n\n$$\\text{主角 }=y,\\ x\\text{ 當常數};\\qquad \\dfrac{\\partial u}{\\partial y} = \\dfrac{\\partial}{\\partial y}(xy) = x \\quad\\text{（今次 }x\\text{ 當常數係數，}\\dfrac{\\partial}{\\partial y}y=1\\text{，得 }x\\cdot 1=x\\text{）}$$\n\n**第 3 步：套 $e^{u}\\cdot u'$**\n\n$$\\dfrac{\\partial f}{\\partial y} = e^{xy}\\cdot\\dfrac{\\partial u}{\\partial y} = e^{xy}\\cdot x = x\\,e^{xy} \\quad\\text{（外層 }e^{xy}\\text{ 乘內層偏導 }x\\text{，S9）}$$\n\n> **(乙) 答案：$\\dfrac{\\partial f}{\\partial y}=x\\,e^{xy}$。** 對 $x$ 求乘 $y$、對 $y$ 求乘 $x$——個內層偏導啱啱掉轉，正正反映「邊個係主角」嘅分別。**內層求導嗰陣，記得邊個係主角先對邊個導，另一個照當常數。**\n\n---\n\n### 例 4（混合・多種法則一齊出）：$f = x^{2}y + e^{2x} + \\ln y$\n\n> 求 $\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$。呢題一條式入面同時有：乘積項（式(1)）、$e^{u}$ 內層型（S9 式 $e^{u}\\cdot u'$）、$\\ln$ 型（S9 式 $\\dfrac{u'}{u}$），係考試最鍾意嘅綜合題。\n\n**(甲) 先求 $\\dfrac{\\partial f}{\\partial x}$（主角 $x$，$y$ 當常數）**\n\n**第 1 步：和差逐項拆開（S8）**\n\n$$\\dfrac{\\partial f}{\\partial x} = \\dfrac{\\partial}{\\partial x}(x^{2}y) + \\dfrac{\\partial}{\\partial x}(e^{2x}) + \\dfrac{\\partial}{\\partial x}(\\ln y) \\quad\\text{（和嘅偏導 $=$ 逐項偏導相加，S8）}$$\n\n**第 2 步：第一項 $x^{2}y$——$y$ 係常數係數提出，對 $x^{2}$ 微分**\n\n$$\\dfrac{\\partial}{\\partial x}(x^{2}y) = y\\cdot 2x = 2xy \\quad\\text{（}y\\text{ 當常數提出，}x^2\\text{ 導數 }2x\\text{，S8）}$$\n\n**第 3 步：第二項 $e^{2x}$——S9 內層版，內層 $u=2x$ 對 $x$ 導 $=2$**\n\n$$\\dfrac{\\partial}{\\partial x}(e^{2x}) = e^{2x}\\cdot 2 = 2e^{2x} \\quad\\text{（}e^{u}\\cdot u'\\text{，}u=2x,\\ u'=2\\text{，S9）}$$\n\n**第 4 步：第三項 $\\ln y$——入面冇 $x$，對 $x$ 嚟講係常數**\n\n$$\\dfrac{\\partial}{\\partial x}(\\ln y) = 0 \\quad\\text{（}\\ln y\\text{ 當常數（因 }y\\text{ 當常數），導數 }=0\\text{）}$$\n\n**第 5 步：三項砌返埋一齊**\n\n$$\\dfrac{\\partial f}{\\partial x} = 2xy + 2e^{2x} + 0 = 2xy + 2e^{2x} \\quad\\text{（把第 2、3、4 步相加）}$$\n\n> **(甲) 答案：$\\dfrac{\\partial f}{\\partial x}=2xy+2e^{2x}$。** 留意 $\\ln y$ 對 $x$ 求導**直接消失**（成項變 0），因為入面冇主角 $x$。\n\n**(乙) 再求 $\\dfrac{\\partial f}{\\partial y}$（主角 $y$，$x$ 當常數）**\n\n**第 1 步：逐項拆開**\n\n$$\\dfrac{\\partial f}{\\partial y} = \\dfrac{\\partial}{\\partial y}(x^{2}y) + \\dfrac{\\partial}{\\partial y}(e^{2x}) + \\dfrac{\\partial}{\\partial y}(\\ln y) \\quad\\text{（和差逐項，S8）}$$\n\n**第 2 步：第一項 $x^{2}y$——$x^{2}$ 係常數係數，對 $y$ 微分**\n\n$$\\dfrac{\\partial}{\\partial y}(x^{2}y) = x^{2}\\cdot 1 = x^{2} \\quad\\text{（}x^2\\text{ 當常數提出，}y\\text{ 導數 }=1\\text{，S8）}$$\n\n**第 3 步：第二項 $e^{2x}$——入面冇 $y$，對 $y$ 嚟講係常數**\n\n$$\\dfrac{\\partial}{\\partial y}(e^{2x}) = 0 \\quad\\text{（}e^{2x}\\text{ 當常數（因 }x\\text{ 當常數），導數 }=0\\text{）}$$\n\n**第 4 步：第三項 $\\ln y$——主角項，套 S9 式 $\\dfrac{u'}{u}$**\n\n$$\\dfrac{\\partial}{\\partial y}(\\ln y) = \\dfrac{1}{y} \\quad\\text{（內層 }u=y,\\ u'=1\\text{，}\\dfrac{u'}{u}=\\dfrac{1}{y}\\text{，S9 式 }\\dfrac{d}{dy}\\ln y=\\tfrac{1}{y}\\text{）}$$\n\n**第 5 步：三項砌返埋一齊**\n\n$$\\dfrac{\\partial f}{\\partial y} = x^{2} + 0 + \\dfrac{1}{y} = x^{2} + \\dfrac{1}{y} \\quad\\text{（把第 2、3、4 步相加）}$$\n\n> **(乙) 答案：$\\dfrac{\\partial f}{\\partial y}=x^{2}+\\dfrac{1}{y}$。** 呢題對 $x$、對 $y$ 各自用咗唔同組合嘅法則，但流程一樣：**揀主角 → 其餘當常數 → 套 S8／S9**。注意 $e^{2x}$ 對 $y$ 求時成項變 0，而對 $x$ 求時就係 $2e^{2x}$——**同一項喺兩條偏導入面命運完全唔同：邊項冇主角變數，邊項就清零。**\n\n---\n\n## 八、易混淆對比：偏微分最易撈亂嗰幾件事\n\n| 容易混 | 正確理解 |\n|---|---|\n| 求 $\\dfrac{\\partial}{\\partial x}$ 時，$\\dfrac{\\partial}{\\partial x}(y^{3})=3y^{2}$？ | **錯！** $y^{3}$ 入面冇 $x$，對 $x$ 嚟講係**常數**，導數 $=0$。唔好見到有冪就微分，要先睇主角係邊個。 |\n| 求 $\\dfrac{\\partial}{\\partial x}(x^{2}y^{3})$ 時，把 $y^{3}$ 變 $0$？ | **錯！** $y^{3}$ 係**乘喺主角度**嘅常數係數，要**原封提出**：答案 $2x\\,y^{3}$，$y^{3}$ 仲喺度。「單獨成項」先變 0，「乘喺主角度」要提出——兩者啱啱相反。 |\n| $\\dfrac{\\partial}{\\partial x}(e^{xy}) = e^{xy}$？ | **錯**，漏咗乘內層偏導。內層 $xy$ 對 $x$ 求 $=y$（$y$ 當常數），所以係 $y\\,e^{xy}$（S9 內層版）。 |\n| 內層 $\\dfrac{\\partial}{\\partial x}(xy)=xy$ 或 $=1$？ | **都錯**。$y$ 當常數係數提出、$\\dfrac{\\partial}{\\partial x}x=1$，所以 $\\dfrac{\\partial}{\\partial x}(xy)=y\\cdot1=y$。當常數唔代表佢消失，佢仲跟住做係數。 |\n| 求咗 $\\dfrac{\\partial f}{\\partial x}$ 就算做完？對 $x$、對 $y$ 嘅偏導應該一樣？ | **唔係／唔一定一樣**。二元函數有兩個偏導，$\\dfrac{\\partial f}{\\partial x}$ 同 $\\dfrac{\\partial f}{\\partial y}$ 係兩個唔同結果（例 1：$6x$ vs $2$），題目要邊個睇清楚。 |\n\n---\n\n## 九、一頁總表\n\n| 函數／情況 | 偏微分結果 | 備注 |\n|:--|:--|:--|\n| $\\dfrac{\\partial}{\\partial x}(x^{n}y^{m})$ | $n\\,x^{n-1}y^{m}$ | **主公式，式(1)**；$y^{m}$ 當常數提出 |\n| $\\dfrac{\\partial}{\\partial y}(x^{n}y^{m})$ | $m\\,x^{n}y^{m-1}$ | 式(1$'$)；角色掉轉，$x^{n}$ 當常數提出 |\n| 旁觀變數**單獨成項**（如 $2y$、$\\ln y$ 對 $x$ 求） | $0$ | 整項當常數，導數係 $0$，項消失 |\n| 旁觀變數**乘喺主角度**（如 $x^2y^3$ 對 $x$ 求） | 提出做常數係數 | 原封企喺結果，**唔變 0** |\n| $\\dfrac{\\partial}{\\partial x}(e^{xy})$ | $y\\,e^{xy}$ | S9 內層版 $e^{u}\\cdot u'$，內層 $\\partial(xy)/\\partial x=y$ |\n| $\\dfrac{\\partial}{\\partial y}(e^{xy})$ | $x\\,e^{xy}$ | 內層 $\\partial(xy)/\\partial y=x$ |\n| $\\dfrac{\\partial}{\\partial x}(e^{kx})$（$k$ 係 $x$ 以外常數） | $k\\,e^{kx}$ | S9，內層 $kx$ 對 $x$ 導 $=k$ |\n| $\\dfrac{\\partial}{\\partial y}(\\ln y)$ | $\\dfrac{1}{y}$ | S9 對數導數 $\\dfrac{u'}{u}$ |\n| 二階記法 | $\\dfrac{\\partial^2 f}{\\partial x^2},\\ \\dfrac{\\partial^2 f}{\\partial x\\,\\partial y}$ | 同變數兩次／混合偏導；本節只需識睇記號 |\n| 流程 | ①揀主角 ②其餘當常數 ③套 S8／S9 | 一切偏導通用 |\n\n---\n\n## 十、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。\n\n**L1 基礎定義**\n- D1：求 $\\dfrac{\\partial f}{\\partial x}$ 嗰陣，$y$ 應該當成咩？(a) 變數　(b) 常數　(c) $0$　(d) 主角\n- D2：同一個二元函數 $f(x,y)$，可以求幾多個一階偏導？(a) 得一個　(b) 兩個（對 $x$、對 $y$ 各一）　(c) 三個　(d) 冇得求\n\n**L2 公式理解**\n- D3：求 $\\dfrac{\\partial}{\\partial x}$ 時，純 $y$ 嘅項（例如 $5y^{2}$，入面冇 $x$）嘅偏導等於？(a) $10y$　(b) $5y^2$　(c) $0$　(d) $10xy$\n- D4：$\\dfrac{\\partial}{\\partial x}(x^{n}y^{m})$ 等於？(a) $n\\,x^{n-1}y^{m}$　(b) $m\\,x^{n}y^{m-1}$　(c) $nm\\,x^{n-1}y^{m-1}$　(d) $x^{n}y^{m}$\n\n**L3 單步應用**\n- D5：$\\dfrac{\\partial}{\\partial x}(x^{2}y^{3})=$？(a) $2x\\,y^3$　(b) $3x^2y^2$　(c) $6xy^2$　(d) $x^2y^3$\n- D6：$\\dfrac{\\partial}{\\partial y}(x^{2}y^{3})=$？(a) $2x\\,y^3$　(b) $3x^2y^2$　(c) $6xy^2$　(d) $x^2$\n\n**L4 多步計算（內層函數）**\n- D7：$\\dfrac{\\partial}{\\partial x}(e^{xy})=$？(a) $e^{xy}$　(b) $y\\,e^{xy}$　(c) $x\\,e^{xy}$　(d) $xy\\,e^{xy}$\n- D8：$\\dfrac{\\partial}{\\partial y}(e^{xy})=$？(a) $e^{xy}$　(b) $y\\,e^{xy}$　(c) $x\\,e^{xy}$　(d) $e^{x}$\n\n**L5 綜合應用**\n- D9：$f=x^{2}y + \\ln y$，求 $\\dfrac{\\partial f}{\\partial y}=$？(a) $x^{2}+\\dfrac{1}{y}$　(b) $2xy+\\dfrac{1}{y}$　(c) $x^{2}$　(d) $2xy$\n- D10：$f=e^{2x}+y^{3}$，求 $\\dfrac{\\partial f}{\\partial x}=$？(a) $2e^{2x}+3y^{2}$　(b) $2e^{2x}$　(c) $e^{2x}+3y^{2}$　(d) $2e^{2x}+y^{3}$\n\n**診斷答案**：D1 b｜D2 b｜D3 c｜D4 a｜D5 a｜D6 b｜D7 b｜D8 c｜D9 a｜D10 b\n\n**逐題錯誤分析（點出各誘答項嘅常見誤解）**\n\n- **D1（答 b）**：選 a「變數」=未入到偏微分核心，仲當 $y$ 會郁；選 c「$0$」=撈亂咗「當常數」同「當 0」，$y$ 當常數係可以提出做係數，唔係消失；選 d「主角」=主角係 $x$ 先啱，$y$ 係旁觀者。\n- **D2（答 b）**：選 a「得一個」=求咗 $\\partial f/\\partial x$ 就以為做完，漏咗 $\\partial f/\\partial y$；選 c「三個」=二元函數只有兩個一階偏導，數多咗；選 d「冇得求」=誤以為多變數唔可微分。\n- **D3（答 c）**：選 a「$10y$」同 b「$5y^2$」=見到 $5y^2$ 就照 $y$ 微分，但主角係 $x$，$5y^2$ 入面冇 $x$ 故導數 $=0$；選 d「$10xy$」=亂咁拼湊。核心誤解：冇先睇主角係邊個。\n- **D4（答 a）**：選 b 係對 $y$ 求嘅對稱版（式1$'$），撈亂咗主角；選 c「兩個都跌冪」=以為 $x$、$y$ 同時微分，但一次只郁一個主角；選 d「原式」=當咗冇微分。\n- **D5（答 a）**：選 b「$3x^2y^2$」=做咗對 $y$ 求（角色掉轉）；選 c「$6xy^2$」=錯把 $y^3$ 都當主角一齊微分（兩個變數同時跌冪）；選 d「原式」=漏微分。核心：$y^3$ 係常數係數要原封提出。\n- **D6（答 b）**：選 a「$2xy^3$」=做咗對 $x$ 求；選 c「$6xy^2$」=兩變數同時微分；選 d「$x^2$」=把 $y^3$ 當成 $y$（冪次冇照搬）。\n- **D7（答 b）**：選 a「$e^{xy}$」=漏咗乘內層偏導（最常見錯）；選 c「$x\\,e^{xy}$」=用咗對 $y$ 求嘅內層 $x$，撈亂主角；選 d「$xy\\,e^{xy}$」=內層 $\\partial(xy)/\\partial x$ 當成 $xy$ 而唔係 $y$（冇當 $y$ 為常數提出）。\n- **D8（答 c）**：選 a「$e^{xy}$」=漏乘內層；選 b「$y\\,e^{xy}$」=用咗對 $x$ 求嘅內層 $y$，主角搞錯；選 d「$e^{x}$」=亂改外層。核心：對 $y$ 求時內層 $\\partial(xy)/\\partial y=x$。\n- **D9（答 a）**：選 b「$2xy+\\dfrac{1}{y}$」=第一項 $x^2y$ 錯當 $x$ 為主角微分（應對 $y$，$x^2$ 提出得 $x^2$）；選 c「$x^2$」=漏咗 $\\ln y$ 嗰項；選 d「$2xy$」=兩項都搞錯主角又漏項。\n- **D10（答 b）**：選 a「$2e^{2x}+3y^2$」同 c、d=把 $y^3$ 嗰項（對 $x$ 求應 $=0$，因冇主角 $x$）錯當有貢獻，仲微埋出 $3y^2$ 或原封留 $y^3$。核心：$y^3$ 對 $x$ 求係常數項，整項清零。\n\n> 卡喺 L1–L2 → 返 S18 補偏導數概念同 $\\partial$ 記號、S8 常數規則，重溫「對 $x$ 偏微分時 $y$ 當常數」；卡喺 L3 → 練「揀主角 + 套冪次法則」，重睇例 1、例 2 同式(1)，特別係「唔當主角嗰個變數保持原樣」；卡喺 L4 → 重睇例 3（$e^{xy}$ 內層只對主角求導，先補 S9）；卡喺 L5 → 重睇例 4 同流程三步走，特別係「單獨成項變 0 vs 乘喺主角度提出」、「邊項冇主角邊項清零」嘅分別。\n",
   "fieldLink": "",
   "checkpoints": [
     {
       "id": "c1",
-      "text": "能說出偏微分計算口訣：算 ∂/∂x 時把 y 當純數字，再套 Week 1 微分規則"
+      "text": "講得出偏微分流程三步：①揀主角 ②其餘變數一律當常數 ③套返 S8/S9 規則"
     },
     {
       "id": "c2",
-      "text": "能對含常數係數的項偏微分（如 ∂/∂x(x³y²)=3x²y²，y² 整包當係數）"
+      "text": "分得清『旁觀變數單獨成項→導數=0、整項消失』同『旁觀變數乘喺主角度→當常數係數提出、唔變0』"
     },
     {
       "id": "c3",
-      "text": "能對 e^{xy} 這類合成項用鏈鎖律偏微分（記得乘內層：∂/∂x→×y、∂/∂y→×x）"
+      "text": "套主公式 ∂/∂x(xⁿyᵐ)=n·xⁿ⁻¹·yᵐ，及對稱版 ∂/∂y(xⁿyᵐ)=m·xⁿ·yᵐ⁻¹"
     },
     {
       "id": "c4",
-      "text": "能對同一個函數獨立算出 ∂f/∂x 與 ∂f/∂y 兩個結果"
+      "text": "對同一個 f 獨立算出兩個偏導 ∂f/∂x 同 ∂f/∂y，明白兩者通常唔同（如 3x²+2y 得 6x 同 2），唔會求咗一個就停"
     },
     {
       "id": "c5",
-      "text": "能指出常見錯誤（把常數當變數微分、漏乘鏈鎖律內層）並訂正"
+      "text": "用 S9 內層版做 e^(xy)：∂/∂x 得 y·e^(xy)、∂/∂y 得 x·e^(xy)，確認內層只對主角求導（∂(xy)/∂x=y）"
     },
     {
       "id": "c6",
-      "text": "三句話總結本節"
+      "text": "唔睇表，獨立做一條混合題（x²y+e^(2x)+ln y 類）分別求 ∂x、∂y，逐項當常數、邊項冇主角邊項清零並訂正"
+    },
+    {
+      "id": "c7",
+      "text": "識讀二階偏導記法：∂²f/∂x² 係同變數兩次，∂²f/∂x∂y 係混合偏導（知道係偏微分兩次即可）"
     }
   ],
   "resources": [
     {
       "type": "link",
-      "label": "（選看）Paul's Online Math Notes：Partial Derivatives",
-      "url": "https://tutorial.math.lamar.edu"
+      "label": "（選做）Paul's Math Notes：Partial Derivatives",
+      "url": "https://tutorial.math.lamar.edu/Classes/CalcIII/PartialDerivatives.aspx"
     }
   ],
   "charts": [],
@@ -62,88 +67,69 @@
     {
       "type": "single",
       "difficulty": "basic",
-      "q": "算 ∂/∂x 的口訣是？",
+      "q": "求 ∂f/∂x 嗰陣，變數 y 應該當成咩嚟處理？",
       "options": [
-        "把 y 當常數（純數字），再對 x 套 Week 1 微分規則",
-        "把 x 和 y 都微分",
-        "把 x 當常數",
-        "先積分再微分"
+        "當常數（即一個唔郁嘅數字）",
+        "當變數，照樣對佢微分",
+        "一律當 0",
+        "一律當主角"
       ],
       "answer": 0,
-      "explain": "對 x 偏微分＝固定 y。把 y 看成數字後，整題退化成單變數微分，照 Week 1 規則做。"
-    },
-    {
-      "type": "single",
-      "difficulty": "basic",
-      "q": "∂/∂x(x³y²) = ?",
-      "options": [
-        "3x²y²",
-        "3x²·2y",
-        "2x³y",
-        "3x²"
-      ],
-      "answer": 0,
-      "explain": "y² 是常數係數整包不動，對 x³ 用冪次法則得 3x²，乘上 y²：3x²y²。"
+      "explain": "偏微分嘅核心：鎖定主角 x，其餘變數（呢度係 y）一律當常數（S18）。揀咗 x 做主角，y 就好似 3、7、π 咁係死數，二元函數塌返做單變數函數，再套 S8/S9 規則。當咗 y 做變數照微分（選 b）就唔係偏導。注意 y 當常數唔等於當 0——佢可以提出做係數。"
     },
     {
       "type": "truefalse",
       "difficulty": "basic",
-      "q": "對 x 偏微分時，純粹由 y 組成的項（例如 y³）會被當成常數，導數為 0。",
-      "answer": true,
-      "explain": "對 x 而言 y³ 不含 x、是常數，常數的導數為 0。"
+      "q": "求 ∂/∂x 時，∂(y³)/∂x = 3y²。",
+      "answer": false,
+      "explain": "錯。y³ 入面冇主角 x，對 x 嚟講 y³ 係常數，常數嘅導數 = 0，所以 ∂(y³)/∂x = 0。3y² 係對 y 求導先啱。唔好見到有冪次就微分，要先睇主角係邊個。"
     },
     {
       "type": "single",
-      "difficulty": "standard",
-      "q": "∂/∂y(x³y²) = ?",
+      "difficulty": "basic",
+      "q": "∂/∂x(xⁿyᵐ) 等於邊個？",
       "options": [
-        "2x³y",
-        "3x²y²",
-        "x³",
-        "2xy"
+        "n·xⁿ⁻¹·yᵐ",
+        "m·xⁿ·yᵐ⁻¹",
+        "nm·xⁿ⁻¹·yᵐ⁻¹",
+        "xⁿ·yᵐ"
       ],
       "answer": 0,
-      "explain": "對 y 偏微分把 x³ 當常數係數，對 y² 用冪次法則得 2y，乘 x³：2x³y。"
+      "explain": "主公式（式1）：對 x 求偏導，yᵐ 當常數原封提出，淨係 xⁿ 套冪次法則變 n·xⁿ⁻¹，所以結果 n·xⁿ⁻¹·yᵐ。選 b 係對 y 求嘅對稱版；選 c 兩個都跌冪係錯（一次只郁一個主角）。"
     },
     {
-      "type": "single",
+      "type": "fill",
       "difficulty": "standard",
-      "q": "∂/∂x(e^{xy}) = ?（y 當常數）",
-      "options": [
-        "y·e^{xy}",
-        "e^{xy}",
-        "x·e^{xy}",
-        "e^{x}"
-      ],
-      "answer": 0,
-      "explain": "鏈鎖律：外層 e^{(內)} 導數＝e^{xy}，乘內層 xy 對 x 的導數＝y，得 y·e^{xy}。別漏乘內層的 y。"
+      "q": "f = x²y³，求 ∂f/∂x。（答案用 unicode 寫，例如 2x·y³ 寫成 2xy³）",
+      "answer": "2xy³",
+      "explain": "主角 x，y³ 當常數係數提出：∂f/∂x = y³·∂(x²)/∂x = y³·2x = 2xy³。重點：y³ 係乘喺主角度嘅常數係數，要原封提出，唔可以當佢變 0。對照式(1) n=2、m=3 得 2x¹y³。選做 ∂/∂y 會得 3x²y²，係另一個偏導。"
     },
     {
-      "type": "single",
+      "type": "fill",
       "difficulty": "standard",
-      "q": "f(x,y)=x²y³，∂f/∂x 與 ∂f/∂y 分別是？",
-      "options": [
-        "2xy³ 與 3x²y²",
-        "2xy³ 與 2x²y",
-        "x²y³ 與 x²y³",
-        "2x 與 3y²"
-      ],
-      "answer": 0,
-      "explain": "∂/∂x：y³ 當係數、x²→2x，得 2xy³。∂/∂y：x² 當係數、y³→3y²，得 3x²y²。"
+      "q": "f = e^(xy)，求 ∂f/∂x。（答案用 unicode，寫成 y·e^(xy) 形式，例如 ye^(xy)）",
+      "answer": "ye^(xy)",
+      "explain": "套 S9 內層版 ∂/∂x(eᵘ)=eᵘ·u′：外層 e^(xy) 照樣，內層 u=xy 對 x 求偏導（y 當常數）得 ∂(xy)/∂x = y。所以 ∂f/∂x = e^(xy)·y = ye^(xy)。最常錯：漏咗乘內層（淨寫 e^(xy)），或者把內層 ∂(xy)/∂x 當成 1 或 xy。"
     },
     {
-      "type": "single",
+      "type": "fill",
+      "difficulty": "standard",
+      "q": "f = 3x² + 2y，求 ∂f/∂y。",
+      "answer": "2",
+      "explain": "換主角：y 做主角、x 當常數。逐項：∂(3x²)/∂y = 0（3x² 冇 y，當常數，導數 0）；∂(2y)/∂y = 2（係數 2 提出，y 導數 1）。砌埋 0+2 = 2。留意同一個 f 對 x 求係 6x、對 y 求係 2，兩者完全唔同。"
+    },
+    {
+      "type": "fill",
       "difficulty": "challenge",
-      "q": "進階：f(x,y)=x²y + e^{2x} + y。求 ∂f/∂x。",
-      "options": [
-        "2xy + 2e^{2x}",
-        "2xy + e^{2x} + 1",
-        "2xy + 2e^{2x} + 1",
-        "x² + 2e^{2x}"
-      ],
-      "answer": 0,
-      "explain": "答對不易，重點在逐項、含鏈鎖律、且分清哪些對 x 是常數。",
-      "strategy": "策略：對 x 偏微分，逐項處理，把 y 當常數。\n① x²y：y 當係數、x²→2x，得 2xy。\n② e^{2x}：合成，鏈鎖律＝e^{2x}·(2x 對 x 的導數=2)=2e^{2x}。\n③ 純 y：對 x 是常數，導數=0（選項二、三多加的 1 就是把這項誤微分）。\n合計：2xy + 2e^{2x}。\n心法：偏微分先『逐項拆開』，每項各自判斷『對正在動的變數，這項是常數還是要微分』，合成項記得鏈鎖律乘內層。"
+      "q": "f = x³y² + e^(xy)，求 ∂f/∂y。（答案用 unicode）",
+      "answer": "2x³y+x·e^(xy)",
+      "explain": "答案 ∂f/∂y = 2x³y + x·e^(xy)。逐項：∂/∂y(x³y²)——x³ 當常數提出、y² 套冪次法則得 2y，所以呢項 = 2x³y；∂/∂y(e^(xy))——S9 內層版 eᵘ·u′，外層 e^(xy) 照樣，內層 ∂(xy)/∂y=x（x 當常數提出），所以呢項 = x·e^(xy)；砌埋兩項得 2x³y + x·e^(xy)。",
+      "strategy": "策略：呢題一條式有兩種法則，要逐項拆開、逐項鎖主角。換主角求 ∂/∂y → y 做主角、x 當常數。\n① 和差逐項拆開（S8）：∂f/∂y = ∂/∂y(x³y²) + ∂/∂y(e^(xy))。\n② 第一項（主公式對稱版 ∂/∂y(xⁿyᵐ)=m·xⁿyᵐ⁻¹）：x³ 當常數提出，對 y² 用冪次法則得 2y，再乘 x³ = x³·2y = 2x³y。\n③ 第二項（S9 內層版 eᵘ·u′）：內層 u=xy，求 ∂/∂y 時 x 當常數係數，∂(xy)/∂y = x；所以 ∂/∂y(e^(xy)) = e^(xy)·x = x·e^(xy)。\n④ 兩項砌埋：∂f/∂y = 2x³y + x·e^(xy)。\n心法：(1) 鎖定主角 y、其餘當常數；(2) 逐項套對應法則（冪次／eᵘ·u′）；(3) 內層只對主角 y 求導，所以 ∂(xy)/∂y=x 而唔係 y。對照一下：呢個 f 對 x 求係 ∂f/∂x = 3x²y² + y·e^(xy)，啱啱反過嚟，可見同一項喺兩條偏導命運唔同。"
     }
+  ],
+  "chatPracticeHints": [
+    "乘喺主角嘅 y³ 當咗 0",
+    "e^(xy) 漏乘內層偏導",
+    "求咗 ∂x 就停漏埋 ∂y"
   ]
 }
