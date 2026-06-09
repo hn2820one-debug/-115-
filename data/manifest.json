@@ -150,7 +150,7 @@
     "S30": {"title":"數學總複習（二）","titleEn":"Math Grand Review II","platform":"self","isCore":false},
     "S31": {"title":"數學自我檢定","titleEn":"Math Self-Assessment","platform":"paul","isCore":false},
     "S32": {"title":"數學收尾","titleEn":"Math Wrap-up","platform":"self","isCore":false},
-    "S33": {"title":"原子結構（一）","titleEn":"Atomic Structure I","platform":"junyi","isCore":false},
+    "S33": {"title":"原子結構（一）","titleEn":"Atomic Structure I","platform":"junyi","isCore":true},
     "S34": {"title":"原子結構（二）：電子組態","titleEn":"Atomic Structure II — Electron Config","platform":"ka","isCore":false},
     "S35": {"title":"週期表邏輯","titleEn":"Periodic Table Logic","platform":"ka","isCore":false},
     "S36": {"title":"化學鍵總覽","titleEn":"Chemical Bonding Overview","platform":"junyi","isCore":false},
