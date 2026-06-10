@@ -20,7 +20,6 @@ const A = {
 }
 // 本批要建嘅課節（逐堂順序處理、即寫即存）。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S35', title: '週期表邏輯', tier: 'bridge', cognition: 'concept', extension: 'none', platform: 'ka' },
   { id: 'S36', title: '化學鍵總覽', tier: 'core', cognition: 'concept', extension: 'life', platform: 'junyi' },
   { id: 'S37', title: '金屬鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
   { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
