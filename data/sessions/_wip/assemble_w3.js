@@ -20,6 +20,11 @@ const DIMS = {
   S25: { week:2, order:25, title:'指數函數的積分', titleEn:'Integration of Exponentials', platform:'paul', gradImportance:'important', tier:'core', cognition:'calculation', prereq:['S22','S23','S9'], assessWeight:'medium', extension:'packaging', gradCourse:['general'] },
   S26: { week:2, order:26, title:'微積分綜合（一）', titleEn:'Calculus Mixed I', platform:'paul', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S8','S23'], assessWeight:'light', extension:'none', gradCourse:['general'] },
   S27: { week:2, order:27, title:'微積分綜合（二）計時', titleEn:'Calculus Mixed II (Timed)', platform:'paul', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S26'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S28: { week:2, order:28, title:'斜率與曲線解讀（現場應用）', titleEn:'Slope & Curve Reading (Field App)', platform:'self', gradImportance:'support', tier:'tool', cognition:'chartread', prereq:['S7','S21'], assessWeight:'light', extension:'packaging', gradCourse:['general'] },
+  S29: { week:2, order:29, title:'數學總複習（一）', titleEn:'Math Grand Review I', platform:'self', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S8','S19','S23'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S30: { week:2, order:30, title:'數學總複習（二）', titleEn:'Math Grand Review II', platform:'self', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S29'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S31: { week:2, order:31, title:'數學自我檢定', titleEn:'Math Self-Assessment', platform:'paul', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S29','S30'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S32: { week:2, order:32, title:'數學收尾', titleEn:'Math Wrap-up', platform:'self', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S31'], assessWeight:'light', extension:'none', gradCourse:['general'] },
   // ── Week 3：基礎化學 — 原子與鍵結 ──
   S33: { week:3, order:33, title:'原子結構（一）', titleEn:'Atomic Structure I', platform:'junyi', gradImportance:'important', tier:'core', cognition:'concept', prereq:[], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   // S33B：優化版 workflow 重生成嘅對照樣本（同 S33 維度，唔上 manifest、唔覆蓋 S33）
