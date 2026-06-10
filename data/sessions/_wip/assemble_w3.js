@@ -16,6 +16,10 @@ const DIMS = {
   S21: { week:2, order:21, title:'積分的意義', titleEn:'Meaning of Integration', platform:'3b1b', gradImportance:'important', tier:'core', cognition:'concept', prereq:['S7','S8'], assessWeight:'medium', extension:'life', gradCourse:['general'] },
   S22: { week:2, order:22, title:'反導數概念', titleEn:'Antiderivatives', platform:'junyi', gradImportance:'important', tier:'core', cognition:'calculation', prereq:['S21','S8','S9'], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   S23: { week:2, order:23, title:'定積分', titleEn:'Definite Integrals', platform:'junyi', gradImportance:'essential', tier:'core', cognition:'calculation', prereq:['S22','S21'], assessWeight:'medium', extension:'packaging', gradCourse:['general','thermo'] },
+  S24: { week:2, order:24, title:'定積分練習', titleEn:'Definite Integral Practice', platform:'paul', gradImportance:'support', tier:'tool', cognition:'calculation', prereq:['S23'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S25: { week:2, order:25, title:'指數函數的積分', titleEn:'Integration of Exponentials', platform:'paul', gradImportance:'important', tier:'core', cognition:'calculation', prereq:['S22','S23','S9'], assessWeight:'medium', extension:'packaging', gradCourse:['general'] },
+  S26: { week:2, order:26, title:'微積分綜合（一）', titleEn:'Calculus Mixed I', platform:'paul', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S8','S23'], assessWeight:'light', extension:'none', gradCourse:['general'] },
+  S27: { week:2, order:27, title:'微積分綜合（二）計時', titleEn:'Calculus Mixed II (Timed)', platform:'paul', gradImportance:'support', tier:'tool', cognition:'synthesis', prereq:['S26'], assessWeight:'light', extension:'none', gradCourse:['general'] },
   // ── Week 3：基礎化學 — 原子與鍵結 ──
   S33: { week:3, order:33, title:'原子結構（一）', titleEn:'Atomic Structure I', platform:'junyi', gradImportance:'important', tier:'core', cognition:'concept', prereq:[], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   // S33B：優化版 workflow 重生成嘅對照樣本（同 S33 維度，唔上 manifest、唔覆蓋 S33）

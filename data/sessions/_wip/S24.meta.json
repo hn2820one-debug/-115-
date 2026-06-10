@@ -1,0 +1,22 @@
+{
+  "objective": "把 S23 嘅定積分計算由『睇得明』練到『計得啱、計得快』:喺聊天室親手做 6 題定積分(definite integral),每題完整行四步模板(搵反導數 F → 方括號寫上下限 → 代上限同下限 → F(b)−F(a) 上減下),全程唔寫 +C。重點唔係學新嘢,而係把呢類題最常見嘅三大手誤壓死——漏代下限/漏項、正負號(負區答案係負、上下限對調要變號)、端點值(ln1=0、ln e=1、e⁰=1)記錯;練到 6 題全對、同型號連對,為 S25 指數函數積分同之後熱力學 ΔH=∫Cp dT 嘅計算打穩手感",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "6 題定積分全部有寫晒四步模板(搵 F → 方括號 [F(x)]ₐᵇ → 代上限 b 同下限 a → F(b)−F(a)),冇心算跳步" },
+    { "id": "c2", "text": "每題都把整條反導數 F 代足兩個端點,冇漏代下限、冇漏項,亦全程冇寫 +C" },
+    { "id": "c3", "text": "計到負區題(∫₀¹(x−2)dx)答案係負數而冇夾硬改正,明白係帶正負號面積(signed area)" },
+    { "id": "c4", "text": "計上下限對調題(∫₂⁰2x dx)有用 ∫ₐᵇ=−∫ᵇₐ 變號性質,答案有變號" },
+    { "id": "c5", "text": "ln 型同 eˣ 型題用啱端點值 ln1=0、ln e=1、e⁰=1" },
+    { "id": "c6", "text": "錯題已訂正並寫低錯喺邊一步,又揀同型號新題重做到連對兩題" }
+  ],
+  "resources": [
+    { "type": "link", "label": "(選看)Paul's Online Math Notes:Computing Definite Integrals(定積分計算與練習題)", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/ComputingDefiniteIntegrals.aspx" }
+  ],
+  "charts": [],
+  "quiz": [],
+  "chatPracticeHints": [
+    "漏代下限淨計 F(b)",
+    "定積分唔好寫 +C",
+    "負區/對調漏咗負號"
+  ]
+}

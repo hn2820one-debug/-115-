@@ -142,7 +142,7 @@
     "S22": {"title":"反導數概念","titleEn":"Antiderivatives","platform":"junyi","isCore":true},
     "S23": {"title":"定積分","titleEn":"Definite Integrals","platform":"junyi","isCore":true},
     "S24": {"title":"定積分練習","titleEn":"Definite Integral Practice","platform":"paul","isCore":false},
-    "S25": {"title":"指數函數的積分","titleEn":"Integration of Exponentials","platform":"paul","isCore":false},
+    "S25": {"title":"指數函數的積分","titleEn":"Integration of Exponentials","platform":"paul","isCore":true},
     "S26": {"title":"微積分綜合（一）","titleEn":"Calculus Mixed I","platform":"paul","isCore":false},
     "S27": {"title":"微積分綜合（二）計時","titleEn":"Calculus Mixed II (Timed)","platform":"paul","isCore":false},
     "S28": {"title":"斜率與曲線解讀","titleEn":"Slope & Curve Reading (Field App)","platform":"self","isCore":false},

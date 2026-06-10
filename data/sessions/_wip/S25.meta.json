@@ -1,0 +1,69 @@
+{
+  "objective": "掌握指數函數嘅積分：核心係 e^x 微積都返自己（∫eˣdx=eˣ+C），一般情況 ∫e^(kx)dx=(1/k)e^(kx)+C——指數入面 x 前面係 k，積分就喺前面除返個 k（因為微分會由鏈式法則掉出個 k，積分逆操作要除返抵消）；識把常數係數提出（∫a·e^(kx)dx=(a/k)e^(kx)+C）、識逐項做和差積分、識做定積分版套上下限相減（∫_a^b e^(kx)dx=(1/k)e^(kb)−(1/k)e^(ka)），並養成『微返答案核對』嘅習慣，為 S90 阿瑞尼士同擴散方程式嘅指數型解打底",
+  "fieldLink": "材料所擴散（diffusion）解析解（如菲克第二定律 Fick's second law）入面成日出現 e^(−x²/(4Dt)) 呢類指數函數，而誤差函數 erf 本身就係指數函數嘅積分；封裝 Cu/Sn 生 IMC、摻雜原子由表面擴散入內都靠呢類指數型解。本節 ∫e^(kx)dx=(1/k)e^(kx)+C 係呢一切嘅最基本積木，亦同 S90 阿瑞尼士 D=D₀·exp(−Q/RT) 同族",
+  "checkpoints": [
+    { "id": "c1", "text": "講得出 e^x 嘅核心性質：微分返自己、積分都返自己，所以 ∫eˣdx=eˣ+C（記得補積分常數 C）" },
+    { "id": "c2", "text": "識用主公式 ∫e^(kx)dx=(1/k)e^(kx)+C，並講得出『前面除返個 k』係因為微分時鏈式法則掉出個 k，積分要除返抵消" },
+    { "id": "c3", "text": "畀 ∫e^(3x)dx 或 ∫e^(−2x)dx 即算得返 (1/3)e^(3x)+C、−(1/2)e^(−2x)+C（連負號一齊除）" },
+    { "id": "c4", "text": "識把常數係數提出（∫6e^(3x)dx=2e^(3x)+C）並逐項做和差積分，每項各除各嘅 k，最後只補一個 C" },
+    { "id": "c5", "text": "識做定積分版：先揾反導數再代上限減下限（∫_0^1 eˣdx=e−1），記得 e^0=1、定積分唔使寫 C" },
+    { "id": "c6", "text": "養成『微返答案核對』習慣：微 (1/k)e^(kx) 應得返 e^(kx)，對得返被積函數即答案啱" }
+  ],
+  "resources": [
+    { "type": "link", "label": "（選看）Paul's Online Math Notes：Computing Indefinite Integrals（含指數）", "url": "https://tutorial.math.lamar.edu/Classes/CalcI/IndefiniteIntegrals.aspx" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "∫eˣ dx 等於下面邊一個？",
+      "options": [
+        "eˣ + C",
+        "x·eˣ + C",
+        "(1/x)·eˣ + C",
+        "e^(x+1) + C"
+      ],
+      "answer": 0,
+      "explain": "eˣ 係唯一一個積分返自己嘅函數：∫eˣdx=eˣ+C。常見錯選 x·eˣ：把指數函數當成冪函數去「次方加一」就會錯——指數函數 x 喺指數位，唔跟冪函數規矩。記得補返積分常數 C。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "∫e^(2x) dx = e^(2x) + C（即係前面唔使乘任何嘢）。",
+      "answer": false,
+      "explain": "錯。正解係 (1/2)e^(2x)+C，前面要除返個 2。因為微分 e^(2x) 時鏈式法則會掉出個 2（變 2e^(2x)），積分係逆操作就要除返呢個 2 先抵消得返。口訣：指數入面 x 前面係幾，積分就喺前面除幾。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "做 ∫a·e^(kx) dx 時，前面個常數係數 a 之後，仲要對個 k 做咩運算？",
+      "options": [
+        "除返個 k（變 a/k）",
+        "乘個 k（變 a·k）",
+        "唔使理 k，前面照舊係 a",
+        "把 a 同 k 相加（變 a+k）"
+      ],
+      "answer": 0,
+      "explain": "正解係除返個 k：∫a·e^(kx)dx=(a/k)e^(kx)+C。因為微分 e^(kx) 時鏈式法則會掉出個 k，積分係逆操作就要除返呢個 k 抵消。常見錯揀『乘 k』：把『除』做成『乘』，方向掉轉；常見錯揀『唔使理 k』：漏咗除返個 k。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "∫₀¹ eˣ dx，反導數係 eˣ，代上下限得 e¹ − e⁰。已知 e¹ = e、e⁰ = 1，呢個結果係下面邊一個？",
+      "options": [
+        "e − 1",
+        "e",
+        "1 − e",
+        "e + 1"
+      ],
+      "answer": 0,
+      "explain": "反導數係 eˣ，套牛頓–萊布尼茲：[eˣ]₀¹ = e¹ − e⁰ = e − 1（上限減下限）。常見錯選 1−e：把上下限掉轉；常見錯選 e：當咗 e^0=0（其實 e^0=1）。定積分唔使寫 +C，因為相減時抵消。"
+    }
+  ],
+  "chatPracticeHints": [
+    "∫e^(kx) 漏除個 k",
+    "負指數漏咗連負號除",
+    "定積分當 e⁰=0"
+  ]
+}
