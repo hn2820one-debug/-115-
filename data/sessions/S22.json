@@ -1,0 +1,114 @@
+{
+  "id": "S22",
+  "stage": 1,
+  "week": 2,
+  "order": 22,
+  "title": "反導數概念",
+  "titleEn": "Antiderivatives",
+  "platform": "junyi",
+  "objective": "由概念變到識手計反導數（antiderivative）：明白 F 係 f 嘅反導數即 F'(x)=f(x)，搵反導數就係把 S8/S9 求導法則倒返轉行；掌握核心冪法則反導數 ∫xⁿdx = x^(n+1)/(n+1)+C（n≠−1，口訣『次方加一、除返加一』），會用常數倍同逐項規則把多項式拆開逐項做，背實 ∫eˣdx=eˣ+C 同 ∫(1/x)dx=ln|x|+C 兩條特殊式；徹底理解 +C（積分常數）係因為微分時常數唔見咗、由導數倒返冇法定，所以反導數係一整族；識用一個條件釘死 C 由通解寫返特解，為 S23 定積分（先搵反導數再代上下限相減）同之後熱力學 Cp 對 T 積分打底",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S21",
+    "S8",
+    "S9"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S22 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: calculation｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n呢節要把<span class=\"term-zh\">反導數</span>（<span class=\"term-en\">antiderivative</span>）由「概念」變成「你隻手識計」。一句講晒：**反導數就係微分嘅逆運算——畀你一個導數 $f(x)$，問返「邊個函數微分之後會變成 $f(x)$」，嗰個函數就叫 $f(x)$ 嘅反導數 $F(x)$。** 計反導數冇乜神秘，就係**把 $S8$ 學嗰啲求導法則「倒返轉行」**：求導會把次方降低、乘落嚟；反導數就反過嚟——次方升高、除返落去。本節會把<span class=\"term-zh\">冪次</span>（<span class=\"term-en\">power</span>）、$e^x$、$\\dfrac{1}{x}$ 嘅基本反導數逐條推到滴水不漏，再把全部材料科學會撞到嘅「$+C$ 點解一定要寫」講透，最後畀你五題由淺到深嘅完整計算同 L1–L5 診斷。睇完呢節，你應該攞起一條 $f(x)$ 就即刻寫得返 $F(x)+C$。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：$S21$（<span class=\"term-zh\">積分</span>（<span class=\"term-en\">integration</span>）＝累積／曲線下面積，同微分互為逆運算）、$S8$（<span class=\"term-zh\">基本求導法則</span>（<span class=\"term-en\">differentiation rules</span>），尤其<span class=\"term-zh\">冪法則</span>（<span class=\"term-en\">power rule</span>）$\\frac{d}{dx}x^n = n\\,x^{n-1}$）同 $S9$（$\\frac{d}{dx}e^x = e^x$、$\\frac{d}{dx}\\ln x = \\frac{1}{x}$ 等基本函數導數）。\n- **新內容同已學嘅關係**：$S21$ 畀咗你「積分同微分係相反」嘅**直覺**；本節係把呢個相反**真正計出嚟**——反導數就係「行返轉頭嘅微分」。你 $S8$／$S9$ 求導每一條公式，今次都要**倒返轉讀一次**。\n- **本節係邊節嘅地基**：本節係 $S23$（<span class=\"term-zh\">定積分</span>（<span class=\"term-en\">definite integral</span>））同 $S24$（定積分練習）嘅直接前置——定積分嘅計法（<span class=\"term-zh\">微積分基本定理</span>（<span class=\"term-en\">Fundamental Theorem of Calculus</span>）：先搵反導數 $F(x)$，再代上下限相減 $F(b)-F(a)$）完全建喺反導數之上。再遠啲，研究所固態熱力學「由 $C_p$ 對 $T$ 積分求<span class=\"term-zh\">焓變</span>（<span class=\"term-en\">enthalpy change</span>）」、擴散「由<span class=\"term-zh\">通量</span>（<span class=\"term-en\">flux</span>）積返總量」，計嘅第一步都係搵反導數。\n- **如果未掌握就先補**：如果你而家寫唔出 $\\frac{d}{dx}x^3 = 3x^2$、$\\frac{d}{dx}e^x = e^x$、$\\frac{d}{dx}\\ln x = \\frac{1}{x}$，請先返去 $S8$、$S9$ 重溫求導，因為反導數就係佢哋嘅倒影；若連「積分同微分相反」都仲蒙，先補返 $S21$。\n\n---\n\n## 三、先講白話：反導數就係「微分嘅倒帶」\n\n想像微分係一部攪拌機：你放一條函數 $F(x)$ 入去，撳掣（微分），出嚟係佢嘅導數 $f(x)$。**反導數就係問你：「如果出嚟係 $f(x)$，咁當初放咗咩入去？」** 即係把攪拌機**倒帶**，由結果估返原料。\n\n舉個最簡單嘅例：$\\dfrac{d}{dx}(x^2) = 2x$。咁「$2x$ 嘅反導數」就係問：「邊個函數微分後變 $2x$？」——答案就係 $x^2$（因為 $x^2$ 微分啱啱好得 $2x$）。\n\n但呢度有個關鍵陷阱：**$x^2$ 微分得 $2x$，但 $x^2+1$、$x^2+7$、$x^2-100$ 微分**都係 $2x$**——因為常數微分變 $0$，唔見咗。** 所以「$2x$ 嘅反導數」唔止一個，而係**一整族**只差一個常數嘅函數。為咗誠實把呢個「微分時唔見咗、倒返轉冇法知道嘅常數」表達出嚟，我哋一定要喺答案後面加一個<span class=\"term-zh\">積分常數</span>（<span class=\"term-en\">constant of integration</span>）$+C$。呢個 $+C$ 唔係裝飾，係**反導數本質上嘅不確定性**——呢點本節會反覆強調。\n\n> 一句記住：**微分係「由原料整出成品」（一對一）；反導數係「由成品估返原料」（會差個唔知道嘅常數 $C$）。** 所以反導數永遠帶 $+C$。\n\n---\n\n## 四、正式定義：$F$ 係 $f$ 嘅反導數 ⟺ $F' = f$\n\n畀一條函數 $f(x)$。如果有另一條函數 $F(x)$，佢嘅導數啱啱好等於 $f(x)$，即\n\n$$F'(x) = \\frac{dF}{dx} = f(x),$$\n\n咁就叫 $F(x)$ 做 $f(x)$ 嘅一個<span class=\"term-zh\">反導數</span>（<span class=\"term-en\">antiderivative</span>）。把「搵反導數」呢個動作（連同 $+C$）寫成符號，就係<span class=\"term-zh\">不定積分</span>（<span class=\"term-en\">indefinite integral</span>）：\n\n$$\\int f(x)\\,dx = F(x) + C \\quad\\text{（讀作「}f(x)\\text{ 對 }x\\text{ 嘅不定積分」）}$$\n\n| 符號／概念 | 意思 | 注意 |\n|---|---|---|\n| $f(x)$ | <span class=\"term-zh\">被積函數</span>（<span class=\"term-en\">integrand</span>）／原本嗰個導數 | 你手上有嘅嘢 |\n| $F(x)$ | $f$ 嘅一個反導數 | 滿足 $F'(x)=f(x)$ |\n| $\\displaystyle\\int \\cdots\\, dx$ | <span class=\"term-zh\">不定積分符號</span>（<span class=\"term-en\">indefinite integral</span>） | 同 $S21$ 嘅 $\\int_a^b$ 唔同——**冇上下限**，結果係一條函數唔係一個數 |\n| $+C$ | <span class=\"term-zh\">積分常數</span>（<span class=\"term-en\">constant of integration</span>） | **唔可以漏**；代表微分時唔見咗嘅常數 |\n\n**「不定」同「定」要分清**：$S21$ 嗰個 $\\int_a^b f(x)\\,dx$ 有上下限、結果係**一個數**（面積）；本節 $\\int f(x)\\,dx$ **冇**上下限、結果係**一條函數**（$F(x)+C$）。兩者個符號似，但一個答數、一個答函數。$S23$ 會用反導數把兩者駁返埋。\n\n---\n\n## 五、主公式：冪法則反導數（<span class=\"term-zh\">冪法則</span>（<span class=\"term-en\">power rule</span>）倒返轉）\n\n材料計算入面最常撞到嘅，就係<span class=\"term-zh\">冪次</span>（<span class=\"term-en\">power</span>）型 $x^n$ 嘅反導數。本節最核心一條式如下（$n\\ne -1$）：\n\n$$\\boxed{\\,\\int x^{n}\\,dx = \\frac{x^{\\,n+1}}{n+1} + C \\quad (n \\ne -1)\\,} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明／限制 |\n|---|---|---|\n| $x$ | 自變數 | — |\n| $n$ | 次方（指數） | 可以係正整數、負數、分數；**唯獨 $n=-1$ 唔啱用**（分母會變 $0$，嗰個情況用式(3)） |\n| $x^{n+1}$ | 次方升高一級後嘅 $x$ | 「升次方」係冪法則求導「降次方」嘅倒返轉 |\n| $n+1$ | 新指數，做埋分母 | 「除返個新指數」抵消求導時乘落嚟嘅倍數 |\n| $C$ | <span class=\"term-zh\">積分常數</span>（<span class=\"term-en\">constant of integration</span>） | 必寫 |\n\n**點樣由求導冪法則「倒返轉」推出式(1)**——逐行做，每行只做一件事：\n\n$$\\frac{d}{dx}\\,x^{m} = m\\,x^{\\,m-1} \\quad\\text{（}S8\\text{ 求導冪法則：指數 }m\\text{ 乘落嚟，次方減 1）}$$\n\n$$\\text{令 } m = n+1 \\quad\\text{（我哋想最後個被積函數係 }x^n\\text{，所以倒返推原本指數係 }n+1\\text{）}$$\n\n$$\\frac{d}{dx}\\,x^{\\,n+1} = (n+1)\\,x^{\\,n} \\quad\\text{（把 }m=n+1\\text{ 代入上面求導式）}$$\n\n$$\\frac{d}{dx}\\left[\\frac{x^{\\,n+1}}{n+1}\\right] = \\frac{(n+1)\\,x^{\\,n}}{n+1} \\quad\\text{（兩邊同除常數 }n+1\\text{；右邊把 }n+1\\text{ 提去分母）}$$\n\n$$\\frac{d}{dx}\\left[\\frac{x^{\\,n+1}}{n+1}\\right] = x^{\\,n} \\quad\\text{（右邊分子分母個 }n+1\\text{ 約走）}$$\n\n$$\\therefore\\ \\int x^{n}\\,dx = \\frac{x^{\\,n+1}}{n+1} + C \\quad\\text{（既然 }\\tfrac{x^{n+1}}{n+1}\\text{ 微分得 }x^n\\text{，佢就係 }x^n\\text{ 嘅反導數；加 }C\\text{ 補返唔見嗰常數）}$$\n\n> **點記呢條式（口訣）**：「**次方加一、除返加一**」——指數 $n$ 升做 $n+1$，再除以個新指數 $n+1$。正好同求導「次方乘落、減一」鏡像。**$n=-1$ 例外**係因為若 $n=-1$，$n+1=0$，分母變 $0$ 唔成立——嗰個 $\\int x^{-1}dx = \\int\\frac{1}{x}dx$ 要用式(3) 嘅 $\\ln$。\n\n---\n\n## 六、衍生規則：常數倍、加減、逐項（把積分拆開嚟做）\n\n實際題目好少淨係一個 $x^n$，多數係幾項加埋、前面仲有系數。下面兩條規則畀你把複雜式拆成一柞式(1)：\n\n$$\\int k\\,f(x)\\,dx = k\\int f(x)\\,dx \\quad\\text{（常數倍可以提出嚟）} \\tag{2a}$$\n\n$$\\int \\big[f(x)\\pm g(x)\\big]\\,dx = \\int f(x)\\,dx \\pm \\int g(x)\\,dx \\quad\\text{（和差可以逐項分開積）} \\tag{2b}$$\n\n**式(2a)(2b) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $k$ | 常數系數 | 例如 $5x^2$ 入面個 $5$；可以提到積分外面 |\n| $f(x),\\ g(x)$ | 任意可積函數 | 例如 $3x^2$ 同 $4x$ |\n| $\\pm$ | 加或減 | 加減先可以逐項拆；**乘／除唔可以咁拆**（要另啲方法） |\n\n把式(2a)(2b) 配埋式(1)，一條多項式就一項一項咁做：\n\n$$\\int\\big(a x^{p} + b x^{q}\\big)\\,dx = a\\cdot\\frac{x^{p+1}}{p+1} + b\\cdot\\frac{x^{q+1}}{q+1} + C \\quad\\text{（逐項套式(1)，系數照帶，最後加一個 }C\\text{）}$$\n\n> **只寫一個 $C$ 就夠**：每項本應各有常數，但一柞常數加埋仍然係一個常數，所以**全條式尾收一個 $C$ 就得**，唔使每項一個。\n\n---\n\n## 七、兩條必背特殊反導數：$e^x$ 同 $\\dfrac{1}{x}$\n\n有兩條材料／熱力學成日撞到、又唔跟冪法則嘅反導數，要當公式背實：\n\n$$\\int e^{x}\\,dx = e^{x} + C \\tag{3a}$$\n\n$$\\int \\frac{1}{x}\\,dx = \\ln|x| + C \\tag{3b}$$\n\n**式(3a)(3b) 符號表**\n\n| 符號 | 意義 | 點解係咁 |\n|---|---|---|\n| $e^{x}$ | <span class=\"term-zh\">自然指數</span>（<span class=\"term-en\">natural exponential</span>） | $S9$：$\\frac{d}{dx}e^x=e^x$，微分後不變，所以反導數都係佢自己 |\n| $\\ln\\lvert x\\rvert$ | <span class=\"term-zh\">自然對數</span>（<span class=\"term-en\">natural logarithm</span>），取絕對值 | $S9$：$\\frac{d}{dx}\\ln x=\\frac{1}{x}$，倒返轉即 $\\frac{1}{x}$ 嘅反導數係 $\\ln$ |\n| $\\lvert x\\rvert$ | 絕對值 | 因為 $\\frac{1}{x}$ 喺 $x<0$ 都有定義，加絕對值令反導數喺負區都啱 |\n\n**點解 $\\dfrac{1}{x}$ 唔可以套式(1)？** 因為 $\\dfrac{1}{x}=x^{-1}$，即 $n=-1$，咁 $n+1=0$，式(1) 分母變 $0$——所以 $n=-1$ 係式(1) 嘅唯一例外，要改用式(3b) 嘅 $\\ln$。呢個正係式(1) 寫住 $(n\\ne -1)$ 嘅原因。\n\n> 驗算口訣：**搵到反導數後，把佢微分返轉頭，睇返唔返到原本嗰個 $f(x)$**。例如 $\\ln|x|$ 微分得 $\\frac{1}{x}$ ✓、$e^x$ 微分得 $e^x$ ✓——返到原樣就啱。呢個「微分驗算」係本節最值錢嘅自我檢查手段。\n\n---\n\n## 八、睇圖：同一個導數，一整族反導數（$+C$ 點解係一疊平行曲線）\n\n$+C$ 喺幾何上係咩？下面把 $f(x)=2x$ 嘅幾個反導數 $x^2+C$ 畫出嚟（$C=0,1,2$）。留意佢哋係**一疊上下平移嘅曲線**，喺**同一個 $x$ 度斜率（切線）完全一樣**——因為佢哋微分（求斜率）全部都係 $2x$：\n\n<svg viewBox=\"0 0 420 260\" width=\"100%\" style=\"max-width:420px;display:block;margin:0 auto;background:transparent;\">\n  <!-- 軸 -->\n  <line x1=\"50\" y1=\"230\" x2=\"400\" y2=\"230\" stroke=\"#64748b\" stroke-width=\"1.5\"/>\n  <line x1=\"210\" y1=\"245\" x2=\"210\" y2=\"20\" stroke=\"#64748b\" stroke-width=\"1.5\"/>\n  <text x=\"392\" y=\"248\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">x</text>\n  <text x=\"218\" y=\"30\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">y</text>\n  <!-- 三條平行拋物線 y=x^2+C，C=2(上) / 1 / 0(下)；以 (210,230) 為原點，1 單位≈55px(x)、20px(y) -->\n  <path d=\"M70 150 Q210 70 350 150\" fill=\"none\" stroke=\"#4a9eff\" stroke-width=\"2\"/>\n  <path d=\"M70 170 Q210 90 350 170\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"2\"/>\n  <path d=\"M70 190 Q210 110 350 190\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"2.2\"/>\n  <!-- 標籤 -->\n  <text x=\"356\" y=\"150\" fill=\"#4a9eff\" font-size=\"12\" font-family=\"sans-serif\">x²+2</text>\n  <text x=\"356\" y=\"170\" fill=\"#2dd4bf\" font-size=\"12\" font-family=\"sans-serif\">x²+1</text>\n  <text x=\"356\" y=\"190\" fill=\"#f06060\" font-size=\"12\" font-family=\"sans-serif\">x²+0</text>\n  <!-- 同一 x 處平行切線（示意：x≈1 處三條曲線斜率相同） -->\n  <line x1=\"240\" y1=\"78\" x2=\"300\" y2=\"58\" stroke=\"#f5c842\" stroke-width=\"1.3\" stroke-dasharray=\"4 3\"/>\n  <line x1=\"240\" y1=\"98\" x2=\"300\" y2=\"78\" stroke=\"#f5c842\" stroke-width=\"1.3\" stroke-dasharray=\"4 3\"/>\n  <line x1=\"240\" y1=\"118\" x2=\"300\" y2=\"98\" stroke=\"#f5c842\" stroke-width=\"1.3\" stroke-dasharray=\"4 3\"/>\n  <text x=\"250\" y=\"50\" fill=\"#f5c842\" font-size=\"11\" font-family=\"sans-serif\">同一 x 斜率相同 = 2x</text>\n  <text x=\"210\" y=\"258\" text-anchor=\"middle\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\">微分（求斜率）三條都係 2x → 反導數唔止一條，差個 C</text>\n</svg>\n\n**讀圖導引（呢張圖點睇）**\n\n① **橫軸（$x$ 軸）**：自變數 $x$（無單位，純數學示意）。\n② **縱軸（$y$ 軸）**：函數值 $y=F(x)=x^2+C$。\n③ **每個關鍵特徵代表咩**：三條同色嘅拋物線分別係 $C=0$（紅）、$C=1$（青）、$C=2$（藍），佢哋形狀一模一樣，只係**整條上下平移**；黃色虛線係喺同一個 $x$ 度畫嘅切線——三條切線**互相平行**，即斜率相同，因為三條曲線微分都係 $2x$。\n④ **最容易睇錯嘅地方**：唔好以為「$2x$ 嘅反導數就係 $x^2$ 一條」——係**一整族** $x^2+C$，圖中只畫咗三條，實情有無限多條（$C$ 任意）。正因為由 $2x$ 倒返去冇辦法知道嗰條曲線上下擺喺邊（即 $C$ 係幾多），所以**反導數一定要寫 $+C$**。要釘死 $C$，就要再畀多一個條件（例如「過某點」），呢個 $S23$ 同之後熱力學積分會用到。\n\n---\n\n## 九、Worked Examples（由易到難，逐步、每個數字標來源）\n\n> 反導數每做一題，**最後都用「微分驗算」核返**：把你個答案微分，睇返唔返到題目原本嗰個 $f(x)$。返到＝啱。\n\n### 例 1（易・線性／常數內層）：$\\displaystyle\\int 6x\\,dx$\n\n**第 1 步：把系數提出（式(2a)）**\n\n$$\\int 6x\\,dx = 6\\int x\\,dx \\quad\\text{（常數 }6\\text{ 提到積分外，式(2a)）}$$\n\n**第 2 步：對 $x = x^1$ 套式(1)（$n=1$）**\n\n$$\\int x\\,dx = \\frac{x^{1+1}}{1+1} = \\frac{x^{2}}{2} \\quad\\text{（「次方加一除返加一」：}n=1\\to\\frac{x^2}{2}\\text{，式(1)）}$$\n\n**第 3 步：乘返個系數、加 $C$**\n\n$$\\int 6x\\,dx = 6\\cdot\\frac{x^{2}}{2} + C = 3x^{2} + C \\quad\\text{（}6\\div 2=3\\text{；加積分常數）}$$\n\n> **答案：$3x^2 + C$。** 驗算：$\\frac{d}{dx}(3x^2+C)=6x$ ✓（返到原本嘅 $6x$）。\n\n### 例 2（中・二次內層＋逐項）：$\\displaystyle\\int \\big(3x^{2} + 4x - 5\\big)\\,dx$\n\n**第 1 步：逐項拆開（式(2b)）**\n\n$$\\int(3x^2+4x-5)\\,dx = \\int 3x^2\\,dx + \\int 4x\\,dx - \\int 5\\,dx \\quad\\text{（和差逐項分開，式(2b)）}$$\n\n**第 2 步：第一項 $\\int 3x^2\\,dx$（$n=2$）**\n\n$$\\int 3x^2\\,dx = 3\\cdot\\frac{x^{3}}{3} = x^{3} \\quad\\text{（系數提出後套式(1)：}n=2\\to\\frac{x^3}{3}\\text{，再 }3\\div3=1\\text{）}$$\n\n**第 3 步：第二項 $\\int 4x\\,dx$（$n=1$）**\n\n$$\\int 4x\\,dx = 4\\cdot\\frac{x^{2}}{2} = 2x^{2} \\quad\\text{（}n=1\\to\\frac{x^2}{2}\\text{，再 }4\\div2=2\\text{）}$$\n\n**第 4 步：第三項 $\\int 5\\,dx$（常數，即 $5x^0$，$n=0$）**\n\n$$\\int 5\\,dx = 5\\cdot\\frac{x^{1}}{1} = 5x \\quad\\text{（常數 }5=5x^0\\text{，}n=0\\to\\frac{x^1}{1}=x\\text{，所以得 }5x\\text{）}$$\n\n**第 5 步：合埋、加一個 $C$**\n\n$$\\int(3x^2+4x-5)\\,dx = x^{3} + 2x^{2} - 5x + C \\quad\\text{（三項合埋，全式收一個 }C\\text{）}$$\n\n> **答案：$x^3 + 2x^2 - 5x + C$。** 驗算：$\\frac{d}{dx}(x^3+2x^2-5x+C)=3x^2+4x-5$ ✓。**留意「常數 $5$ 嘅反導數係 $5x$」**——好多人會誤寫成 $5$，記住常數係 $5x^0$，反導數要升次方變 $5x$。\n\n### 例 3（較複雜・根號／負次方內層）：$\\displaystyle\\int\\Big(\\sqrt{x} + \\frac{1}{x^{2}}\\Big)\\,dx$\n\n**第 1 步：把根號同分式改寫成 $x^n$（先化成冪次先做得到式(1)）**\n\n$$\\sqrt{x} = x^{1/2},\\qquad \\frac{1}{x^{2}} = x^{-2} \\quad\\text{（根號＝}\\tfrac12\\text{ 次方；分母搬上去變負次方）}$$\n\n**第 2 步：第一項 $\\int x^{1/2}\\,dx$（$n=\\tfrac12$）**\n\n$$\\int x^{1/2}\\,dx = \\frac{x^{1/2+1}}{1/2+1} = \\frac{x^{3/2}}{3/2} = \\frac{2}{3}x^{3/2} \\quad\\text{（}n=\\tfrac12\\to n+1=\\tfrac32\\text{；除以 }\\tfrac32\\text{＝乘 }\\tfrac23\\text{，式(1)）}$$\n\n**第 3 步：第二項 $\\int x^{-2}\\,dx$（$n=-2$，注意 $\\ne -1$，可用式(1)）**\n\n$$\\int x^{-2}\\,dx = \\frac{x^{-2+1}}{-2+1} = \\frac{x^{-1}}{-1} = -x^{-1} = -\\frac{1}{x} \\quad\\text{（}n=-2\\to n+1=-1\\text{；除以 }-1\\text{，再寫返做 }-\\tfrac1x\\text{）}$$\n\n**第 4 步：合埋、加 $C$**\n\n$$\\int\\Big(\\sqrt{x}+\\frac{1}{x^2}\\Big)\\,dx = \\frac{2}{3}x^{3/2} - \\frac{1}{x} + C \\quad\\text{（兩項合埋，加積分常數）}$$\n\n> **答案：$\\dfrac{2}{3}x^{3/2} - \\dfrac{1}{x} + C$。** 驗算：$\\frac{d}{dx}\\big(\\frac23 x^{3/2}\\big)=\\frac23\\cdot\\frac32 x^{1/2}=x^{1/2}=\\sqrt{x}$ ✓；$\\frac{d}{dx}(-x^{-1})=x^{-2}=\\frac{1}{x^2}$ ✓。**陷阱**：$x^{-2}$ 個 $n=-2$，$n+1=-1\\ne 0$，所以仍然用式(1)；**唯獨 $x^{-1}$（即 $\\frac1x$）先要用 $\\ln$。**\n\n### 例 4（混合・含 $e^x$、$\\frac1x$、$+C$ 釘死）：$\\displaystyle\\int\\Big(2e^{x} + \\frac{3}{x}\\Big)\\,dx$，並用條件 $F(1)=2e$ 求埋個 $C$\n\n**第 1 步：逐項拆開、系數提出（式(2a)(2b)）**\n\n$$\\int\\Big(2e^x+\\frac{3}{x}\\Big)\\,dx = 2\\int e^x\\,dx + 3\\int\\frac{1}{x}\\,dx \\quad\\text{（逐項分開、系數提出）}$$\n\n**第 2 步：兩項各套式(3a)、式(3b)**\n\n$$2\\int e^x\\,dx = 2e^x \\quad\\text{（式(3a)：}\\int e^x dx=e^x\\text{）}$$\n\n$$3\\int\\frac{1}{x}\\,dx = 3\\ln|x| \\quad\\text{（式(3b)：}\\int\\tfrac1x dx=\\ln|x|\\text{）}$$\n\n**第 3 步：合埋、加 $C$（先寫通解）**\n\n$$F(x) = 2e^{x} + 3\\ln|x| + C \\quad\\text{（兩項合埋，加積分常數——呢個係一整族）}$$\n\n**第 4 步：用條件 $F(1)=2e$ 釘死個 $C$**\n\n$$F(1) = 2e^{1} + 3\\ln|1| + C = 2e + 3\\cdot 0 + C \\quad\\text{（代 }x=1\\text{；}\\ln 1 = 0\\text{）}$$\n\n$$2e + C = 2e \\quad\\text{（題目給定 }F(1)=2e\\text{，令兩邊相等）}$$\n\n$$C = 0 \\quad\\text{（兩邊減 }2e\\text{）}$$\n\n**第 5 步：寫返釘死咗 $C$ 嘅特解**\n\n$$F(x) = 2e^{x} + 3\\ln|x| \\quad\\text{（把 }C=0\\text{ 代返通解）}$$\n\n> **答案：通解 $F(x)=2e^x+3\\ln|x|+C$；加條件 $F(1)=2e$ 後 $C=0$，特解 $F(x)=2e^x+3\\ln|x|$。** 呢題示範咗本節最完整嘅一條 workflow：**逐項拆 → 套基本反導數 → 帶 $+C$ 寫通解 → 用一個條件解返 $C$ → 寫特解**。驗算通解：$\\frac{d}{dx}(2e^x+3\\ln|x|+C)=2e^x+\\frac3x$ ✓。**$S23$ 同之後熱力學「由 $C_p$ 積分＋邊界條件定積分常數」用嘅就係呢套。**\n\n---\n\n## 十、易混淆對比：唔好把呢幾件事撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| 反導數可以唔寫 $+C$？ | **唔可以**。$F(x)$ 同 $F(x)+7$ 微分都係同一個 $f(x)$，反導數係一整族；漏咗 $+C$ ＝漏咗無限多個答案。（**定積分**因為上下限相減時 $C$ 互相抵消，先唔使寫——嗰個 $S23$ 講。） |\n| $\\int x^n dx$ 對所有 $n$ 都用式(1)？ | **唯獨 $n=-1$ 例外**。$n=-1$ 時 $n+1=0$，分母變 $0$；$\\int x^{-1}dx=\\int\\frac1x dx=\\ln\\lvert x\\rvert+C$。其餘 $n$（包括 $-2,-3,\\tfrac12$ 等）照用式(1)。 |\n| 常數 $5$ 嘅反導數係 $5$？ | **係 $5x$**。常數 $5=5x^0$，套式(1)：$n=0\\to\\frac{x^1}{1}=x$，所以 $\\int 5\\,dx = 5x+C$。 |\n| 求導同反導數方向一樣？ | **啱啱相反**。求導：次方乘落、減一（$x^n\\to nx^{n-1}$）；反導數：次方加一、除返加一（$x^n\\to\\frac{x^{n+1}}{n+1}$）。一個降次、一個升次。 |\n| $\\int (f\\cdot g)\\,dx = \\int f\\,dx\\cdot\\int g\\,dx$？ | **錯**。積分**冇**乘積／商可以咁拆嘅規則（式(2) 只對**常數倍同加減**成立）；乘積要另啲方法（之後課程先學），本節題目都係加減型。 |\n| 不定積分同定積分一樣？ | **唔同**。不定積分 $\\int f\\,dx=F(x)+C$ 結果係**函數**（帶 $C$）；定積分 $\\int_a^b f\\,dx=F(b)-F(a)$ 結果係**一個數**（冇 $C$）。 |\n\n---\n\n## 十一、一頁總表\n\n| 項目 | 公式／結果 | 備注 |\n|:--|:--|:--|\n| 反導數定義 | $F'(x)=f(x)\\iff\\displaystyle\\int f(x)\\,dx=F(x)+C$ | 反導數＝微分嘅逆；必帶 $+C$ |\n| **冪法則反導數（主公式）** | $\\displaystyle\\int x^{n}\\,dx=\\frac{x^{n+1}}{n+1}+C\\ (n\\ne-1)$ | 式(1)：次方加一、除返加一 |\n| 常數倍 | $\\displaystyle\\int k\\,f\\,dx=k\\!\\int f\\,dx$ | 式(2a)：系數提出 |\n| 和差逐項 | $\\displaystyle\\int(f\\pm g)\\,dx=\\!\\int f\\,dx\\pm\\!\\int g\\,dx$ | 式(2b)：只對加減，**乘除唔得** |\n| 指數 | $\\displaystyle\\int e^{x}\\,dx=e^{x}+C$ | 式(3a)：微分後不變 |\n| 倒數（$n=-1$ 例外） | $\\displaystyle\\int \\frac{1}{x}\\,dx=\\ln\\lvert x\\rvert+C$ | 式(3b)：取絕對值 |\n| 常數函數 | $\\displaystyle\\int k\\,dx=kx+C$ | 由式(1) 取 $n=0$ 得 |\n| 釘死 $C$ | 給一個條件 $F(x_0)=y_0$，代入解 $C$ | 通解 → 特解（例 4） |\n| 驗算 | 把答案微分，睇返唔返到 $f(x)$ | 本節最佳自檢 |\n\n---\n\n## 十二、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1：$F(x)$ 係 $f(x)$ 嘅反導數，即係話？(a) $F(x)=f(x)$　(b) $F'(x)=f(x)$　(c) $f'(x)=F(x)$　(d) $F(x)\\cdot f(x)=1$\n- D2：以下邊樣係反導數答案**一定唔可以漏**嘅？(a) 上下限　(b) 積分常數 $+C$　(c) 絕對值符號　(d) 等號\n\n**L2 概念理解**\n- D3：$\\int 2x\\,dx$ 點解要寫 $+C$？(a) 為咗好睇　(b) 因為 $x^2$、$x^2+1$、$x^2+3$ 微分都係 $2x$，差個常數冇法由 $2x$ 倒返知道　(c) 因為 $C$ 一定等於 $0$　(d) 規定要寫，冇原因\n- D4：求導同反導數對 $x^n$ 嘅次方操作方向係？(a) 兩個都升次方　(b) 兩個都降次方　(c) 求導降次（$\\times n$、$-1$），反導數升次（$+1$、$\\div$）　(d) 冇分別\n\n**L3 單步應用**\n- D5：$\\int x^{3}\\,dx = ?$ (a) $3x^{2}+C$　(b) $\\frac{x^{4}}{4}+C$　(c) $x^{4}+C$　(d) $\\frac{x^{2}}{2}+C$\n- D6：$\\int \\frac{1}{x}\\,dx = ?$ (a) $\\frac{x^{0}}{0}+C$　(b) $-\\frac{1}{x^{2}}+C$　(c) $\\ln|x|+C$　(d) $1+C$\n\n**L4 多步（逐項／特殊）**\n- D7：$\\int(4x^{3}-2x+7)\\,dx = ?$ (a) $x^{4}-x^{2}+7x+C$　(b) $12x^{2}-2+C$　(c) $4x^{4}-2x^{2}+7+C$　(d) $x^{4}-x^{2}+7+C$\n- D8：$\\int(e^{x}+\\frac{2}{x})\\,dx = ?$ (a) $e^{x}+2\\ln|x|+C$　(b) $e^{x}+\\frac{2}{x^{2}}+C$　(c) $\\frac{e^{x}}{x}+C$　(d) $e^{x}+2x+C$\n\n**L5 綜合應用**\n- D9：已知 $F(x)$ 係 $f(x)=3x^{2}$ 嘅反導數，且 $F(0)=5$。$F(x)=?$ (a) $x^{3}$　(b) $x^{3}+5$　(c) $6x+5$　(d) $x^{3}+C$\n- D10：「$\\int x^{-2}\\,dx$ 同 $\\int x^{-1}\\,dx$ 都唔可以用冪法則式(1)」——啱定錯？(a) 啱，兩個都係負次方都唔得　(b) 錯，$x^{-2}$（$n=-2$，$n+1=-1\\ne0$）可用式(1) 得 $-\\frac1x+C$；只有 $x^{-1}$（$n=-1$）要用 $\\ln$　(c) 啱，負次方一律用 $\\ln$　(d) 兩個都用 $e^x$\n\n**診斷答案**：D1 b｜D2 b｜D3 b｜D4 c｜D5 b｜D6 c｜D7 a｜D8 a｜D9 b｜D10 b\n\n> 卡喺 L1–L2 → 重睇第四節（反導數定義）同第三、八節（$+C$ 點解一定要寫）；卡喺 L3 → 重睇第五節式(1)「次方加一除返加一」同第七節 $e^x$／$\\frac1x$；卡喺 L4 → 重睇第六節逐項規則同例 2、例 3；卡喺 L5 → 重睇例 4（用條件釘死 $C$）同第十節易混淆（$n=-1$ 例外）。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出反導數定義：F 係 f 嘅反導數即 F'(x)=f(x)；搵反導數＝把求導倒返轉行，並識用『微分驗算』（把答案微分睇返唔返到 f）核對"
+    },
+    {
+      "id": "c2",
+      "text": "默寫得出主公式 ∫xⁿdx = x^(n+1)/(n+1)+C（n≠−1），並講得出口訣『次方加一、除返加一』同求導『次方乘落、減一』係鏡像"
+    },
+    {
+      "id": "c3",
+      "text": "識把多項式逐項做：常數倍提出（∫kf=k∫f）、加減逐項拆（∫(f±g)=∫f±∫g），並知道常數 5 嘅反導數係 5x（5=5x⁰）"
+    },
+    {
+      "id": "c4",
+      "text": "背實兩條特殊反導數 ∫eˣdx=eˣ+C、∫(1/x)dx=ln|x|+C，並講得出 1/x（n=−1）點解係式(1) 嘅唯一例外（n+1=0 分母為零）"
+    },
+    {
+      "id": "c5",
+      "text": "解釋得到 +C 嘅意義：因為微分時常數變 0 唔見咗，由導數倒返冇法知 C，所以反導數係一整族（圖上＝一疊平行平移曲線、同 x 處斜率相同），漏 +C 即漏無限多答案"
+    },
+    {
+      "id": "c6",
+      "text": "識做完整流程：逐項拆 → 套基本反導數 → 帶 +C 寫通解 → 用一個條件 F(x₀)=y₀ 解返 C → 寫特解（例：F(1)=2e 解到 C=0）"
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "label": "（選看）Khan Academy：Antiderivatives and indefinite integrals",
+      "url": "https://www.khanacademy.org/math/ap-calculus-ab/ab-integration-new"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "「F(x) 係 f(x) 嘅反導數」呢句話，準確意思係咩？",
+      "options": [
+        "F(x) = f(x)，兩條函數一樣",
+        "F'(x) = f(x)，即 F 微分之後得返 f",
+        "f'(x) = F(x)，即 f 微分得 F",
+        "F(x) × f(x) = 1"
+      ],
+      "answer": 1,
+      "explain": "啱。反導數嘅定義就係 F'(x)=f(x)——F 微分之後啱啱好變返 f。換句話，搵反導數就係把微分倒返轉行。常見錯選『f 微分得 F』係把方向搞反咗：係 F 微分得 f，唔係 f 微分得 F。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "因為 x²、x²+1、x²+7 微分之後全部都係 2x，所以由 2x 倒返去冇辦法知道原本嗰個常數係幾多，故此 ∫2x dx 一定要寫成 x²+C。",
+      "answer": true,
+      "explain": "啱。常數微分會變 0 唔見咗，所以一整族 x²+C 微分都係 2x；由 2x 倒返冇法定 C，要誠實寫 +C 表達呢個不確定性。漏咗 +C 就等於漏咗無限多個答案。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "冪法則反導數 ∫xⁿdx（n≠−1）嘅口訣係邊一句？",
+      "options": [
+        "次方乘落、減一",
+        "次方加一、除返加一",
+        "次方不變、乘以 n",
+        "次方加一、乘返加一"
+      ],
+      "answer": 1,
+      "explain": "啱。冪法則反導數 ∫xⁿdx=x^(n+1)/(n+1)+C，即指數先加一變 n+1，再除以呢個新指數 n+1，所以口訣係『次方加一、除返加一』。『次方乘落、減一』係求導（方向啱啱相反）；『乘返加一』係把『除』睇錯做『乘』。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "∫(1/x) dx 等於？（提示：1/x 即 x⁻¹，n=−1）",
+      "options": [
+        "x⁰/0 + C",
+        "ln|x| + C",
+        "−1/x² + C",
+        "1 + C"
+      ],
+      "answer": 1,
+      "explain": "啱。1/x 即 n=−1，n+1=0 會令冪法則分母變零，所以唔可以用 ∫xⁿdx 嗰條；要用特殊式 ∫(1/x)dx=ln|x|+C（因為 ln|x| 微分得 1/x）。錯選 x⁰/0 正正暴露咗 n=−1 用唔到冪法則嘅原因。"
+    }
+  ],
+  "chatPracticeHints": [
+    "漏寫積分常數 +C",
+    "常數反導數應係 kx",
+    "n=−1 要用 ln 唔用冪法則"
+  ]
+}

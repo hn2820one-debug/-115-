@@ -12,6 +12,10 @@ const OUT = path.join(__dirname, '..');
 // cognition: concept / calculation / chartread / recall / synthesis
 // extension: life / packaging / research / none
 const DIMS = {
+  // ── Week 2：微積分 — 積分入門（S21–S23）──
+  S21: { week:2, order:21, title:'積分的意義', titleEn:'Meaning of Integration', platform:'3b1b', gradImportance:'important', tier:'core', cognition:'concept', prereq:['S7','S8'], assessWeight:'medium', extension:'life', gradCourse:['general'] },
+  S22: { week:2, order:22, title:'反導數概念', titleEn:'Antiderivatives', platform:'junyi', gradImportance:'important', tier:'core', cognition:'calculation', prereq:['S21','S8','S9'], assessWeight:'medium', extension:'none', gradCourse:['general'] },
+  S23: { week:2, order:23, title:'定積分', titleEn:'Definite Integrals', platform:'junyi', gradImportance:'essential', tier:'core', cognition:'calculation', prereq:['S22','S21'], assessWeight:'medium', extension:'packaging', gradCourse:['general','thermo'] },
   // ── Week 3：基礎化學 — 原子與鍵結 ──
   S33: { week:3, order:33, title:'原子結構（一）', titleEn:'Atomic Structure I', platform:'junyi', gradImportance:'important', tier:'core', cognition:'concept', prereq:[], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   // S33B：優化版 workflow 重生成嘅對照樣本（同 S33 維度，唔上 manifest、唔覆蓋 S33）

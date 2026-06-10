@@ -19,9 +19,9 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S37', title: '金屬鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S39', title: '鍵結與材料性質', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S21', title: '積分的意義', tier: 'core', cognition: 'concept', extension: 'life', platform: '3b1b' },
+  { id: 'S22', title: '反導數概念', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'junyi' },
+  { id: 'S23', title: '定積分', tier: 'core', cognition: 'calculation', extension: 'packaging', platform: 'junyi' },
 ]
 
 const TIERDESC = {
