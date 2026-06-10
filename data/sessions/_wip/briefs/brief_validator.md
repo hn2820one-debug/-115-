@@ -22,6 +22,7 @@
 - 題數：core 3–4、backbone 2、bridge 1、tool 0。
 - quiz 嘅 q/options/explain 用 **unicode 數式**（唔可 `$…$` LaTeX）；出現 LaTeX＝format issue。
 - single answer＝index、truefalse answer＝布林。每題有概念 explain。
+- **App quiz single 題只可係「概念辨認」或「直接讀圖」，唔可要求學生做心算（即使一步，例如要佢計 27−13＝14）**。雙軌制原則：計算全留聊天室。違反＝**critical**，必須 flag 並提供改寫建議（改成純概念問法，例如「N＝A−Z 係邊條」而唔係「計 N」）。
 
 ## Section 6 分層檢查
 **通用**：符號統一無自創｜術語全形雙語｜數據有據｜extension=none 就無延伸｜粵語書面語（非普通話）｜全 LaTeX｜段落順序對｜銜接點有｜一頁總表有。
