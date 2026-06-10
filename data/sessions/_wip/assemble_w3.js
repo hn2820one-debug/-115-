@@ -14,6 +14,8 @@ const OUT = path.join(__dirname, '..');
 const DIMS = {
   // ── Week 3：基礎化學 — 原子與鍵結 ──
   S33: { week:3, order:33, title:'原子結構（一）', titleEn:'Atomic Structure I', platform:'junyi', gradImportance:'important', tier:'core', cognition:'concept', prereq:[], assessWeight:'medium', extension:'none', gradCourse:['general'] },
+  // S33B：優化版 workflow 重生成嘅對照樣本（同 S33 維度，唔上 manifest、唔覆蓋 S33）
+  S33B: { week:3, order:33, title:'原子結構（一）', titleEn:'Atomic Structure I', platform:'junyi', gradImportance:'important', tier:'core', cognition:'concept', prereq:[], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   S34: { week:3, order:34, title:'原子結構（二）：電子組態', titleEn:'Atomic Structure II — Electron Config', platform:'ka', gradImportance:'important', tier:'core', cognition:'concept', prereq:['S33'], assessWeight:'medium', extension:'none', gradCourse:['general'] },
   S35: { week:3, order:35, title:'週期表邏輯', titleEn:'Periodic Table Logic', platform:'ka', gradImportance:'support', tier:'bridge', cognition:'concept', prereq:['S34'], assessWeight:'light', extension:'none', gradCourse:['general'] },
   S36: { week:3, order:36, title:'化學鍵總覽', titleEn:'Chemical Bonding Overview', platform:'junyi', gradImportance:'essential', tier:'core', cognition:'concept', prereq:['S34'], assessWeight:'medium', extension:'life', gradCourse:['general'] },
