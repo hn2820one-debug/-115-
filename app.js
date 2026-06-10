@@ -1795,7 +1795,20 @@ function renderLessonContent(id, session) {
   // here are returned so renderLesson() won't render them again in the bottom section.
   const charts = session.charts || [];
   const consumedCharts = new Set();
-  let html = marked.parse(session.content);
+
+  // Protect math from marked: marked.js (CommonMark) escapes backslash + ASCII
+  // punctuation, so spacing/structure commands inside $…$ / $$…$$ (\, \; \! \\ \%
+  // \{ \} …) get their backslash silently eaten BEFORE KaTeX ever sees them
+  // (e.g. \boxed{\,A=Z+N\,} would render the literal commas ,A=Z+N,). Stash every
+  // math span behind an alphanumeric placeholder marked won't touch, parse the
+  // Markdown, then restore the pristine LaTeX so KaTeX auto-render gets it intact.
+  const mathStore = [];
+  const protectedSrc = session.content.replace(
+    /\$\$[\s\S]*?\$\$|\$[^$\n]+?\$/g,
+    m => `KMATHTOKEN${mathStore.push(m) - 1}KEND`
+  );
+  let html = marked.parse(protectedSrc)
+    .replace(/KMATHTOKEN(\d+)KEND/g, (_m, i) => mathStore[+i]);
   html = html.replace(/(?:<p>\s*)?\[CHART:([A-Za-z0-9_]+)\]\s*(?:<\/p>)?/g, (_m, type) => {
     let idx = -1;
     for (let i = 0; i < charts.length; i++) {
