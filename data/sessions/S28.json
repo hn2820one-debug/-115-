@@ -1,0 +1,66 @@
+{
+  "id": "S28",
+  "stage": 1,
+  "week": 2,
+  "order": 28,
+  "title": "斜率與曲線解讀（現場應用）",
+  "titleEn": "Slope & Curve Reading (Field App)",
+  "platform": "self",
+  "objective": "把 Week 2 學嘅斜率(S7)、導數(S8)、積分面積(S21)由乾淨數學圖搬落真實現場圖:喺聊天室揾/畫返自己現場見過嘅 3 張溫度曲線(temperature curve)或 bond profile 圖,每張用『讀圖三句』(①斜率＝變化率、②斜率＝0 即峰/谷、③面積＝累積)拆成一個『變化率故事』——講出邊段升溫最快(最斜)、何時達峰(導數＝0、轉平之後開始跌嗰刻)、邊段降溫急唔急,並識避開最易撈亂嘅『高(最高溫)』同『斜(升最快)』。重點唔係學新公式,而係練到睇 reflow 爐溫/打線 profile 即時讀得明變化率,為 Week 4 嘅熱與 reflow 熱歷程、以及研究所 DSC/TGA 熱分析曲線嘅讀圖打底",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "support",
+  "tier": "tool",
+  "cognition": "chartread",
+  "prereq": [
+    "S7",
+    "S21"
+  ],
+  "assessWeight": "light",
+  "extension": "packaging",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S28 合成最終版｜新規範 v2（粵語書面語）｜tier: tool 工具/輸出｜cognition: chartread｜gradCourse: [\"general\"]｜extension: packaging -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n<!-- tool 節：動作導向（整理／練習／輸出框／讀圖），唔出教學長文、唔出 App quiz、唔出 L1–L5 -->\n\n## 一、總綱（本節練咩、點解要練）\n\n呢節係 **Week 2 微積分嘅<span class=\"term-zh\">現場應用</span>（<span class=\"term-en\">field application</span>）收口節**——唔再教新公式，唯一任務係：**揾返你自己現場見過嘅 3 張<span class=\"term-zh\">溫度曲線</span>（<span class=\"term-en\">temperature curve</span>）或<span class=\"term-zh\">接合輪廓</span>（<span class=\"term-en\">bond profile</span>）圖，用微積分嘅語言（斜率＝變化率、導數＝$0$ 即峰值）把每段曲線「翻譯」成一個<span class=\"term-zh\">變化率故事</span>（<span class=\"term-en\">rate-of-change story</span>），再喺聊天室講畀我聽、我幫你執靚。** 點解要練呢個？因為你之前 $S7$、$S21$ 學過嘅斜率／導數，全部係喺乾淨嘅 $f(x)=x^2$ 上面練嘅；但你日日喺<span class=\"term-zh\">封裝</span>（<span class=\"term-en\">packaging</span>）現場睇嘅 <span class=\"term-zh\">reflow</span>（<span class=\"term-en\">reflow</span>）爐溫曲線、<span class=\"term-zh\">打線</span>（<span class=\"term-en\">wire bonding</span>）嘅 bond profile，先係真嘢——識用「呢段斜率大代表升溫快」、「呢一刻斜率＝$0$ 代表到咗峰溫」去讀圖，先算把數學接返落你份工。本節係**動手讀＋輸出**，唔係睇，記住要真係攞圖出嚟講。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：$S7$（<span class=\"term-zh\">斜率</span>（<span class=\"term-en\">slope</span>）：$m=\\dfrac{\\Delta y}{\\Delta x}$，斜率＝兩點間嘅變化率）同 $S8$（<span class=\"term-zh\">導數</span>（<span class=\"term-en\">derivative</span>）：$f'(x)$＝曲線喺某一點嘅<span class=\"term-zh\">瞬時斜率</span>（<span class=\"term-en\">instantaneous slope</span>），導數＝$0$ 代表水平、即極大／極小）；亦用到 $S21$（<span class=\"term-zh\">積分</span>（<span class=\"term-en\">integration</span>）：曲線下面積＝累積量）嘅讀圖直覺。\n- **同已學嘅關係**：本節**唔加任何新公式**，係把 $S7$、$S8$、$S21$ 嘅抽象結論搬去**真實現場圖**——之前讀 $f(x)=x^2$ 嘅斜率，今次讀爐溫曲線嘅斜率；數學一模一樣，只係 $X$ 軸由 $x$ 變做<span class=\"term-zh\">時間</span>（<span class=\"term-en\">time</span>）、$Y$ 軸由 $y$ 變做<span class=\"term-zh\">溫度</span>（<span class=\"term-en\">temperature</span>）。\n- **如果一上手就卡**：唔記得斜率點計／代表咩 → 返 $S7$；唔識「導數＝$0$ 即峰／谷」→ 返 $S8$；唔識「曲線下面積＝累積」→ 返 $S21$。本節**唔重新解釋**呢啲，預設你識，淨係練「擺落真圖度點讀」。\n- **本節係邊節地基**：讀得明變化率故事，就接得返 Week 4 嘅<span class=\"term-zh\">熱</span>（<span class=\"term-en\">heat</span>）同 <span class=\"term-zh\">reflow</span> 熱歷程；亦係你研究所睇 <span class=\"term-zh\">TGA</span>（<span class=\"term-en\">TGA</span>）、<span class=\"term-zh\">DSC</span>（<span class=\"term-en\">DSC</span>）等<span class=\"term-zh\">熱分析</span>（<span class=\"term-en\">thermal analysis</span>）曲線嘅基本功。\n\n---\n\n## 三、重點回顧（讀圖前要鞏固嘅幾句，全部係舊嘢）\n\n> 本節**唔出教學長文**，呢度淨係把 $S7$／$S8$／$S21$ 嘅結論濃縮成「讀圖三句」，落手前默念一次即可。\n\n**讀曲線三句口訣（睇任何溫度／bond profile 圖都用呢三句）**\n\n1. **斜率＝變化率**：曲線**愈斜**代表變化**愈快**。升溫段斜率大 → 升得快；斜率細／近乎水平 → 升得慢或者就嚟停。一段直斜線嘅斜率就係 $m=\\dfrac{\\Delta y}{\\Delta x}=\\dfrac{\\text{溫度變化}}{\\text{時間變化}}$（單位 $^\\circ\\mathrm{C}/\\mathrm{s}$），即<span class=\"term-zh\">升溫速率</span>（<span class=\"term-en\">ramp rate</span>）。\n2. **斜率＝$0$ 即峰／谷**：曲線**轉平嗰一刻**（切線水平、$f'(t)=0$）就係<span class=\"term-zh\">峰溫</span>（<span class=\"term-en\">peak temperature</span>）或者最低點。reflow 曲線最高嗰個尖頂、bond profile 嘅<span class=\"term-zh\">保溫平台</span>（<span class=\"term-en\">hold/soak plateau</span>）前後，都係靠呢個睇出嚟。\n3. **曲線下面積＝累積量**：曲線同 $X$ 軸之間圍住嘅面積，代表「累積咗幾多」——例如<span class=\"term-zh\">液相線以上時間</span>（<span class=\"term-en\">time above liquidus, TAL</span>）就係溫度超過<span class=\"term-zh\">液相線溫度</span>（<span class=\"term-en\">liquidus temperature</span>，業界俗稱「熔點」、合金用語）嗰條橫線以上、曲線圍住嗰段（呢個係 $S21$ 嘅「面積＝累積」喺現場嘅樣）。\n\n**唯一參考主式（讀圖判斜率時靠呢句即時翻譯，無需計，記住意思即可）**\n\n$$\\boxed{\\;\\text{斜率／導數 }f'(t)=\\frac{dT}{dt}\\;\\Longrightarrow\\;\\begin{cases}>0 & \\text{升溫（正斜，愈大升愈快）}\\\\[2pt]=0 & \\text{峰／谷（轉平嗰刻）}\\\\[2pt]<0 & \\text{降溫（負斜，愈負跌愈快）}\\end{cases}\\;}$$\n\n符號：$T$ = 溫度（$^\\circ\\mathrm{C}$）；$t$ = 時間（$\\mathrm{s}$）；$\\dfrac{dT}{dt}=f'(t)$ = 溫度對時間嘅導數，即該刻嘅升／降溫速率（$^\\circ\\mathrm{C}/\\mathrm{s}$）。本式為讀圖示意，落手前默念一次即可，唔使計數。\n\n> 一句記：**「睇斜唔睇高——邊段斜代表變化快，邊一刻轉平就係峰。」**\n\n---\n\n## 四、睇圖示範：一條 reflow 爐溫曲線點讀（讀圖導引）\n\n> 下面係一條典型嘅 <span class=\"term-zh\">reflow</span> 爐溫示意曲線，等你睇下「變化率故事」應該點講。之後你就照呢個方式，讀你自己揾返嚟嘅 3 張圖。\n\n<svg viewBox=\"0 0 460 250\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"reflow 爐溫示意曲線\">\n  <!-- 座標軸 -->\n  <line x1=\"45\" y1=\"210\" x2=\"440\" y2=\"210\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/>\n  <line x1=\"45\" y1=\"210\" x2=\"45\" y2=\"20\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/>\n  <text x=\"240\" y=\"240\" fill=\"#64748b\" font-size=\"12\" text-anchor=\"middle\">時間 t（s）→</text>\n  <text x=\"16\" y=\"120\" fill=\"#64748b\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 16 120)\">溫度 T（°C）→</text>\n  <!-- liquidus 橫線 -->\n  <line x1=\"45\" y1=\"95\" x2=\"440\" y2=\"95\" stroke=\"#f5c842\" stroke-width=\"1\" stroke-dasharray=\"4 3\"/>\n  <text x=\"350\" y=\"90\" fill=\"#f5c842\" font-size=\"10\">液相線 liquidus</text>\n  <!-- 曲線：升溫(陡) → soak(近平) → 再升 → 峰(轉平) → 降溫 -->\n  <path d=\"M45 200 L120 150 L210 148 L300 45 L330 55 L440 175\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"2.5\"/>\n  <!-- A 陡升段 -->\n  <text x=\"78\" y=\"170\" fill=\"#4a9eff\" font-size=\"11\">A 斜率大</text>\n  <text x=\"78\" y=\"184\" fill=\"#64748b\" font-size=\"9\">升溫快</text>\n  <!-- B soak 近平 -->\n  <text x=\"150\" y=\"120\" fill=\"#4a9eff\" font-size=\"11\">B 近乎水平</text>\n  <text x=\"150\" y=\"134\" fill=\"#64748b\" font-size=\"9\">soak 保溫</text>\n  <!-- C 峰 f'=0 -->\n  <circle cx=\"300\" cy=\"45\" r=\"4\" fill=\"#2dd4bf\"/>\n  <text x=\"300\" y=\"34\" fill=\"#2dd4bf\" font-size=\"11\" text-anchor=\"middle\">C 峰：f′(t)=0</text>\n  <!-- D 降溫 -->\n  <text x=\"392\" y=\"140\" fill=\"#4a9eff\" font-size=\"11\">D 負斜率</text>\n  <text x=\"392\" y=\"154\" fill=\"#64748b\" font-size=\"9\">降溫</text>\n</svg>\n\n**讀圖導引（四點，逐點對返條曲線睇）**\n\n- **① X 軸**：時間 $t$（單位 $\\mathrm{s}$，由左到右），代表爐內走咗幾耐。\n- **② Y 軸**：溫度 $T$（單位 $^\\circ\\mathrm{C}$，由低到高），代表板溫去到幾多度。\n- **③ 每個關鍵特徵代表咩**：\n  - **A（陡升段）**：斜率大、正值 → 升溫快，呢段 $\\dfrac{dT}{dt}$ 最大。\n  - **B（近乎水平段）**：斜率近 $0$ 但溫度未到頂 → <span class=\"term-zh\">保溫平台</span>（<span class=\"term-en\">soak</span>），溫度幾乎唔升，等成塊板溫度拉勻。\n  - **C（尖頂，青點）**：切線啱啱水平、$f'(t)=0$ → <span class=\"term-zh\">峰溫</span>（<span class=\"term-en\">peak</span>），全程最高溫嗰一刻。\n  - **D（落斜段）**：斜率負值 → 降溫，愈斜跌得愈急。\n  - **黃色虛線以上、曲線圍住嗰塊面積** → <span class=\"term-zh\">液相線以上時間</span>（<span class=\"term-en\">TAL</span>）嘅概念（$S21$ 面積＝累積）。\n- **④ 最易睇錯嘅地方**：\n  - **撈亂「高」同「斜」**：峰**溫**最高嘅位（C）同升**溫最快**嘅位（A）唔係同一點——A 最斜但未最高，C 最高但嗰刻斜率係 $0$。讀「邊段升得快」要睇斜唔好睇高。\n  - **B 段唔係峰**：soak 段雖然都係近乎水平，但溫度未到頂、後面仲再升——只有**之後唔再升、開始跌**嗰個轉平點（C）先係真‧峰。睇佢「平完之後係升定跌」嚟分。\n\n---\n\n## 五、練習指引（喺聊天室做：揾 3 張現場圖，逐張講變化率故事）\n\n> **做法**：揾返你**自己現場見過**嘅 **3 張**溫度曲線或 bond profile 圖（手機影低／截圖／自己手畫都得），每張**用上面「讀圖三句」拆**，再喺聊天室逐張講畀我聽，我同你逐點執。**唔夠 3 張就用手畫一條你記得嘅典型曲線頂上，重點係練「讀」唔係儲圖。**\n\n**每張圖要交嘅「變化率故事」四件嘢（缺一件當未完成）**\n\n| # | 要講嘅嘢 | 用邊句口訣／靠咩判 | ⚠ 最易講錯嘅位 |\n|:--:|:--|:--|:--|\n| 1 | **邊段升溫最快** | 斜率＝變化率：揾最斜嗰段（$\\dfrac{dT}{dt}$ 最大） | 講咗最高溫嗰點當「最快」——高 ≠ 快，睇斜唔睇高 |\n| 2 | **何時達峰／峰溫喺邊** | 導數＝$0$：曲線轉平、之後開始跌嗰刻 | 把 soak 平台（B）當咗峰；峰係「平完跌」嗰個 |\n| 3 | **邊段降溫、急唔急** | 負斜率：落斜段，愈斜跌愈急 | 只講「跌」唔講「幾急」——要比較斜度 |\n| 4 | **有冇累積量可以講**（選做） | 面積＝累積：如 TAL／某溫以上嘅時間 | 把橫軸長度（時間）當成面積——面積要連埋高度 |\n\n**講之前，每張圖先標清楚兩條軸（最基本、最易漏）**\n\n- **先確認 $X$ 軸係咪時間、$Y$ 軸係咪溫度**，連單位都讀出嚟（$\\mathrm{s}$ 定 $\\min$？$^\\circ\\mathrm{C}$ 定 $\\mathrm{K}$？）。軸讀錯，下面成個故事都錯。\n- bond profile 有時 $Y$ 軸係**功率／力／溫度**唔一定係溫度——睇清楚標籤先當「斜率＝升溫速率」，唔好亂套。\n\n> **做完即喺聊天室交：每張圖講齊上面 4 件嘢（最少頭 3 件），講埋你最唔肯定嗰點。** 我會幫你核對：你講「最快」嗰段係咪真‧最斜、你指嘅「峰」係咪真係 $f'=0$、有冇撈亂「高」同「斜」。三張都講得啱，呢個 Week 嘅微積分先算真係落到你份工。\n\n---\n\n## 六、自我檢核清單（逐項勾，全勾先叫過關）\n\n- [ ] 我有**真係揾返／畫返 3 張**現場溫度或 bond profile 圖（唔係淨係諗）。\n- [ ] 每張圖我都有**先標清楚 $X$ 軸（時間＋單位）同 $Y$ 軸（溫度／何種量＋單位）**先讀。\n- [ ] 我講得出每張圖**邊段升溫最快**，而且係靠**最斜**揾出嚟（唔係攞最高溫嗰點當最快）。\n- [ ] 我指得出**峰／谷喺邊**，而且知道係**導數＝$0$（轉平、之後開始跌）**嗰刻，冇把 soak 平台當峰。\n- [ ] 我講得出**邊段降溫、急唔急**，識用**斜度（負斜率大細）**去比較。\n- [ ] 我冇**撈亂「高」同「斜」**——「升得最快」同「溫度最高」係兩件唔同嘅事。\n- [ ] （選做）有需要嘅圖，我識用**面積＝累積**講出 TAL／某溫以上時間嘅意思。\n- [ ] 三張圖我都喺聊天室**講咗變化率故事**、收到核對、並改正咗講錯嗰點。\n\n---\n\n## 七、現場連結（封裝 packaging）\n\n- **reflow 爐溫曲線**：reflow（迴焊）成敗就係睇條溫度曲線——A 段<span class=\"term-zh\">升溫速率</span>（<span class=\"term-en\">ramp rate</span>）太斜會打到<span class=\"term-zh\">熱衝擊</span>（<span class=\"term-en\">thermal shock</span>）／彈件，C 段<span class=\"term-zh\">峰溫</span>（<span class=\"term-en\">peak</span>）唔夠高焊唔透、太高傷件，黃線以上嘅面積（TAL）太細焊唔開、太大易生<span class=\"term-zh\">介金屬</span>（<span class=\"term-en\">IMC</span>）。你識讀「斜率＝速率、轉平＝峰、面積＝TAL」，先睇得明 process window 點解咁定。\n- **wire bonding 的 bond profile**：打線嘅功率／力／時間 profile 一樣係用斜率讀——邊段上得急、邊刻到頂保持，影響<span class=\"term-zh\">焊點</span>（<span class=\"term-en\">bond</span>）強度。睇 profile 嘅「變化率故事」係你日常 debug 嘅基本動作。\n- **接落研究所**：研究所做<span class=\"term-zh\">熱分析</span>（<span class=\"term-en\">thermal analysis</span>）嘅 <span class=\"term-zh\">DSC</span>（<span class=\"term-en\">DSC</span>）／<span class=\"term-zh\">TGA</span>（<span class=\"term-en\">TGA</span>）曲線，一樣靠「斜率＝速率、峰＝轉平、面積＝總量」嚟讀——今次喺現場練嘅讀圖功，直接搬得入實驗室。\n\n---\n\n## 八、一頁速查表\n\n| 項目 | 內容 | 備注 |\n|:--|:--|:--|\n| 本節做法 | 揾／畫 3 張現場溫度或 bond profile 圖，每張講「變化率故事」 | 動手讀＋聊天室輸出，唔係睇 |\n| 讀圖三句 | ①斜率＝變化率 ②斜率＝$0$ 即峰／谷 ③面積＝累積 | 任何曲線都用呢三句 |\n| 斜率符號 | $\\dfrac{dT}{dt}>0$ 升溫；$=0$ 峰／谷；$<0$ 降溫 | 愈斜變化愈快 |\n| 升溫速率 | $m=\\dfrac{\\Delta T}{\\Delta t}$（$^\\circ\\mathrm{C}/\\mathrm{s}$），即 ramp rate | 直斜段嘅斜率 |\n| 峰溫判法 | 曲線轉平、**之後開始跌**嗰一刻（$f'=0$） | soak 平台唔係峰 |\n| 面積＝累積 | 某溫橫線以上、曲線圍住嗰塊 → TAL 概念 | $S21$ 面積＝累積 |\n| 必交四件 | ①最快升溫段 ②峰位 ③降溫段急唔急 ④（選）累積量 | 最少交頭三件 |\n| 最易失分 | 撈亂「高（最高溫）」同「斜（升最快）」／soak 當峰／軸單位讀錯 | 每張先掃呢三樣 |\n\n術語對照：<span class=\"term-zh\">溫度曲線</span>（<span class=\"term-en\">temperature curve</span>）｜<span class=\"term-zh\">接合輪廓</span>（<span class=\"term-en\">bond profile</span>）｜<span class=\"term-zh\">升溫速率</span>（<span class=\"term-en\">ramp rate</span>）｜<span class=\"term-zh\">峰溫</span>（<span class=\"term-en\">peak temperature</span>）｜<span class=\"term-zh\">保溫平台</span>（<span class=\"term-en\">soak plateau</span>）｜<span class=\"term-zh\">液相線以上時間</span>（<span class=\"term-en\">time above liquidus, TAL</span>）\n\n> **本節係 tool 現場讀圖／輸出節**：唔再讀新內容，重點係**親手揾／畫 3 張圖、用讀圖三句拆、喺聊天室講變化率故事畀我核對**。聊天室見，攞你張圖出嚟，我同你逐張執到讀得啱為止。\n",
+  "fieldLink": "封裝現場日日睇嘅 reflow 爐溫曲線同 wire bonding 嘅 bond profile,成敗都係用斜率讀:升溫段太斜會熱衝擊、峰溫(轉平嗰刻、f'=0)唔夠高焊唔透、熔點橫線以上嘅面積(TAL)太細焊唔開太大易生 IMC;識『斜率＝速率、轉平＝峰、面積＝TAL』先睇得明 process window。同一套讀圖功直接搬入研究所做 DSC/TGA 熱分析",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "有真係揾返/手畫返 3 張現場溫度或 bond profile 圖,唔係淨係喺腦度諗"
+    },
+    {
+      "id": "c2",
+      "text": "每張圖落手前都有標清楚 X 軸(時間＋單位)同 Y 軸(溫度/何種量＋單位)先讀,冇讀錯軸"
+    },
+    {
+      "id": "c3",
+      "text": "講得出每張圖邊段升溫最快,而且係靠『最斜(dT/dt 最大)』揾出嚟,冇攞最高溫嗰點當最快"
+    },
+    {
+      "id": "c4",
+      "text": "指得出峰/谷喺邊,知道係導數＝0(曲線轉平、之後開始跌)嗰刻,冇把 soak 保溫平台當咗峰"
+    },
+    {
+      "id": "c5",
+      "text": "冇撈亂『高(溫度最高)』同『斜(升得最快)』——清楚呢兩樣係兩件唔同嘅事"
+    },
+    {
+      "id": "c6",
+      "text": "三張圖都喺聊天室講咗變化率故事(最少升最快段/峰位/降溫段三件),收到核對並改正咗講錯嗰點"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "(選看)3Blue1Brown:導數的意義(斜率＝瞬時變化率,讀現場曲線前重溫直覺)",
+      "url": "https://www.3blue1brown.com/lessons/derivatives"
+    }
+  ],
+  "charts": [],
+  "quiz": [],
+  "chatPracticeHints": [
+    "撈亂高(最高溫)同斜(升最快)",
+    "soak 保溫平台當咗峰",
+    "讀圖前冇先標清 X/Y 軸單位"
+  ]
+}

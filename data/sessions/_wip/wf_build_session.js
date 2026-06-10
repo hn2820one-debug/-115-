@@ -19,10 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S24', title: '定積分練習', tier: 'tool', cognition: 'calculation', extension: 'none', platform: 'paul' },
-  { id: 'S25', title: '指數函數的積分', tier: 'core', cognition: 'calculation', extension: 'packaging', platform: 'paul' },
-  { id: 'S26', title: '微積分綜合（一）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'paul' },
-  { id: 'S27', title: '微積分綜合（二）計時', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'paul' },
+  { id: 'S28', title: '斜率與曲線解讀（現場應用）', tier: 'tool', cognition: 'chartread', extension: 'packaging', platform: 'self' },
+  { id: 'S29', title: '數學總複習（一）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S30', title: '數學總複習（二）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S31', title: '數學自我檢定', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'paul' },
+  { id: 'S32', title: '數學收尾', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
 ]
 
 const TIERDESC = {
