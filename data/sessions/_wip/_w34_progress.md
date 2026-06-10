@@ -14,7 +14,7 @@
 | id | 標題 | tier | cognition | ext | status |
 |---|---|---|---|---|---|
 | S33 | 原子結構（一） | core | concept | none | ✅ done（已 push live）|
-| S34 | 原子結構（二）：電子組態 | core | concept | none | ⏳ pending |
+| S34 | 原子結構（二）：電子組態 | core | concept | none | ✅ done |
 | S35 | 週期表邏輯 | bridge | concept | none | ⏳ pending |
 | S36 | 化學鍵總覽 | core | concept | life | ⏳ pending |
 | S37 | 金屬鍵深入 | core | concept | life | ⏳ pending |
