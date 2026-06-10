@@ -19,7 +19,9 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S33B', title: '原子結構（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'junyi' },
+  { id: 'S37', title: '金屬鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S39', title: '鍵結與材料性質', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
 ]
 
 const TIERDESC = {
@@ -64,7 +66,7 @@ function writePrompt(s) {
 
 【務必守（簡報有詳列，呢度只標最易失分）】
 - 粵語書面語；content 全部數式用 LaTeX；**$\\boxed{}$ 啱啱一條**主公式；每條公式附符號表；逐行推導行末標依據。
-- 專業詞每次 `<span class="term-zh">中</span>（<span class="term-en">en</span>）`（**全形（）**）。
+- 專業詞每次寫成 <span class="term-zh">中</span>（<span class="term-en">en</span>）（**全形（）**，唔好半形）。
 - App quiz 入 meta.json，**唔好寫落 content**；${s.tier === 'tool' ? 'tool 節 meta.quiz=[]' : s.tier === 'bridge' ? '1 題' : '3–4 題（建議 2 basic+2 standard）'}、**全 single/truefalse**、**q/options/explain 用 unicode 數式（唔可 $LaTeX$）**。single answer=index、truefalse answer=布林。
 - 段落順序：總綱→銜接點(H9)→正式定義→公式+符號表→Worked Examples(H8 由易到難)→易混淆→(如有圖:內嵌簡單 SVG+讀圖導引)→一頁總表(H10)→(core)診斷題組 L1–L5。
 - charts 留 []（SVG 內嵌喺 content）；chatPracticeHints ${s.tier === 'tool' ? '可 []' : '2–3 條 ≤15 字粵語'}。

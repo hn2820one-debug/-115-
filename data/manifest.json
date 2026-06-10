@@ -153,7 +153,7 @@
     "S33": {"title":"原子結構（一）","titleEn":"Atomic Structure I","platform":"junyi","isCore":true},
     "S34": {"title":"原子結構（二）：電子組態","titleEn":"Atomic Structure II — Electron Config","platform":"ka","isCore":true},
     "S35": {"title":"週期表邏輯","titleEn":"Periodic Table Logic","platform":"ka","isCore":false},
-    "S36": {"title":"化學鍵總覽","titleEn":"Chemical Bonding Overview","platform":"junyi","isCore":false},
+    "S36": {"title":"化學鍵總覽","titleEn":"Chemical Bonding Overview","platform":"junyi","isCore":true},
     "S37": {"title":"金屬鍵深入","titleEn":"Metallic Bonding In-depth","platform":"callister","isCore":false},
     "S38": {"title":"共價鍵深入","titleEn":"Covalent Bonding In-depth","platform":"callister","isCore":false},
     "S39": {"title":"鍵結與材料性質","titleEn":"Bonding & Material Properties","platform":"callister","isCore":false},

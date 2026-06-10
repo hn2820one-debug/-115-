@@ -5,8 +5,10 @@
 > 每堂 agent 直接寫 `_wip/{id}.content.md` + `{id}.meta.json`，再 `node assemble_w3.js {id}` → `data/sessions/{id}.json`
 > **完成判準（磁碟為準）**：`data/sessions/{id}.json` 存在、可解析、status=done。續做＝揾未有 JSON 嘅 id 繼續。
 
-## 🔖 斷點（2026-06-10）
-S33/S34/S35 ✅ done 並 push。S36 草稿已寫（`_wip/S36.content.md`+`.meta.json`）但未驗證未組裝——撞 session limit（台北 10:50am 重置）。**續做：limit 解除後，把 `wf_build_session.js` 的 `SESSIONS` 設為 [S36, S37, S38, …]（S36 會重寫一稿再經完整驗證）再 `Workflow({scriptPath})`。** 之後 S39→S64。
+## 🔖 斷點（2026-06-10，使用者要求建完 S36 即停）
+S33（已 backport 式3 符號表）/S34/S35/**S36** ✅ done 並 push。優化版 v2 pipeline 已驗證（~129K/堂、慳 55%）＋ brief 已加 2 規則（App quiz 零心算、非座標圖唔套 X/Y）。
+`wf_build_session.js` 的 `SESSIONS` 已預設為 **[S37, S38, S39]**，下次續做直接 `Workflow({scriptPath:'…/wf_build_session.js'})` 即可，之後順序推 S40→S64。
+> 註：`_wip/S37.content.md` 係上次停 run 時嘅**半截孤兒草稿（未驗證、無 meta、無 S37.json）**，續做時會被重新生成覆蓋，可忽略。
 
 ## 續做步驟（下次接手）
 1. 睇下表 status；或掃 `data/sessions/` 邊啲 S34–S64 已有 JSON。
@@ -19,7 +21,7 @@ S33/S34/S35 ✅ done 並 push。S36 草稿已寫（`_wip/S36.content.md`+`.meta.
 | S33 | 原子結構（一） | core | concept | none | ✅ done（已 push live）|
 | S34 | 原子結構（二）：電子組態 | core | concept | none | ✅ done |
 | S35 | 週期表邏輯 | bridge | concept | none | ✅ done |
-| S36 | 化學鍵總覽 | core | concept | life | 📝 草稿已寫待驗證（撞 limit）|
+| S36 | 化學鍵總覽 | core | concept | life | ✅ done（優化版 v2 建，已 push）|
 | S37 | 金屬鍵深入 | core | concept | life | ⏳ pending |
 | S38 | 共價鍵深入 | core | concept | life | ⏳ pending |
 | S39 | 鍵結與材料性質 | core | concept | life | ⏳ pending |
