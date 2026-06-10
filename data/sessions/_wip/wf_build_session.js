@@ -8,8 +8,23 @@ export const meta = {
   ],
 }
 
-// args: { base, wip, spec, plan, exemplarContent, exemplarMeta, sessions:[{id,title,tier,cognition,extension,platform}] }
-const A = args
+// 路徑全用正斜線（無反斜線，literal 安全）；本批要建嘅 session 改 SESSIONS 即可。
+const ROOT = 'C:/Users/Keith/Desktop/中興大115學年度材料科學與工程學系碩士在職專班'
+const A = {
+  base: ROOT + '/foundationlearn',
+  wip: ROOT + '/foundationlearn/data/sessions/_wip',
+  spec: ROOT + '/Background/筆記規範.md',
+  plan: ROOT + '/Background/三個月入學前補底計劃.md',
+  exemplarContent: ROOT + '/foundationlearn/data/sessions/_wip/S33.content.md',
+  exemplarMeta: ROOT + '/foundationlearn/data/sessions/_wip/S33.meta.json',
+}
+// 本批要建嘅課節（逐堂順序處理、即寫即存）。續做時改呢個陣列。
+const SESSIONS = [
+  { id: 'S35', title: '週期表邏輯', tier: 'bridge', cognition: 'concept', extension: 'none', platform: 'ka' },
+  { id: 'S36', title: '化學鍵總覽', tier: 'core', cognition: 'concept', extension: 'life', platform: 'junyi' },
+  { id: 'S37', title: '金屬鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+]
 const TIERDESC = {
   core: 'core 深講：完整深講、可取代教科書，要完整計算或判讀範例，附 L1–L5 診斷題組',
   backbone: 'backbone 標準：中等篇幅、講清楚即可',
@@ -98,7 +113,7 @@ const LENSES = [
 ]
 
 const results = []
-for (const s of A.sessions) {
+for (const s of SESSIONS) {
   log(`▶ 開始 ${s.id}「${s.title}」（${s.tier}/${s.cognition}）`)
 
   // 1) 寫

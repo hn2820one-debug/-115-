@@ -1,0 +1,75 @@
+{
+  "id": "S35",
+  "stage": 1,
+  "week": 3,
+  "order": 35,
+  "title": "週期表邏輯",
+  "titleEn": "Periodic Table Logic",
+  "platform": "ka",
+  "objective": "搞清楚週期表唔係亂排,而係電子組態排出嚟嘅『電子地圖』:橫行(週期)＝最外殼層第幾層 n;直行(族)＝價電子數相同(同族化學性質相似);並識按位置認三大分區——金屬(左+中,價電子少易甩、導電延展)、非金屬(右上角,價電子多、絕緣易脆)、半金屬(中間斜對角帶,性質介乎兩者、係半導體來源)。能由電子組態講出元素喺表嘅大概位置(例:Na 組態 3s¹ → 第 3 週期、第 1 族),並認得 Si(半金屬,半導體之王)、Cu/Au/Sn(金屬,封裝常用)喺表嘅分區,為 S36 化學鍵打底",
+  "isCore": false,
+  "status": "done",
+  "gradImportance": "support",
+  "tier": "bridge",
+  "cognition": "concept",
+  "prereq": [
+    "S34"
+  ],
+  "assessWeight": "light",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S35 合成最終版｜新規範 v2（粵語書面語）｜tier: bridge 輕講｜cognition: concept｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n<span class=\"term-zh\">週期表</span>（<span class=\"term-en\">periodic table</span>）唔係亂咁排嘅一張表——佢嘅每一格位置，其實就係上一節嘅<span class=\"term-zh\">電子組態</span>（<span class=\"term-en\">electron configuration</span>）排出嚟嘅結果。本節（bridge 輕講）只要你「知道、能銜接」三件事：**橫行（週期）＝最外殼層第幾層 $n$**、**直行（族）＝價電子數**、**金屬／非金屬／半金屬係按位置分區**。搞掂呢三點，你就睇得明點解 Si、Cu、Sn、Au 各自企喺表嘅邊一格。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：直接接住 **S34（電子組態）**。S34 教咗點數一粒原子嘅<span class=\"term-zh\">價電子</span>（<span class=\"term-en\">valence electron</span>）——即最外層（最大 $n$）嗰層嘅 $s+p$ 電子。本節就係話畀你知：**價電子嘅數目同最外層嘅層數，正正就係週期表嘅「座標」。** 若果你仲未識數價電子，請先回 S34 第七節。\n- **新內容同已學嘅關係**：呢節係 S34 嘅**直接應用兼整理**——唔加新公式，只係把「電子組態」呢套住址系統，攤平成一張**地圖**畀你睇。S34 係「逐粒電子點排」，S35 係「排完之後，成班元素喺地圖上點分佈」。\n- **本節係邊節嘅地基**：本節係 **S36（化學鍵總覽）** 嘅前置。元素喺週期表嘅位置（係金屬定非金屬、價電子幾多），直接決定佢哋之間會成邊種鍵（金屬鍵／離子鍵／共價鍵）。亦係之後睇半導體（Si、Ge）、封裝金屬（Cu、Au、Sn）性質嘅地圖。\n- **如果未掌握就先補**：本節唔需要任何數學，只需要 S34 嘅「識數價電子」。其餘由零講起。\n\n---\n\n## 三、先講白話：週期表其實係一張「電子地圖」\n\n上一節我哋學會逐粒電子點泊位。而家想像：把成百種元素**由細到大（按原子序 $Z$）排成隊**，一邊排一邊填電子——你會發現一件好靚嘅事：**每當最外層嘅電子「填滿」一輪，下一粒新元素就好似返到起點咁，性質同上一輪嘅頭嗰個好似。**\n\n呢種「性質隔一段就重複返」嘅現象，就係<span class=\"term-zh\">週期性</span>（<span class=\"term-en\">periodicity</span>）。<span class=\"term-zh\">週期表</span>（<span class=\"term-en\">periodic table</span>）就係把元素照住呢個重複規律，**摺返一行一行咁砌埋**：性質相似嘅，啱啱好疊喺同一條直行。所以週期表唔係人手砌嘅分類，而係電子組態**自己排出嚟**嘅地圖。\n\n---\n\n## 四、兩條座標軸：週期（橫）同族（直）\n\n週期表用兩條座標定位每個元素：橫睇係<span class=\"term-zh\">週期</span>（<span class=\"term-en\">period</span>），直睇係<span class=\"term-zh\">族</span>（<span class=\"term-en\">group</span>）。\n\n**橫行＝週期（period）＝最外殼層係第幾層 $n$。**\n同一橫行嘅元素，最外層電子都喺同一個主殼層。第 1 週期係 $n=1$、第 2 週期係 $n=2$，如此類推。由左行到右，就係**最外層由空一路填到滿**嘅過程。\n\n**直行＝族（group）＝最外層價電子數相同。**\n同一直行（同族）嘅元素，**價電子數一樣**，所以化學性質好相似。例如最左嗰行（第 1 族）全部得 1 粒價電子、好活潑；最右嗰行（第 18 族）價電子填到滿、好穩定唔反應（<span class=\"term-zh\">惰性氣體</span>（<span class=\"term-en\">noble gas</span>））。\n\n> **一句記住本節最核心嘅對應關係**——週期表嘅座標，就係電子組態：\n\n$$\\boxed{\\ \\text{週期（第幾橫行）} = n_{\\max}\\ ;\\quad \\text{族（性質）} \\leftrightarrow \\text{價電子數}\\ }\\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 說明 |\n|---|---|---|\n| $n_{\\max}$ | 該元素電子組態入面**最大嘅主殼層數**（即最外層第幾層） | 整數 $1,2,3,\\dots$；等於佢喺第幾橫行（週期） |\n| <span class=\"term-zh\">週期</span>（<span class=\"term-en\">period</span>） | 週期表嘅**橫行編號** | 由 $n_{\\max}$ 決定；同行最外層同 $n$ |\n| <span class=\"term-zh\">族</span>（<span class=\"term-en\">group</span>） | 週期表嘅**直行**，代表一組價電子數相同嘅元素 | 同族價電子數相同 → 化學性質相似 |\n| 價電子數 | 最外層（$n_{\\max}$ 嗰層）嘅 $s+p$ 電子數（S34 定義） | 決定該元素點成鍵、活唔活潑 |\n\n> 注意：呢條唔係要你計嘅數式，而係一個**對應規則**——把 S34 識數嘅兩個量（最外層第幾層、價電子幾多），對應落週期表嘅（橫行、直行）。記住「**橫睇層數、直睇價電子**」就夠。\n\n**用一個例子貫穿**：鈉 $\\mathrm{Na}$，組態 $1s^2\\,2s^2\\,2p^6\\,3s^1$（S34 例 2）。最大 $n=3$ → 喺**第 3 週期**（第 3 橫行）；最外層得 $3s^1$ 即 **1 粒價電子** → 喺**第 1 族**（最左行）。所以淨係睇組態，就一句講得出鈉企喺表嘅「第 3 行、最左直行」。\n\n---\n\n## 五、三大分區：金屬、非金屬、半金屬\n\n除咗橫直座標，週期表仲按位置分三大區，呢個分區同**材料性質**直接相關，係本節對現場最有用嗰部分。\n\n- <span class=\"term-zh\">金屬</span>（<span class=\"term-en\">metal</span>）：佔週期表**左邊同中間絕大部分**。價電子少、易甩走 → **導電、導熱、有金屬光澤、可延展**。封裝現場嘅 <span class=\"term-zh\">銅</span>（<span class=\"term-en\">copper</span>） Cu、<span class=\"term-zh\">金</span>（<span class=\"term-en\">gold</span>） Au、<span class=\"term-zh\">錫</span>（<span class=\"term-en\">tin</span>） Sn 都係金屬。\n- <span class=\"term-zh\">非金屬</span>（<span class=\"term-en\">nonmetal</span>）：集中喺**右上角**。價電子多、傾向搶電子 → **唔導電（絕緣）、唔延展、易脆**。例如氧 O、氮 N、氯 Cl。\n- <span class=\"term-zh\">半金屬</span>（<span class=\"term-en\">metalloid</span>），又叫<span class=\"term-zh\">類金屬</span>：夾喺金屬同非金屬之間嘅一條**斜對角帶**。性質介乎兩者 → 導電能力**唔上唔落**，正係<span class=\"term-zh\">半導體</span>（<span class=\"term-en\">semiconductor</span>）嘅材料來源。<span class=\"term-zh\">矽</span>（<span class=\"term-en\">silicon</span>） Si、<span class=\"term-zh\">鍺</span>（<span class=\"term-en\">germanium</span>） Ge 就喺呢條帶上。\n\n> **點解 Si 做到半導體？** 因為佢企喺金屬同非金屬之間嘅半金屬帶——導電性「半桶水」，可以靠<span class=\"term-zh\">摻雜</span>（<span class=\"term-en\">doping</span>）去精準控制佢導唔導電。呢個位置上嘅特性，就係成個晶圓工業嘅物理根。（深入要留待後面鍵結同能帶嘅單元。）\n\n---\n\n## 六、睇圖：週期表骨架同四個關鍵元素位置（含讀圖導引）\n\n下面係一個**簡化嘅週期表骨架**（只標出本節要識認嘅幾個位置，唔係完整 118 格）。橫行係週期（$n$）、直行係族；顏色分三大區，並標出 Si、Cu、Sn、Au 四個現場關鍵元素。\n\n<svg viewBox=\"0 0 620 360\" width=\"100%\" style=\"max-width:620px;display:block;margin:0 auto;background:transparent;\">\n  <text x=\"20\" y=\"30\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">週期↓</text>\n  <text x=\"300\" y=\"18\" text-anchor=\"middle\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">← 族（直行）：同行價電子數相同 →</text>\n  <text x=\"28\" y=\"60\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">1</text>\n  <text x=\"28\" y=\"92\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">2</text>\n  <text x=\"28\" y=\"124\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">3</text>\n  <text x=\"28\" y=\"156\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">4</text>\n  <text x=\"28\" y=\"188\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">5</text>\n  <text x=\"28\" y=\"220\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">6</text>\n  <rect x=\"45\" y=\"100\" width=\"120\" height=\"120\" fill=\"#4a9eff\" opacity=\"0.30\" stroke=\"#4a9eff\" stroke-width=\"1\"/>\n  <rect x=\"165\" y=\"132\" width=\"300\" height=\"88\" fill=\"#4a9eff\" opacity=\"0.30\" stroke=\"#4a9eff\" stroke-width=\"1\"/>\n  <text x=\"90\" y=\"245\" fill=\"#4a9eff\" font-size=\"12\" font-family=\"sans-serif\">金屬 metal（左＋中）</text>\n  <rect x=\"397\" y=\"132\" width=\"34\" height=\"32\" fill=\"#2dd4bf\" opacity=\"0.45\" stroke=\"#2dd4bf\" stroke-width=\"1\"/>\n  <rect x=\"431\" y=\"164\" width=\"34\" height=\"32\" fill=\"#2dd4bf\" opacity=\"0.45\" stroke=\"#2dd4bf\" stroke-width=\"1\"/>\n  <text x=\"468\" y=\"252\" fill=\"#2dd4bf\" font-size=\"12\" font-family=\"sans-serif\">半金屬 metalloid（斜帶）</text>\n  <rect x=\"431\" y=\"68\" width=\"130\" height=\"64\" fill=\"#94a3b8\" opacity=\"0.30\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <text x=\"452\" y=\"60\" fill=\"#94a3b8\" font-size=\"12\" font-family=\"sans-serif\">非金屬 nonmetal（右上）</text>\n  <rect x=\"397\" y=\"132\" width=\"34\" height=\"32\" fill=\"none\" stroke=\"#f5c842\" stroke-width=\"2.5\"/><text x=\"414\" y=\"153\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"14\" font-family=\"sans-serif\">Si</text>\n  <rect x=\"165\" y=\"164\" width=\"34\" height=\"32\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"2.5\"/><text x=\"182\" y=\"185\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"14\" font-family=\"sans-serif\">Cu</text>\n  <rect x=\"397\" y=\"196\" width=\"34\" height=\"32\" fill=\"#4a9eff\" opacity=\"0.30\" stroke=\"#f06060\" stroke-width=\"2.5\"/><text x=\"414\" y=\"217\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"14\" font-family=\"sans-serif\">Sn</text>\n  <rect x=\"165\" y=\"196\" width=\"34\" height=\"32\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"2.5\"/><text x=\"182\" y=\"217\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"14\" font-family=\"sans-serif\">Au</text>\n  <text x=\"310\" y=\"295\" text-anchor=\"middle\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">黃框＝半導體（Si）；紅框＝封裝常用金屬（Cu／Au／Sn）</text>\n  <text x=\"310\" y=\"318\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"11\" font-family=\"sans-serif\">※示意骨架，位置為相對示意，非完整 118 格實表</text>\n</svg>\n\n**讀圖導引（呢張圖點睇）**\n\n① **X 軸（橫，左→右）＝族（group）**：由左到右，最外層價電子由少變多。最左係 1 粒（好活潑金屬）、最右係填滿（惰性氣體）。\n② **Y 軸（直，上→落）＝週期（period）＝最外殼層第幾層 $n$**：第 1 行 $n=1$、第 2 行 $n=2$……愈落，最外層愈外、原子愈大。\n③ **三個顏色區**：藍＝金屬（左＋中，佔大半）、灰＝非金屬（右上角）、青＝半金屬（夾喺中間嘅斜對角帶）。**Si（黃框）正喺青色半金屬帶上**——呢個位置就係佢做半導體嘅根。Cu、Au、Sn（紅框）全部喺藍色金屬區，正係封裝常用金屬。\n④ **最容易睇錯嘅地方**：呢張係**示意骨架，唔係按真實 118 格畫**——格子位置只係幫你記「邊個區、邊種性質」，唔好當佢係精確嘅週期表座標。要記嘅唔係 Si「喺第幾格」，而係「Si 喺金屬同非金屬之間嘅半金屬帶，所以性質半桶水」。\n\n---\n\n## 七、一頁總表\n\n| 項目 | 對應關係／結果 | 備注 |\n|:--|:--|:--|\n| 核心對應（主公式） | 週期 $=n_{\\max}$；族 $\\leftrightarrow$ 價電子數 | 式(1)，橫睇層數、直睇價電子 |\n| 週期（橫行） | ＝最外殼層第幾層 $n$ | 同行最外層同一主殼層 |\n| 族（直行） | ＝價電子數相同 | 同族化學性質相似 |\n| 金屬（metal） | 週期表**左＋中**，價電子少、易甩 | 導電導熱、延展；Cu／Au／Sn |\n| 非金屬（nonmetal） | **右上角**，價電子多、搶電子 | 絕緣、易脆；O／N／Cl |\n| 半金屬（metalloid） | 中間**斜對角帶**，性質介乎兩者 | 半導體來源；Si／Ge |\n| Si（矽，silicon） | 半金屬帶，價電子 4 | 半導體之王，晶圓核心 |\n| Cu（銅）／Au（金）／Sn（錫） | 金屬區 | 封裝導線／打線／焊料常用金屬 |\n| 同族規律例 | 第 1 族（1 價電子，活潑）、第 18 族（填滿，惰性） | 兩極端，幫記族＝性質 |\n\n---\n\n> **本節係 bridge 輕講**：重點唔係背完整週期表，而係「**知道週期表＝電子地圖**」呢個銜接。記住「橫睇層數 $n$、直睇價電子、三大分區定性質」，就足以接落 S36 化學鍵——因為兩個元素會成邊種鍵，就睇佢哋各自喺呢張地圖嘅邊一區、各有幾多價電子。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出週期表嘅兩條座標:橫行(週期)＝最外殼層第幾層 n、直行(族)＝價電子數相同,並明白同族化學性質相似係因為價電子數一樣"
+    },
+    {
+      "id": "c2",
+      "text": "畀一個電子組態,講得出該元素喺第幾週期、價電子幾多(例:Na 1s²2s²2p⁶3s¹ → 最大 n=3 第 3 週期、3s¹ 即 1 粒價電子第 1 族)"
+    },
+    {
+      "id": "c3",
+      "text": "認得三大分區嘅位置同性質:金屬(左+中,導電延展)、非金屬(右上角,絕緣易脆)、半金屬(中間斜對角帶,半導體來源)"
+    },
+    {
+      "id": "c4",
+      "text": "指得出現場關鍵元素喺邊一區:Si 喺半金屬帶(所以做半導體)、Cu/Au/Sn 喺金屬區(封裝導線/打線/焊料)"
+    },
+    {
+      "id": "c5",
+      "text": "講得出『週期表＝電子地圖』點銜接落 S36:兩個元素成邊種鍵,就睇佢哋各喺邊一區、各有幾多價電子"
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "label": "(選看)Khan Academy 化學:Periodic table trends(週期表趨勢)",
+      "url": "https://www.khanacademy.org"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "週期表入面,同一條直行(同族,group)嘅元素,有咩共通?",
+      "options": [
+        "最外層價電子數相同,所以化學性質相似",
+        "原子核入面中子數相同",
+        "質量數 A 相同",
+        "都喺同一個主殼層 n"
+      ],
+      "answer": 0,
+      "explain": "同族(同一直行)嘅元素價電子數相同,所以化學性質好相似——呢個正係週期表把性質相似嘅疊埋同一行嘅原因。常見錯選『都喺同一主殼層 n』:嗰個係橫行(週期)嘅特徵,唔係直行(族)。中子數/質量數相同係同位素,同週期表座標冇關係。"
+    }
+  ],
+  "chatPracticeHints": [
+    "週期(橫)同族(直)撈轉",
+    "Si 當成金屬(其實係半金屬)",
+    "同族當成同位素"
+  ]
+}

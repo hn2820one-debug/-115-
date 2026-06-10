@@ -5,6 +5,9 @@
 > 每堂 agent 直接寫 `_wip/{id}.content.md` + `{id}.meta.json`，再 `node assemble_w3.js {id}` → `data/sessions/{id}.json`
 > **完成判準（磁碟為準）**：`data/sessions/{id}.json` 存在、可解析、status=done。續做＝揾未有 JSON 嘅 id 繼續。
 
+## 🔖 斷點（2026-06-10）
+S33/S34/S35 ✅ done 並 push。S36 草稿已寫（`_wip/S36.content.md`+`.meta.json`）但未驗證未組裝——撞 session limit（台北 10:50am 重置）。**續做：limit 解除後，把 `wf_build_session.js` 的 `SESSIONS` 設為 [S36, S37, S38, …]（S36 會重寫一稿再經完整驗證）再 `Workflow({scriptPath})`。** 之後 S39→S64。
+
 ## 續做步驟（下次接手）
 1. 睇下表 status；或掃 `data/sessions/` 邊啲 S34–S64 已有 JSON。
 2. 把仲係 `pending` 嘅 id 傳入 workflow：`Workflow({scriptPath:'…/_wip/wf_build_session.js', args:{sessions:[…], base, spec, plan, gold, exemplar}})`。
@@ -15,8 +18,8 @@
 |---|---|---|---|---|---|
 | S33 | 原子結構（一） | core | concept | none | ✅ done（已 push live）|
 | S34 | 原子結構（二）：電子組態 | core | concept | none | ✅ done |
-| S35 | 週期表邏輯 | bridge | concept | none | ⏳ pending |
-| S36 | 化學鍵總覽 | core | concept | life | ⏳ pending |
+| S35 | 週期表邏輯 | bridge | concept | none | ✅ done |
+| S36 | 化學鍵總覽 | core | concept | life | 📝 草稿已寫待驗證（撞 limit）|
 | S37 | 金屬鍵深入 | core | concept | life | ⏳ pending |
 | S38 | 共價鍵深入 | core | concept | life | ⏳ pending |
 | S39 | 鍵結與材料性質 | core | concept | life | ⏳ pending |
