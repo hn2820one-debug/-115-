@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S43', title: '化學平衡（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'junyi' },
-  { id: 'S44', title: '化學平衡（二）：溫度影響', tier: 'core', cognition: 'concept', extension: 'life', platform: 'junyi' },
-  { id: 'S45', title: '氧化還原基礎', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'ka' },
-  { id: 'S46', title: 'Week 3 整理', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
-  { id: 'S47', title: 'Week 3 練習', tier: 'tool', cognition: 'concept', extension: 'none', platform: 'callister' },
+  { id: 'S48', title: 'Week 3 檢討 + 輸出', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S49', title: '溫度與熱', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
+  { id: 'S50', title: '熱力學第零定律', tier: 'core', cognition: 'concept', extension: 'none', platform: 'ka' },
+  { id: 'S51', title: '熱力學第一定律（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'ka' },
+  { id: 'S52', title: '熱力學第一定律（二）', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'ka' },
 ]
 
 const TIERDESC = {

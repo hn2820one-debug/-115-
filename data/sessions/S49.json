@@ -1,0 +1,110 @@
+{
+  "id": "S49",
+  "stage": 1,
+  "week": 4,
+  "order": 49,
+  "title": "溫度與熱",
+  "titleEn": "Temperature & Heat",
+  "platform": "ka",
+  "objective": "分清三個最易撈亂嘅詞:①溫度(temperature)T 係冷熱程度、量度粒子平均動能,係狀態量、同質量無關;②熱能/內能(thermal/internal energy)U 係物體內部所有粒子郁動能量嘅總和,係擁有量、質量越大通常越多;③熱(heat)Q 係因溫差而由高溫流向低溫嘅能量,係流動量/過程、流完就唔再叫熱(變咗對方嘅熱能)。核心主軸:熱永遠由高溫流向低溫、絕對唔會自動倒流(呢個方向性係 S53 熵嘅種子);流幾多熱用主公式 Q＝mcΔT(Δ T＝T終−T初,終態減初態):升溫 ΔT>0→Q>0 吸熱、降溫 ΔT<0→Q<0 放熱。要識:絕對溫標換算 T(K)＝T(°C)+273.15(單一溫度值用 K、溫差兩標通用)、反解 ΔT＝Q/(mc)(c 大者頂得住、升溫少)、混合用熱量守恆 m_A c_A(Tf−T_A)+m_B c_B(Tf−T_B)＝0 求熱平衡溫度(Tf 偏向 mc 大嗰個)。單位:T 用 K、Q 同 U 用 J、m 一定用 kg(因 c 單位 J/(kg·K) 含 kg)、c 用 J/(kg·K)。最易失分:溫度高當熱能多(細杯滾水熱能可少過大缸溫水)、講『物體含有幾多熱』(應講熱能)、m 用 g 代入(大 1000 倍)、混合後以為熱消失(其實守恆、只係無溫差無淨流動)。本節係 Week 4 開篇,為 S50 熱平衡(第零定律)、S51–S52 第一定律(ΔU＝Q−W 嘅 Q 就係本節嘅熱)、S53 熵、S54 比熱(深講 c)、S55 熱傳導、S56 熱膨脹打底",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "core",
+  "cognition": "concept",
+  "prereq": [],
+  "assessWeight": "medium",
+  "extension": "life",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S49 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: concept｜gradCourse: [\"general\"]｜extension: life -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n日常我哋成日把「溫度」同「熱」當成同一件事，但喺物理同熱力學入面，佢哋係**兩樣完全唔同嘅嘢**。本節要一次過分清三個最易撈亂嘅詞：<span class=\"term-zh\">溫度</span>（<span class=\"term-en\">temperature</span>）係量度「粒子郁得幾勁」嘅冷熱程度（一個**狀態**），<span class=\"term-zh\">熱能／內能</span>（<span class=\"term-en\">thermal energy / internal energy</span>）係物體**內部所有粒子郁動能量嘅總和**（一個物體**擁有**嘅嘢），而<span class=\"term-zh\">熱</span>（<span class=\"term-en\">heat</span>）係**因為溫差而由高溫流去低溫嘅能量**（一個**流動／過程**，唔係物體擁有嘅嘢）。掌握主軸——**熱永遠由高溫流去低溫，流幾多可以用 $Q = mc\\Delta T$ 計**——就有咗成個 Week 4 熱力學（S50 第零定律、S51–S53 第一、第二定律、S54 比熱、S55 熱傳導、S56 熱膨脹）嘅入門地基。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：本節係 Week 4（基礎物理 — 熱與晶體入門）嘅**開篇第一節**，唔需要前面化學節嘅公式做前置（$\\text{prereq}$ 為空）。唯一接得返嘅，係 **$S42$（化學反應與能量）** 嗰個「能量有正負、會出入」嘅直覺——嗰陣講<span class=\"term-zh\">焓變</span>（<span class=\"term-en\">enthalpy change</span>） $\\Delta H$ 放熱（$\\Delta H<0$）／吸熱（$\\Delta H>0$），個「熱」字其實就係本節要嚴格定義嘅<span class=\"term-zh\">熱</span>（<span class=\"term-en\">heat</span>）。如果對「能量會流動、有方向」呢個直覺仲含糊，可以回 $S42$ 掃一眼。\n- **新內容同已學嘅關係**：之前講能量多數係「化學能」（收埋喺鍵入面）。本節**第一次把能量同「溫度、冷熱、粒子郁動」掛鈎**，引入三個全新但極基礎嘅概念：溫度（狀態）、熱能（擁有量）、熱（流動量）。本節**唔需要任何微積分**，淨係用到乘除同「終態減初態」（$\\Delta T = T_{\\text{終}} - T_{\\text{初}}$）嘅基本直覺——同 $S42$ 嘅 $\\Delta H$ 一樣係「終減初」。\n- **本節係邊節嘅地基**：本節係成個 Week 4 熱力學鏈嘅**第一塊磚**。分清溫度／熱／熱能，係 **$S50$（熱力學第零定律：熱平衡）**、**$S51$–$S52$（第一定律：$\\Delta U = Q - W$，個 $Q$ 就係本節嘅熱）**、**$S53$（熵）** 嘅前置；本節主公式 $Q = mc\\Delta T$ 入面個 $c$（<span class=\"term-zh\">比熱</span>（<span class=\"term-en\">specific heat</span>）），到 **$S54$** 會專門深講。亦係之後睇 **$S55$ 熱傳導**、**$S56$ 熱膨脹** 同封裝散熱嘅基本功。\n\n---\n\n## 三、先講白話：水溫 vs 一池水嘅熱\n\n想像兩杯水：一杯係 $90^\\circ\\mathrm{C}$ 嘅熱咖啡（細杯，$50\\ \\mathrm{g}$），一池係 $40^\\circ\\mathrm{C}$ 嘅溫水浴缸（大缸，$50\\,000\\ \\mathrm{g}$）。\n\n- 邊杯**溫度高**？係咖啡（$90^\\circ\\mathrm{C} > 40^\\circ\\mathrm{C}$）。溫度淨係講「冷熱程度」、講粒子**平均**郁得幾勁，同有幾多水**無關**。\n- 邊杯**熱能多**？反而係浴缸。因為熱能係**所有粒子郁動能量嘅總和**——浴缸水多咁多倍，就算每粒郁得慢啲，加埋總和仲係大過細細杯咖啡。\n\n所以：**溫度高 ≠ 熱能多。** 一條燒紅嘅火柴頭溫度好高，但你郁手熄到佢；一缸溫水暖你成晚,因為佢熱能多。\n\n咁<span class=\"term-zh\">熱</span>（<span class=\"term-en\">heat</span>）係咩？如果你把杯熱咖啡擺入溫水浴缸,**能量就會由咖啡（高溫）自動流去浴缸（低溫）**,直到兩者一樣溫——呢股「流緊嘅能量」就係熱。注意:**熱係流緊嗰陣先存在嘅嘢,流完就唔再叫熱**(變咗對方嘅熱能)。所以講「物體含有幾多熱」係錯嘅,應該講「含有幾多熱能」;熱淨係用嚟形容「**流動緊嘅能量**」。\n\n---\n\n## 四、正式定義：溫度、熱能、熱\n\n把上面三杯水嘅比喻,逐個寫成嚴謹定義。三者最大分別,就喺「**狀態 vs 擁有量 vs 流動量**」。\n\n| 詞 | 意義 | 係咩類型 | 單位 |\n|---|---|---|---|\n| <span class=\"term-zh\">溫度</span>（<span class=\"term-en\">temperature</span>） $T$ | 量度物質粒子**平均**動能高低嘅冷熱程度 | **狀態量**(只睇而家、唔理有幾多) | $\\mathrm{K}$ 或 $^\\circ\\mathrm{C}$ |\n| <span class=\"term-zh\">熱能／內能</span>（<span class=\"term-en\">thermal / internal energy</span>） $U$ | 物體內部**所有**粒子郁動能量嘅**總和** | **擁有量**(物體擁有嘅,同質量有關) | $\\mathrm{J}$ |\n| <span class=\"term-zh\">熱</span>（<span class=\"term-en\">heat</span>） $Q$ | **因溫差**而由高溫流向低溫嘅能量 | **流動量／過程**(流緊先存在,有方向) | $\\mathrm{J}$ |\n\n> **三句話分清楚**：①**溫度**係「幾熱」(狀態,同質量無關);②**熱能**係「總共收埋幾多郁動能量」(擁有量,質量越大通常越多);③**熱**係「**因為溫差**正喺度由高溫流去低溫嗰股能量」(過程,流完就唔再叫熱)。一句最緊要嘅:**熱永遠由高溫流向低溫,絕對唔會自動倒流**——呢個方向性,係 $S53$(熵與第二定律)嘅種子。\n\n**絕對溫標(點解材料/熱力學用 $\\mathrm{K}$ 唔用 $^\\circ\\mathrm{C}$)**：<span class=\"term-zh\">克耳文</span>(<span class=\"term-en\">kelvin</span>) $\\mathrm{K}$ 由<span class=\"term-zh\">絕對零度</span>(<span class=\"term-en\">absolute zero</span>,粒子郁動停到最低)起算,$0\\ \\mathrm{K} = -273.15^\\circ\\mathrm{C}$。換算好簡單:\n\n$$T(\\mathrm{K}) = T(^\\circ\\mathrm{C}) + 273.15 \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $T(\\mathrm{K})$ | <span class=\"term-zh\">絕對溫度</span>(<span class=\"term-en\">absolute temperature</span>) | $\\mathrm{K}$ |\n| $T(^\\circ\\mathrm{C})$ | 攝氏溫度 | $^\\circ\\mathrm{C}$ |\n| $273.15$ | 絕對零度同冰點嘅差(常數) | $\\mathrm{K}$ |\n\n> 式(1)唔加框(只式(2)主公式加框,H7)。重點:**溫度差(溫差)用 $\\mathrm{K}$ 定 $^\\circ\\mathrm{C}$ 數值一樣**(因為兩標尺刻度間隔相同,升 $1^\\circ\\mathrm{C}$ 就係升 $1\\ \\mathrm{K}$),所以下面 $\\Delta T$ 兩種單位通用;但**單一溫度值**(例如代入 Arrhenius、氣體定律)就一定要用 $\\mathrm{K}$。\n\n---\n\n## 五、主公式：熱量 $Q = mc\\Delta T$\n\n「一件物體要升(或降)幾多度,需要流入(或流出)幾多熱?」呢條係本節最核心、亦係 $S54$ 比熱會再用嘅一條式。要俾一件質量 $m$、<span class=\"term-zh\">比熱</span>(<span class=\"term-en\">specific heat</span>) $c$ 嘅物體,溫度改變 $\\Delta T$,需要嘅熱量:\n\n$$\\boxed{\\,Q = mc\\,\\Delta T\\,} \\tag{2}$$\n\n**式(2) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $Q$ | <span class=\"term-zh\">熱量</span>(<span class=\"term-en\">heat</span>):流入(正)或流出(負)嘅能量 | $\\mathrm{J}$ |\n| $m$ | 物體<span class=\"term-zh\">質量</span>(<span class=\"term-en\">mass</span>) | $\\mathrm{kg}$ |\n| $c$ | <span class=\"term-zh\">比熱</span>(<span class=\"term-en\">specific heat</span>):令 $1\\ \\mathrm{kg}$ 該物質升 $1\\ \\mathrm{K}$ 所需熱量 | $\\mathrm{J/(kg\\cdot K)}$ |\n| $\\Delta T$ | 溫度變化 $= T_{\\text{終}} - T_{\\text{初}}$(終態減初態) | $\\mathrm{K}$(或 $^\\circ\\mathrm{C}$,差值通用) |\n\n**呢條式喺度講咩?** 一句記法:**要熱幾多,睇「幾重 × 幾難升溫 × 升幾多度」**。$m$ 越大(嘢越多)、$c$ 越大(越「頂得住」唔易升溫)、$\\Delta T$ 越大(要升越多度),需要嘅熱 $Q$ 就越多。$\\Delta T$ 帶正負——\n\n- 物體**升溫**($T_{\\text{終}} > T_{\\text{初}}$) → $\\Delta T > 0$ → $Q > 0$ → **吸熱**(熱流入)。\n- 物體**降溫**($T_{\\text{終}} < T_{\\text{初}}$) → $\\Delta T < 0$ → $Q < 0$ → **放熱**(熱流出)。\n\n**由式(2)睇 $\\Delta T$ 符號點定吸放熱(逐行)。** 思路:判斷一件物體吸定放熱,只需睇 $\\Delta T$ 嘅正負(因 $m,c$ 必為正)。\n\n$$\\Delta T = T_{\\text{終}} - T_{\\text{初}} \\quad\\text{（定義,終態減初態）}$$\n\n$$\\text{若 } T_{\\text{終}} > T_{\\text{初}} \\;\\Rightarrow\\; T_{\\text{終}} - T_{\\text{初}} > 0 \\quad\\text{（大數減細數,結果為正）}$$\n\n$$\\Rightarrow\\; \\Delta T > 0 \\;\\Rightarrow\\; Q = mc\\,\\Delta T > 0 \\quad\\text{（}m>0,\\,c>0,\\,\\Delta T>0\\text{,三正相乘得正 → 吸熱）}$$\n\n$$\\text{若 } T_{\\text{終}} < T_{\\text{初}} \\;\\Rightarrow\\; \\Delta T < 0 \\;\\Rightarrow\\; Q < 0 \\quad\\text{（正 × 正 × 負 = 負 → 放熱）}$$\n\n> **單位一致最易失分**：$c$ 嘅單位 $\\mathrm{J/(kg\\cdot K)}$ 入面有 $\\mathrm{kg}$,所以 $m$ 一定要用 $\\mathrm{kg}$(唔係 $\\mathrm{g}$);乘埋 $\\Delta T$($\\mathrm{K}$),單位 $\\dfrac{\\mathrm{J}}{\\mathrm{kg\\cdot K}}\\times\\mathrm{kg}\\times\\mathrm{K}$ 上下相消,啱啱好剩返 $\\mathrm{J}$。單位對得返,答案就大機會啱。\n\n---\n\n## 六、衍生關係：熱量守恆(混合到熱平衡)\n\n當高溫物體 A 同低溫物體 B 接觸,熱由 A 流去 B,直到兩者**同溫**(即 $S50$ 嘅<span class=\"term-zh\">熱平衡</span>(<span class=\"term-en\">thermal equilibrium</span>))。若無能量漏去外界,**A 放出嘅熱 = B 吸收嘅熱**:\n\n$$Q_{\\text{放}} + Q_{\\text{吸}} = 0 \\quad\\Longleftrightarrow\\quad m_A c_A (T_f - T_{A}) + m_B c_B (T_f - T_{B}) = 0 \\tag{3}$$\n\n**式(3) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $T_f$ | 兩物體最終共同溫度(<span class=\"term-zh\">熱平衡</span>(<span class=\"term-en\">thermal equilibrium</span>)溫度) | $\\mathrm{K}$ |\n| $T_A,\\,T_B$ | A、B 各自初溫($T_A > T_B$) | $\\mathrm{K}$ |\n| $m_A c_A,\\,m_B c_B$ | A、B 各自質量 × 比熱 | $\\mathrm{J/K}$ |\n\n> 式(3)唔加框(只式(2)加框,H7):式(3)係主公式 $Q=mc\\Delta T$ 套兩次再用「守恆」相加得出嘅,唔係新定義。物理意思:**高溫嗰個降溫($\\Delta T<0$,放熱)、低溫嗰個升溫($\\Delta T>0$,吸熱),一放一吸啱啱抵消**。一句記:**熱唔會無端端消失,A 少咗幾多 B 就多咗幾多**——呢個守恆思想,正係 $S51$ 熱力學第一定律(能量守恆)嘅前奏。\n\n---\n\n## 七、睇圖：熱由高溫流向低溫(含讀圖導引)\n\n下面係兩個物體接觸後,溫度隨時間趨向同一個<span class=\"term-zh\">熱平衡</span>(<span class=\"term-en\">thermal equilibrium</span>)溫度嘅示意(縱軸係溫度 $T$,橫軸係時間;純示意,唔按真實比例):\n\n<svg viewBox=\"0 0 520 300\" width=\"100%\" style=\"max-width:520px;display:block;margin:0 auto;background:transparent;\">\n  <line x1=\"50\" y1=\"20\" x2=\"50\" y2=\"250\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/>\n  <line x1=\"50\" y1=\"250\" x2=\"500\" y2=\"250\" stroke=\"#94a3b8\" stroke-width=\"1.5\"/>\n  <text x=\"22\" y=\"140\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\" transform=\"rotate(-90 22 140)\">溫度 T</text>\n  <text x=\"450\" y=\"272\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\">時間 t</text>\n  <line x1=\"50\" y1=\"150\" x2=\"500\" y2=\"150\" stroke=\"#64748b\" stroke-width=\"1\" stroke-dasharray=\"5 5\"/>\n  <text x=\"455\" y=\"145\" fill=\"#f5c842\" font-size=\"11\" font-family=\"sans-serif\">Tf 平衡</text>\n  <path d=\"M60 60 Q200 65 320 145 Q400 152 490 150\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"2.5\"/>\n  <text x=\"62\" y=\"52\" fill=\"#f06060\" font-size=\"11\" font-family=\"sans-serif\">A 高溫(放熱,降溫)</text>\n  <path d=\"M60 240 Q200 235 320 155 Q400 148 490 150\" fill=\"none\" stroke=\"#4a9eff\" stroke-width=\"2.5\"/>\n  <text x=\"62\" y=\"234\" fill=\"#4a9eff\" font-size=\"11\" font-family=\"sans-serif\">B 低溫(吸熱,升溫)</text>\n  <path d=\"M250 95 L290 118\" fill=\"none\" stroke=\"#2dd4bf\" stroke-width=\"2\" marker-end=\"url(#ah)\"/>\n  <text x=\"240\" y=\"92\" fill=\"#2dd4bf\" font-size=\"11\" font-family=\"sans-serif\">熱 Q 由 A 流向 B</text>\n  <defs><marker id=\"ah\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0 0 L6 3 L0 6 z\" fill=\"#2dd4bf\"/></marker></defs>\n</svg>\n\n**讀圖導引(呢張圖點睇)**\n\n① **X 軸(時間 $t$)**:由左(剛接觸)行到右(夠耐之後)。無特定單位,淨係表示時間流逝嘅方向。\n② **Y 軸(溫度 $T$,單位 $\\mathrm{K}$ 或 $^\\circ\\mathrm{C}$)**:越高代表越熱。睇兩條線最後**埋到同一條虛線**($T_f$),就係達到熱平衡。\n③ **每個關鍵特徵**:紅線(A,高溫)一路**跌**(放熱、降溫),藍線(B,低溫)一路**升**(吸熱、升溫),青色箭咀表示熱 $Q$ 嘅流向係**A → B**(高 → 低);兩線最後相遇喺黃色虛線 $T_f$,之後**唔再變**(熱平衡,熱停止淨流動)。\n④ **最容易睇錯嘅地方**:(1)平衡溫度 $T_f$ **唔一定喺正中間**——若 A、B 嘅 $mc$(質量 × 比熱)唔同,$T_f$ 會**偏向 $mc$ 大嗰個**(佢「頂得住」,溫度郁得少)。(2)達到平衡後熱**唔係冇晒**,而係**兩邊一樣溫、再無溫差,所以無淨流動**;唔好誤會成「熱消失咗」。\n\n---\n\n## 八、Worked Examples(由易到難,逐步、每個數字標來源)\n\n> 本節係概念節,例題集中喺「識分溫度/熱/熱能、識做 $\\mathrm{K}$↔$^\\circ\\mathrm{C}$ 換算、識用式(2) $Q=mc\\Delta T$ 計熱量、最後綜合到混合求平衡溫度(式(3))」。每個數字都標來源。比熱以水 $c=4186\\ \\mathrm{J/(kg\\cdot K)}$ 為例(**數值需查證 ⚠**)。\n\n### 例 1(易):攝氏↔克耳文換算\n\n> 問:某退火爐設定 $T = 350^\\circ\\mathrm{C}$。換成絕對溫度 $\\mathrm{K}$ 係幾多?\n\n**第 1 步:寫低換算式**\n\n$$T(\\mathrm{K}) = T(^\\circ\\mathrm{C}) + 273.15 \\quad\\text{（式(1)）}$$\n\n**第 2 步:代入數字(標來源)**\n\n$$T(\\mathrm{K}) = 350 + 273.15 \\quad\\text{（}350^\\circ\\mathrm{C}\\text{ 題幹給定;}273.15\\text{ 常數）}$$\n\n**第 3 步:相加**\n\n$$T = 623.15\\ \\mathrm{K} \\quad\\text{（}350+273.15=623.15\\text{）}$$\n\n> **答案:$623.15\\ \\mathrm{K}$。** 提醒:凡係代入熱力學公式(如往後 Arrhenius)嘅**單一溫度值**,一定要先轉做 $\\mathrm{K}$;但若係算**溫差** $\\Delta T$,$\\mathrm{K}$ 同 $^\\circ\\mathrm{C}$ 數值一樣,唔使轉。\n\n### 例 2(中):用 $Q=mc\\Delta T$ 算要俾幾多熱\n\n> 問:把 $0.5\\ \\mathrm{kg}$ 水由 $20^\\circ\\mathrm{C}$ 加熱到 $80^\\circ\\mathrm{C}$,需要幾多熱量?水 $c = 4186\\ \\mathrm{J/(kg\\cdot K)}$。\n\n**第 1 步:寫低主公式**\n\n$$Q = mc\\,\\Delta T \\quad\\text{（式(2)）}$$\n\n**第 2 步:算溫差 $\\Delta T$(終態減初態)**\n\n$$\\Delta T = T_{\\text{終}} - T_{\\text{初}} = 80 - 20 = 60\\ \\mathrm{K} \\quad\\text{（}80^\\circ\\mathrm{C}、20^\\circ\\mathrm{C}\\text{ 題幹給定;溫差 }^\\circ\\mathrm{C}\\text{ 同 }\\mathrm{K}\\text{ 通用）}$$\n\n**第 3 步:代入數字(標來源)**\n\n$$Q = (0.5\\ \\mathrm{kg}) \\times \\left(4186\\ \\tfrac{\\mathrm{J}}{\\mathrm{kg\\cdot K}}\\right) \\times (60\\ \\mathrm{K}) \\quad\\text{（}m=0.5\\text{ 給定;}c=4186\\text{ 查表;}\\Delta T=60\\text{ 由第 2 步）}$$\n\n**第 4 步:相乘(單位 $\\mathrm{kg}$、$\\mathrm{K}$ 上下相消,剩 $\\mathrm{J}$)**\n\n$$Q = 125\\,580\\ \\mathrm{J} \\approx 1.26\\times10^{5}\\ \\mathrm{J} \\quad\\text{（}0.5\\times4186\\times60=125580\\text{）}$$\n\n> **答案:約 $125\\,580\\ \\mathrm{J}$(即 $\\approx 126\\ \\mathrm{kJ}$),為正 → 吸熱。** $\\Delta T>0$(升溫)所以 $Q>0$,代表熱流入。\n\n### 例 3(較複雜):同樣熱量,水 vs 鐵邊個升溫多\n\n> 問:分別俾 $10\\,000\\ \\mathrm{J}$ 熱量畀 $0.2\\ \\mathrm{kg}$ 水($c_{\\text{水}}=4186$)同 $0.2\\ \\mathrm{kg}$ 鐵($c_{\\text{鐵}}=450\\ \\mathrm{J/(kg\\cdot K)}$,**需查證 ⚠**)。邊個升溫多?各升幾多度?\n\n**第 1 步:由式(2)反解 $\\Delta T$(兩邊同除 $mc$)**\n\n$$Q = mc\\,\\Delta T \\;\\Rightarrow\\; \\Delta T = \\dfrac{Q}{mc} \\quad\\text{（式(2)兩邊同除 }mc\\text{,把 }\\Delta T\\text{ 孤立）}$$\n\n**第 2 步:算水嘅 $\\Delta T$(代入,標來源)**\n\n$$\\Delta T_{\\text{水}} = \\dfrac{10\\,000}{0.2 \\times 4186} = \\dfrac{10\\,000}{837.2} \\approx 11.9\\ \\mathrm{K} \\quad\\text{（}Q=10000\\text{ 給定;}m=0.2\\text{ 給定;}c=4186\\text{ 查表）}$$\n\n**第 3 步:算鐵嘅 $\\Delta T$(代入,標來源)**\n\n$$\\Delta T_{\\text{鐵}} = \\dfrac{10\\,000}{0.2 \\times 450} = \\dfrac{10\\,000}{90} \\approx 111\\ \\mathrm{K} \\quad\\text{（同樣 }Q=10000、m=0.2\\text{;}c=450\\text{ 查表）}$$\n\n> **答案:鐵升溫多得多(約 $111\\ \\mathrm{K}$ vs 水約 $11.9\\ \\mathrm{K}$)。** 物理意思:比熱 $c$ 越大越「頂得住」唔易升溫——水嘅 $c$ 係鐵嘅近 $9$ 倍,同樣熱量落去,水只升咗鐵嘅約 $1/9$。呢個正係水做散熱劑、海洋調節氣候嘅原因(往後 $S54$ 深講)。\n\n### 例 4(混合・完整計算):混合求熱平衡溫度\n\n> 問:把 $0.3\\ \\mathrm{kg}$、$90^\\circ\\mathrm{C}$ 嘅熱水(A),倒入 $0.2\\ \\mathrm{kg}$、$20^\\circ\\mathrm{C}$ 嘅凍水(B),兩者同係水($c$ 相同),無熱漏出。最終共同溫度 $T_f$ 係幾多?\n\n**第 0 步:把數字來源寫清楚**\n\n| 量 | 數值 | 來源 |\n|---|---|---|\n| $m_A,\\,T_A$ | $0.3\\ \\mathrm{kg},\\,90^\\circ\\mathrm{C}$ | 題幹給定 |\n| $m_B,\\,T_B$ | $0.2\\ \\mathrm{kg},\\,20^\\circ\\mathrm{C}$ | 題幹給定 |\n| $c$ | 兩者同係水,相同 | 題幹給定 |\n\n**第 1 步:寫低熱量守恆(式(3))**\n\n$$m_A c (T_f - T_A) + m_B c (T_f - T_B) = 0 \\quad\\text{（式(3):A 放熱 + B 吸熱 = 0）}$$\n\n**第 2 步:兩邊同除 $c$(因兩者同係水,$c$ 相同可消)**\n\n$$m_A (T_f - T_A) + m_B (T_f - T_B) = 0 \\quad\\text{（兩邊同除 }c\\text{,把 }c\\text{ 消去）}$$\n\n**第 3 步:代入數字(標來源)**\n\n$$0.3\\,(T_f - 90) + 0.2\\,(T_f - 20) = 0 \\quad\\text{（}m_A=0.3、T_A=90、m_B=0.2、T_B=20\\text{ 由第 0 步）}$$\n\n**第 4 步:拆括號**\n\n$$0.3\\,T_f - 27 + 0.2\\,T_f - 4 = 0 \\quad\\text{（}0.3\\times90=27、0.2\\times20=4\\text{,逐項展開）}$$\n\n**第 5 步:合併同類項**\n\n$$0.5\\,T_f - 31 = 0 \\quad\\text{（}0.3+0.2=0.5、-27-4=-31\\text{）}$$\n\n**第 6 步:移項(把 $-31$ 搬去右邊)**\n\n$$0.5\\,T_f = 31 \\quad\\text{（兩邊加 }31\\text{）}$$\n\n**第 7 步:兩邊同除 $0.5$,解出 $T_f$**\n\n$$T_f = \\dfrac{31}{0.5} = 62^\\circ\\mathrm{C} \\quad\\text{（兩邊同除 }0.5\\text{）}$$\n\n> **答案:$T_f = 62^\\circ\\mathrm{C}$。** 呢題示範兩種法則一齊出場:**式(3)熱量守恆**(A 放 = B 吸)同**一元一次方程解 $T_f$**。檢查方向:$T_f=62$ 介乎 $20$ 同 $90$ 之間(合理),而且**偏向 $m$ 大嗰個**(A 水多 $0.3>0.2$,所以 $62$ 較近 $90$ 而非中間 $55$)——同讀圖導引④「$T_f$ 偏向 $mc$ 大嗰個」對得返。\n\n---\n\n## 九、易混淆對比:唔好撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| 溫度高就一定熱能多? | **唔係。** 溫度係冷熱程度(同質量無關);熱能係所有粒子郁動能量總和(質量越大通常越多)。細杯滾水溫度高過大缸溫水,但熱能可以少過。 |\n| 「物體含有幾多熱」? | **講法錯。** 物體含嘅係**熱能**;**熱**淨係指「因溫差流動緊嘅能量」,流完就唔再叫熱(變咗對方嘅熱能)。 |\n| 熱可以由低溫流去高溫? | **唔會自動。** 熱永遠由高溫自動流向低溫;要倒流就要外力(如雪櫃做功)。呢個方向性係 $S53$ 熵嘅核心。 |\n| $\\Delta T$ 一定要轉做 $\\mathrm{K}$? | **溫差唔使。** 溫差 $\\mathrm{K}$ 同 $^\\circ\\mathrm{C}$ 數值一樣;但**單一溫度值**代入公式就一定要 $\\mathrm{K}$。 |\n| $m$ 用 $\\mathrm{g}$ 代入 $Q=mc\\Delta T$? | **錯。** $c$ 單位含 $\\mathrm{kg}$,所以 $m$ 一定要 $\\mathrm{kg}$;用 $\\mathrm{g}$ 會大 $1000$ 倍。 |\n| 達熱平衡後熱消失咗? | **唔係。** 係**兩邊同溫、無溫差所以無淨流動**,能量總量守恆,冇消失。 |\n\n---\n\n## 十、一頁總表\n\n| 項目 | 公式／關係 | 一句講佢做咩 |\n|:--|:--|:--|\n| 三詞分清 | 溫度(狀態)・熱能(擁有量)・熱(流動量) | 溫度=幾熱;熱能=總郁動能;熱=因溫差流動嘅能量 |\n| 溫標換算 | $T(\\mathrm{K}) = T(^\\circ\\mathrm{C}) + 273.15$(式(1)) | 單一溫度值用 $\\mathrm{K}$;溫差兩標通用 |\n| 熱量(主公式) | $Q = mc\\Delta T$(式(2)) | 幾重 × 幾難升溫 × 升幾多度 = 要幾多熱 |\n| 吸放熱判斷 | $\\Delta T>0\\Rightarrow Q>0$ 吸熱;$\\Delta T<0\\Rightarrow Q<0$ 放熱 | 升溫吸熱、降溫放熱 |\n| 反解溫升 | $\\Delta T = \\dfrac{Q}{mc}$ | 同樣熱量,$c$ 大者升溫少(頂得住) |\n| 熱量守恆 | $m_A c_A(T_f-T_A)+m_B c_B(T_f-T_B)=0$(式(3)) | A 放 = B 吸;$T_f$ 偏向 $mc$ 大者 |\n| 熱方向 | 高溫 → 低溫(永不自動倒流) | 達同溫即熱平衡($S50$),無淨流動 |\n| 單位 | $T$:$\\mathrm{K}$;$Q,U$:$\\mathrm{J}$;$m$:$\\mathrm{kg}$;$c$:$\\mathrm{J/(kg\\cdot K)}$ | $m$ 用 $\\mathrm{kg}$、單一溫度用 $\\mathrm{K}$ |\n\n---\n\n## 十一、現場連結:封裝散熱入面嘅溫度、熱能同熱\n\n呢節分清嘅三個詞,喺封裝散熱(thermal management)日日見到:\n\n- **晶片「溫度」vs「熱能」**:量度晶片<span class=\"term-zh\">接面溫度</span>(<span class=\"term-en\">junction temperature, $T_j$</span>)係睇佢有幾熱(狀態);但要散走嘅係佢工作時**產生嘅熱**(由電功率轉成嘅熱,因 $T_j$ 高過散熱片而流走)。溫度高唔代表熱能多,但 $T_j$ 過高會燒——所以要把熱**流走**。\n- **熱由高溫流向低溫**:整個散熱路徑(晶片 → <span class=\"term-zh\">熱介面材料</span>(<span class=\"term-en\">thermal interface material, TIM</span>) → 散熱片 → 空氣)就係靠**一級一級嘅溫差**,把熱由高溫晶片一路引去低溫環境——正係本節「熱由高溫流向低溫」嘅放大版($S55$ 熱傳導深講)。\n- **比熱 $c$ 同熱容**:選散熱材料、估熱緩衝,就要用到 $Q=mc\\Delta T$——同樣熱量落去,$mc$ 越大溫度郁得越少(越穩),正係例 3 嘅道理。\n\n---\n\n## 十二、診斷題組(Diagnostic Quiz｜識別自己卡喺邊一層)\n\n> 逐題答,睇吓由邊一層開始錯,就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1:「熱」(heat)最準確嘅意思係?(a) 物體含有嘅總能量　(b) 因溫差而由高溫流向低溫嘅能量　(c) 物體嘅冷熱程度　(d) 粒子嘅平均動能\n- D2:溫度量度緊咩?(a) 物體所有粒子郁動能量嘅總和　(b) 物體質量　(c) 粒子**平均**動能(冷熱程度)　(d) 流動緊嘅能量\n\n**L2 概念理解**\n- D3:一細杯 $90^\\circ\\mathrm{C}$ 滾水同一大缸 $40^\\circ\\mathrm{C}$ 溫水,邊個熱能多?(a) 滾水,因為溫度高　(b) 溫水缸,因為水多、粒子總郁動能大　(c) 一樣多　(d) 無法比較\n- D4:熱嘅流動方向係?(a) 由低溫自動流向高溫　(b) 由高溫自動流向低溫　(c) 兩個方向都會自動流　(d) 同溫差無關\n\n**L3 單步應用**\n- D5:$25^\\circ\\mathrm{C}$ 換成克耳文係?(a) $25\\ \\mathrm{K}$　(b) $248.15\\ \\mathrm{K}$　(c) $298.15\\ \\mathrm{K}$　(d) $273.15\\ \\mathrm{K}$\n- D6:$1\\ \\mathrm{kg}$ 物體 $c=900\\ \\mathrm{J/(kg\\cdot K)}$,升溫 $10\\ \\mathrm{K}$,需要熱量?(a) $90\\ \\mathrm{J}$　(b) $900\\ \\mathrm{J}$　(c) $9000\\ \\mathrm{J}$　(d) $90000\\ \\mathrm{J}$\n\n**L4 多步計算(反解/比較)**\n- D7:俾 $4000\\ \\mathrm{J}$ 熱畀 $0.1\\ \\mathrm{kg}$、$c=2000\\ \\mathrm{J/(kg\\cdot K)}$ 嘅物體,升溫幾多?(a) $5\\ \\mathrm{K}$　(b) $20\\ \\mathrm{K}$　(c) $200\\ \\mathrm{K}$　(d) $2000\\ \\mathrm{K}$\n- D8:同樣熱量落去,A 物 $c=4000$、B 物 $c=500\\ \\mathrm{J/(kg\\cdot K)}$(質量相同),邊個升溫多?(a) A,因為 $c$ 大　(b) B,因為 $c$ 細頂唔住　(c) 一樣　(d) 視乎溫度\n\n**L5 綜合應用**\n- D9:把等質量、$80^\\circ\\mathrm{C}$ 同 $20^\\circ\\mathrm{C}$ 嘅同種液體混合(無熱漏),最終溫度約係?(a) $80^\\circ\\mathrm{C}$　(b) $50^\\circ\\mathrm{C}$　(c) $20^\\circ\\mathrm{C}$　(d) $100^\\circ\\mathrm{C}$\n- D10:「兩個物體達到熱平衡」即係?(a) 兩者熱能完全相等　(b) 熱已經消失晒　(c) 兩者同溫、再無溫差所以無淨熱流動　(d) 較重嗰個溫度較高\n\n**診斷答案**:D1 b｜D2 c｜D3 b｜D4 b｜D5 c｜D6 c｜D7 b｜D8 b｜D9 b｜D10 c\n\n> 卡喺 L1–L2 → 重睇第四節(三詞定義表)同第三節(水溫 vs 一池水嘅白話);卡喺 L3 → 重睇式(1)換算(例 1)同式(2) $Q=mc\\Delta T$(例 2),D6 計法:$Q=1\\times900\\times10=9000\\ \\mathrm{J}$;卡喺 L4 → 重睇例 3 反解 $\\Delta T=Q/(mc)$,D7 計法:$\\Delta T=4000/(0.1\\times2000)=20\\ \\mathrm{K}$,D8 記「$c$ 細頂唔住、升溫多」;卡喺 L5 → 重睇第六節熱量守恆同例 4,D9 等質量同液體所以平衡喺正中 $50^\\circ\\mathrm{C}$,D10 重睇讀圖導引④(平衡=無溫差、唔係熱消失)。\n",
+  "fieldLink": "封裝散熱(thermal management)日日見到呢三個詞:量度晶片接面溫度(junction temperature, Tj)係睇佢有幾熱(狀態),但要散走嘅係佢工作時產生嘅熱(由溫差流走);Tj 高唔代表熱能多,但過高會燒,所以要把熱流走。整個散熱路徑晶片→熱介面材料(TIM)→散熱片→空氣,就係靠一級一級嘅溫差,把熱由高溫晶片引去低溫環境(S55 熱傳導深講)。選散熱材料、估熱緩衝就用 Q＝mcΔT:同樣熱量落去,mc 越大溫度郁得越少越穩",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "識分溫度(冷熱程度、狀態、同質量無關)、熱能(所有粒子郁動能總和、擁有量、同質量有關)、熱(因溫差流動嘅能量、過程),唔好把溫度高當成熱能多"
+    },
+    {
+      "id": "c2",
+      "text": "知熱永遠由高溫自動流向低溫、唔會自動倒流,達同溫即熱平衡、無溫差所以無淨流動(唔係熱消失)"
+    },
+    {
+      "id": "c3",
+      "text": "識做溫標換算 T(K)＝T(°C)+273.15,知單一溫度值要用 K、溫差 ΔT 兩標數值通用"
+    },
+    {
+      "id": "c4",
+      "text": "識用主公式 Q＝mcΔT 算熱量(ΔT＝T終−T初),並由 ΔT 正負判斷升溫吸熱(Q>0)/降溫放熱(Q<0);m 記得用 kg"
+    },
+    {
+      "id": "c5",
+      "text": "識反解 ΔT＝Q/(mc):同樣熱量,比熱 c 越大升溫越少(頂得住),如水 c 約鐵 9 倍、同熱量只升約 1/9"
+    },
+    {
+      "id": "c6",
+      "text": "識用熱量守恆 m_A c_A(Tf−T_A)+m_B c_B(Tf−T_B)＝0 求混合熱平衡溫度,知 Tf 介乎兩初溫之間、偏向 mc 大嗰個"
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "label": "(選看)Khan Academy 物理:Temperature, heat, and thermal energy(溫度、熱與熱能嘅分別)",
+      "url": "https://www.khanacademy.org"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "下面邊個最準確描述「熱」(heat)?",
+      "options": [
+        "因溫差而由高溫流向低溫嘅能量(流動量、流完就唔再叫熱)",
+        "物體內部所有粒子郁動能量嘅總和(擁有量)",
+        "物體嘅冷熱程度(狀態)",
+        "物體嘅質量"
+      ],
+      "answer": 0,
+      "explain": "熱(heat)係過程量:淨係指因溫差而由高溫流向低溫嗰股流動緊嘅能量,流完就唔再叫熱(變咗對方嘅熱能)。錯選 B 講緊嘅係熱能/內能(物體擁有嘅總郁動能);錯選 C 係溫度(冷熱程度);錯選 D 係質量。記法:溫度=幾熱(狀態)、熱能=總郁動能(擁有)、熱=因溫差流動嘅能量(過程)。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "一細杯 90°C 滾水,佢嘅熱能一定多過一大缸 40°C 溫水。",
+      "answer": false,
+      "explain": "錯。溫度高 ≠ 熱能多。溫度淨係冷熱程度、同有幾多水無關;熱能係所有粒子郁動能量嘅總和,同質量有關。大缸溫水雖然每粒郁得慢啲,但水多咁多倍,加埋總和可以大過細杯滾水。所以細杯滾水溫度高,但熱能可以少過大缸溫水。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "根據 Q＝mcΔT,若質量 m 同溫升 ΔT 都唔變,比熱 c 越大,需要嘅熱量 Q 點變?",
+      "options": [
+        "Q 越大(需要更多熱)",
+        "Q 越細(需要更少熱)",
+        "Q 唔變,同 c 無關",
+        "Q 變負數"
+      ],
+      "answer": 0,
+      "explain": "Q＝mcΔT 入面 Q 同 c 成正比:m 同 ΔT 都唔變嗰陣,c 越大個積 mcΔT 就越大,所以需要嘅熱量 Q 越大(越「頂得住」嘅物質要更多熱先升到同樣溫度)。錯選 B 把正比記反;錯選 C 忽略咗 c 喺式入面;錯選 D 符號無關,c、m、ΔT 都係正。記法:同樣升溫,c 越大要嘅熱越多。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "同樣熱量落去,A 物比熱 c＝4000、B 物 c＝500 J/(kg·K)(質量相同),邊個升溫多?",
+      "options": [
+        "B,因為 c 細、頂唔住,同樣熱量升溫多",
+        "A,因為 c 大就升溫快",
+        "兩者升溫一樣",
+        "視乎初始溫度先知"
+      ],
+      "answer": 0,
+      "explain": "反解 ΔT＝Q/(mc):分母 mc 越大,ΔT 越細。質量相同,B 嘅 c(500)細過 A(4000),所以 B 嘅分母細、升溫多(約 A 嘅 8 倍)。比熱 c 大代表越「頂得住」唔易升溫(如水 c 大、好難加熱)。錯選 A 把方向記反(c 大應升溫少);錯選 C、D 忽略咗 c 嘅作用。記住:c 細頂唔住、升溫多。"
+    }
+  ],
+  "chatPracticeHints": [
+    "溫度高唔等於熱能多",
+    "ΔT 終減初,m 要用 kg",
+    "c 細頂唔住升溫多"
+  ]
+}

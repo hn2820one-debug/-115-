@@ -1,0 +1,112 @@
+{
+  "id": "S52",
+  "stage": 1,
+  "week": 4,
+  "order": 52,
+  "title": "熱力學第一定律（二）",
+  "titleEn": "First Law of Thermodynamics II",
+  "platform": "ka",
+  "objective": "由 S51 嘅概念進入實際計算:核心係補上『功 W 點樣由壓力同體積算出嚟』——定壓(isobaric)膨脹時,系統對外做嘅功 W＝P·ΔV(壓力 × 體積變化 ＝ P–V 圖線下面積),其中 ΔV＝V₂−V₁(膨脹>0/壓縮<0)。要做到三件事:(1)識用 W＝P·ΔV 算膨脹功,連單位處理(代入前先換 kPa→Pa、L→m³,因為 Pa·m³＝N·m＝J);(2)識把帶號嘅 Q、W 代入 S51 主式 ΔU＝Q−W 算內能變化,並識反過嚟移項解未知量(Q＝ΔU＋W、W＝Q−ΔU);(3)識分清兩套符號慣例(sign convention):本 App 統一用 ΔU＝Q−W(W＝系統對外做功),另套 ΔU＝Q+W(W＝外界對系統做功)只係正方向定義唔同,揀定一套用到尾就唔會錯。關鍵直覺:定壓加熱時吸入嘅熱唔會全變內能,一部分被膨脹做功 P·ΔV 抽走(只有定容 W＝0 先全變內能)——呢個正正係日後焓 H＝U＋PV 要把 PV 計入嘅原因。本節係 S53(熵,計可逆功)、S54(比熱與熱容,分定壓/定容)同將來焓 H 所有『能量點計』嘅計算地基",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S51"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S52 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: calculation｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n上一節（$S51$）已經把<span class=\"term-zh\">熱力學第一定律</span>（<span class=\"term-en\">first law of thermodynamics</span>）$\\Delta U = Q - W$ 嘅**概念**打好：$U$ 係狀態量、$Q$ 同 $W$ 係過程量、識認絕熱／定容／循環三個特例。本節（二）唔再停留喺概念，而係**真正落手計**——核心係補上**功 $W$ 點樣由壓力同體積算出嚟**：對最常見嘅情況（系統喺**定壓**下膨脹／壓縮），功就係 $W = P\\,\\Delta V$。掌握咗呢條，第一定律先由「一句道理」變成「一個可以代數字、出焦耳數嘅計算工具」。本節要你做到三件事：(1) 識用 $W=P\\Delta V$ 算膨脹功，連同單位（$\\text{Pa}\\times\\text{m}^3=\\text{J}$）一齊處理；(2) 識把帶號嘅 $Q$、$W$ 代入 $\\Delta U=Q-W$ 算內能變化，並識反過嚟由 $\\Delta U$ 移項解未知量；(3) 識分清兩套<span class=\"term-zh\">符號慣例</span>（<span class=\"term-en\">sign convention</span>）（$\\Delta U=Q-W$ vs $\\Delta U=Q+W$）唔好撈亂。呢節係日後<span class=\"term-zh\">焓</span>（<span class=\"term-en\">enthalpy</span>）$H$、熱容、相變潛熱所有「能量點計」嘅計算地基。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：直接接 **$S51$（第一定律一）**——主式 $\\Delta U=Q-W$、狀態量 vs 過程量、三個特例（絕熱／定容／循環）全部喺嗰節定義，本節當你已掌握。若對「$W$ 前面點解係減號」「放熱 $Q<0$」仲含糊，先回 $S51$ 第五、第六節。本節嘅新計算工具 $W=P\\Delta V$ 用到 **$S23$（定積分／面積即累積量）** 嘅直覺——「功＝壓力沿體積變化嘅累積」其實係 $W=\\int P\\,\\mathrm{d}V$ 喺定壓下嘅簡化；唔記得「面積＝累積」可回 $S21$、$S23$。另外用到 **$S6$ 一帶嘅單位換算** 基本功（$\\text{kPa}\\to\\text{Pa}$、$\\text{L}\\to\\text{m}^3$）。\n- **新內容同已學嘅關係**：$S51$ 教你「點解 $\\Delta U=Q-W$」（道理），本節教你「**點樣把 $Q$、$W$ 嘅實際數字計出嚟再代入**」（計算）。最關鍵嘅新嘢係**功唔再係題幹直接俾**，而係要你**由壓力同體積自己算**——$W=P\\Delta V$ 就係呢個「由狀態量算出過程量」嘅橋。\n- **本節係邊節嘅地基**：識計 $W=P\\Delta V$、識代號入 $\\Delta U=Q-W$，係之後 **$S53$（熵）** 計可逆功、**$S54$（比熱與熱容）** 分定壓／定容熱容、以及將來<span class=\"term-zh\">焓</span>（<span class=\"term-en\">enthalpy</span>）$H=U+PV$ 嘅直接前提。冇本節嘅膨脹功計算，定壓加熱「點解部分熱去咗做功、唔全變內能」就計唔出。\n\n---\n\n## 三、先講白話：功就係「氣體推郁活塞掃過嘅面積」\n\n接返 $S51$ 個銀行戶口比喻：$U$ 係結餘，$Q$、$W$ 係兩條過數通道。$S51$ 啲題目，$W$ 係**直接話俾你聽**（「對外做咗 $200\\ \\text{J}$ 功」）。但現實好少咁好彩——更常見嘅情況係：你知道個氣缸**壓力幾多**、**體積由幾多變到幾多**，要你**自己算**佢做咗幾多功。\n\n想像一個針筒（氣缸）入面有氣體，前面塞住個活塞。氣體加熱膨脹，**推住活塞向前郁**。佢做咗幾多功？就好似「用幾大力 × 推咗幾遠」。但氣體唔係用「力 × 距離」咁直接量，而係用**壓力 $P$**（單位面積嘅力）同**體積變化 $\\Delta V$**（活塞掃過嘅空間）嚟描述。如果膨脹過程壓力**保持不變**（定壓），個功就乾淨俐落係：\n\n$$W = P \\times \\Delta V \\quad(\\text{壓力} \\times \\text{體積變化})$$\n\n直覺上佢就係 **$P$–$V$ 圖入面，定壓線下面掃過嗰一橫條嘅面積**（呢個正正係 $S23$「面積＝累積量」嘅延伸）。最要記住一句：**氣體膨脹（$\\Delta V>0$）＝對外做正功（$W>0$）＝結餘要減；氣體被壓縮（$\\Delta V<0$）＝外界對佢做功（$W<0$）＝結餘升。** 下面會嚴格定義同反覆計。\n\n---\n\n## 四、正式定義：定壓功、符號慣例\n\n把上面三樣嘢寫成嚴謹定義。\n\n| 詞 | 嚴謹意義 | 備註 |\n|---|---|---|\n| <span class=\"term-zh\">壓力</span>（<span class=\"term-en\">pressure</span>）$P$ | 單位面積上嘅垂直力，$P=F/A$ | 單位 $\\text{Pa}=\\text{N}/\\text{m}^2$ |\n| <span class=\"term-zh\">體積變化</span>（<span class=\"term-en\">volume change</span>）$\\Delta V$ | 末體積減初體積，$\\Delta V=V_2-V_1$ | 膨脹 $>0$、壓縮 $<0$，單位 $\\text{m}^3$ |\n| <span class=\"term-zh\">膨脹功</span>（<span class=\"term-en\">expansion work</span>）$W$ | 系統因體積改變而對環境做嘅功 | 定壓時 $W=P\\Delta V$ |\n| <span class=\"term-zh\">定壓過程</span>（<span class=\"term-en\">isobaric process</span>） | 壓力 $P$ 全程保持不變嘅過程 | $W=P\\Delta V$ 嘅前提 |\n\n**符號慣例（本 App 全程統一）**：本節同 $S51$ 一律用<span class=\"term-zh\">物理／化工慣例</span>（<span class=\"term-en\">physics convention</span>）——$\\Delta U = Q - W$，其中 $W$ 係「**系統對外**做嘅功」。要留意有部分化學教科書用另一套 $\\Delta U=Q+W$，嗰陣 $W$ 定義成「**外界對系統**做嘅功」（正負方向掉轉）。兩套講嘅係**同一個物理**，只係 $W$ 嘅正方向定義唔同；**揀定一套、由頭用到尾**就唔會錯。本節下面所有公式同例題，一律用 $\\Delta U=Q-W$。\n\n---\n\n## 五、主公式：定壓膨脹功\n\n把「氣體推郁活塞掃過嘅面積」嚴格化。當壓力 $P$ 喺整個過程保持不變（定壓），系統對外做嘅功等於壓力乘以體積變化。\n\n$$\\boxed{\\;W = P\\,\\Delta V\\;} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 單位 | 正負慣例 |\n|---|---|---|---|\n| $W$ | 系統**對外**所做嘅<span class=\"term-zh\">膨脹功</span>（<span class=\"term-en\">expansion work</span>） | $\\text{J}$（焦耳） | 對外做功 $>0$、被壓縮（外界做功）$<0$ |\n| $P$ | 過程中保持不變嘅<span class=\"term-zh\">壓力</span>（<span class=\"term-en\">pressure</span>） | $\\text{Pa}=\\text{N}/\\text{m}^2$ | 永遠 $>0$ |\n| $\\Delta V$ | <span class=\"term-zh\">體積變化</span>（<span class=\"term-en\">volume change</span>），$\\Delta V=V_2-V_1$ | $\\text{m}^3$ | 膨脹 $>0$、壓縮 $<0$ |\n\n**逐行推導：由「功＝力×位移」推出式(1)**（每行只做一個動作，行末標依據）\n\n$$W = F \\times d \\quad\\text{（功嘅定義：力沿位移嘅累積，恆力直線情況）} \\tag{i}$$\n\n$$P = \\frac{F}{A} \\;\\Rightarrow\\; F = P \\times A \\quad\\text{（壓力定義 }P=F/A\\text{，兩邊乘 }A\\text{ 解出 }F\\text{）} \\tag{ii}$$\n\n$$W = (P \\times A) \\times d \\quad\\text{（把 (ii) 嘅 }F\\text{ 代入 (i)）} \\tag{iii}$$\n\n$$W = P \\times (A \\times d) \\quad\\text{（乘法結合律，把 }A\\text{ 同 }d\\text{ 括埋一齊）} \\tag{iv}$$\n\n$$A \\times d = \\Delta V \\quad\\text{（活塞面積 }A\\text{ 乘移動距離 }d\\text{ ＝ 掃過嘅體積，即體積變化）} \\tag{v}$$\n\n$$W = P\\,\\Delta V \\quad\\text{（把 (v) 代入 (iv)）} \\tag{vi}$$\n\n> 式(1) 係本節**唯一加框**嘅主式（H7）。靈魂一句：**定壓功＝壓力 × 體積變化 ＝ $P$–$V$ 圖嗰橫條面積。** 配合 $S51$ 嘅 $\\Delta U=Q-W$，就齊集咗計第一定律題嘅兩件工具。\n\n---\n\n## 六、單位：點解 $\\text{Pa}\\times\\text{m}^3 = \\text{J}$\n\n計 $W=P\\Delta V$ 最易失分嘅唔係公式，係**單位**。代入前一定要把 $P$ 化成 $\\text{Pa}$、$\\Delta V$ 化成 $\\text{m}^3$，咁出嚟先係 $\\text{J}$。逐步驗證單位：\n\n$$P\\times\\Delta V \\;\\to\\; \\text{Pa}\\times\\text{m}^3 \\quad\\text{（把 }P,\\Delta V\\text{ 嘅單位相乘）} \\tag{2}$$\n\n$$\\text{Pa} = \\frac{\\text{N}}{\\text{m}^2} \\quad\\text{（壓力單位定義）} \\tag{3}$$\n\n$$\\frac{\\text{N}}{\\text{m}^2}\\times\\text{m}^3 = \\text{N}\\times\\text{m} \\quad\\text{（}\\text{m}^3\\div\\text{m}^2=\\text{m}\\text{，約走兩個 }\\text{m}\\text{）} \\tag{4}$$\n\n$$\\text{N}\\times\\text{m} = \\text{J} \\quad\\text{（焦耳定義：1 焦耳 ＝ 1 牛頓 × 1 米）} \\tag{5}$$\n\n**常用換算（代入前先換）**\n\n| 由 | 到 | 換算 |\n|---|---|---|\n| $\\text{kPa}$ | $\\text{Pa}$ | $\\times 1000$ |\n| $\\text{atm}$ | $\\text{Pa}$ | $\\times 1.013\\times10^5$ |\n| $\\text{L}$（公升） | $\\text{m}^3$ | $\\times 10^{-3}$ |\n| $\\text{cm}^3$ | $\\text{m}^3$ | $\\times 10^{-6}$ |\n\n> 一句記法：**$P$ 用 $\\text{Pa}$、$V$ 用 $\\text{m}^3$，乘出嚟自動係 $\\text{J}$。** 見到 $\\text{kPa}$ 或 $\\text{L}$ 唔換就硬代，個數會差成千倍。\n\n---\n\n## 七、睇圖：$P$–$V$ 圖上「功就係面積」（含讀圖導引）\n\n下面係一個**定壓膨脹**嘅 $P$–$V$ 圖：橫軸係體積 $V$、縱軸係壓力 $P$。定壓即係壓力唔變，所以過程係一條**水平線**，由 $V_1$ 行到 $V_2$。系統做嘅功 $W=P\\Delta V$，就係呢條線**下面嗰個長方形嘅面積**（高＝$P$，闊＝$\\Delta V$）。\n\n<svg viewBox=\"0 0 540 300\" width=\"100%\" style=\"max-width:540px;display:block;margin:0 auto;background:transparent;\">\n  <!-- 軸 -->\n  <line x1=\"70\" y1=\"240\" x2=\"500\" y2=\"240\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#ax)\"/>\n  <line x1=\"70\" y1=\"240\" x2=\"70\" y2=\"40\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#ay)\"/>\n  <text x=\"495\" y=\"265\" fill=\"#94a3b8\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">V（體積 / m³）</text>\n  <text x=\"40\" y=\"50\" fill=\"#94a3b8\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">P</text>\n  <text x=\"30\" y=\"68\" fill=\"#94a3b8\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">壓力/Pa</text>\n  <!-- 面積（功）長方形 -->\n  <rect x=\"150\" y=\"120\" width=\"240\" height=\"120\" fill=\"#4a9eff\" fill-opacity=\"0.18\" stroke=\"none\"/>\n  <text x=\"270\" y=\"190\" fill=\"#4a9eff\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\">W = P·ΔV</text>\n  <text x=\"270\" y=\"212\" fill=\"#94a3b8\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">（線下面積）</text>\n  <!-- 定壓水平線 -->\n  <line x1=\"150\" y1=\"120\" x2=\"390\" y2=\"120\" stroke=\"#f06060\" stroke-width=\"3\"/>\n  <circle cx=\"150\" cy=\"120\" r=\"4\" fill=\"#f06060\"/>\n  <circle cx=\"390\" cy=\"120\" r=\"4\" fill=\"#f06060\"/>\n  <text x=\"150\" y=\"108\" fill=\"#f06060\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">起點</text>\n  <text x=\"390\" y=\"108\" fill=\"#f06060\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">終點（膨脹→）</text>\n  <!-- P 虛線 -->\n  <line x1=\"70\" y1=\"120\" x2=\"150\" y2=\"120\" stroke=\"#f5c842\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/>\n  <text x=\"58\" y=\"124\" fill=\"#f5c842\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"end\">P</text>\n  <!-- V1 V2 虛線 -->\n  <line x1=\"150\" y1=\"240\" x2=\"150\" y2=\"120\" stroke=\"#64748b\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/>\n  <line x1=\"390\" y1=\"240\" x2=\"390\" y2=\"120\" stroke=\"#64748b\" stroke-width=\"1.5\" stroke-dasharray=\"4 3\"/>\n  <text x=\"150\" y=\"258\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">V₁</text>\n  <text x=\"390\" y=\"258\" fill=\"#cbd5e1\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">V₂</text>\n  <text x=\"270\" y=\"232\" fill=\"#64748b\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">闊 = ΔV = V₂ − V₁</text>\n  <defs>\n    <marker id=\"ax\" markerWidth=\"9\" markerHeight=\"9\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0 0 L6 3 L0 6 z\" fill=\"#94a3b8\"/></marker>\n    <marker id=\"ay\" markerWidth=\"9\" markerHeight=\"9\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0 0 L6 3 L0 6 z\" fill=\"#94a3b8\"/></marker>\n  </defs>\n</svg>\n\n**讀圖導引（呢張圖點睇）**\n\n① **X 軸（橫軸）**：體積 $V$，單位 $\\text{m}^3$。由左去右係體積變大（膨脹）。\n② **Y 軸（縱軸）**：壓力 $P$，單位 $\\text{Pa}$。\n③ **每個關鍵特徵代表咩**：紅色**水平線**＝定壓過程（壓力全程不變），由起點 $V_1$ 行到終點 $V_2$；藍色**長方形面積**＝系統做嘅功 $W=P\\Delta V$（高 $=P$、闊 $=\\Delta V$）。呢個正正係 $S23$「面積＝累積量」：功係壓力沿體積嘅累積。\n④ **最容易睇錯嘅地方**：(1) 高係 $P$、闊係 $\\Delta V=V_2-V_1$（**唔係 $V_2$ 本身**）——好多人攞 $V_2$ 落去乘，計大咗。(2) 圖示係**膨脹**（向右、$\\Delta V>0$、$W>0$）；如果由右行返左（壓縮、$\\Delta V<0$），$W$ 變負，係外界對系統做功。(3) 只有定壓（水平線）先可以直接用 $W=P\\Delta V$；如果 $P$ 一路變（斜線／曲線），就要用面積／積分，本節唔深入。\n\n---\n\n## 八、Worked Examples（由易到難，逐步、每步標來源）\n\n> 本節 cognition=calculation：要識(a) 用 $W=P\\Delta V$ 算功（連單位換算）、(b) 把帶號 $Q$、$W$ 代入 $\\Delta U=Q-W$、(c) 反過嚟移項解未知量。每個數字標來源（題幹給定／查表／由上一步／單位換算）。\n\n### 例 1（易）：直接代 $W=P\\Delta V$\n\n> 問：氣體喺定壓 $P=2.0\\times10^{5}\\ \\text{Pa}$ 下，體積由 $V_1=0.010\\ \\text{m}^3$ 膨脹到 $V_2=0.030\\ \\text{m}^3$。問系統對外做咗幾多功 $W$？\n\n**第 1 步：抄低已知（標來源）**\n\n$$P = 2.0\\times10^{5}\\ \\text{Pa} \\quad\\text{（題幹給定，已係 }\\text{Pa}\\text{）}$$\n\n$$V_1 = 0.010\\ \\text{m}^3,\\quad V_2 = 0.030\\ \\text{m}^3 \\quad\\text{（題幹給定，已係 }\\text{m}^3\\text{）}$$\n\n**第 2 步：算體積變化 $\\Delta V$**\n\n$$\\Delta V = V_2 - V_1 = 0.030 - 0.010 = 0.020\\ \\text{m}^3 \\quad\\text{（末減初，膨脹故正）}$$\n\n**第 3 步：套式(1)**\n\n$$W = P\\,\\Delta V \\quad\\text{（式(1)）}$$\n\n**第 4 步：代入數字**\n\n$$W = (2.0\\times10^{5}\\ \\text{Pa}) \\times (0.020\\ \\text{m}^3) \\quad\\text{（代入第 1、2 步）}$$\n\n**第 5 步：相乘（含 10 嘅次方）**\n\n$$W = 2.0\\times0.020\\times10^{5}\\ \\text{J} = 0.040\\times10^{5}\\ \\text{J} = 4.0\\times10^{3}\\ \\text{J} \\quad\\text{（}\\text{Pa}\\cdot\\text{m}^3=\\text{J}\\text{）}$$\n\n> **答案：$W = +4000\\ \\text{J}$（系統對外做功 $4000\\ \\text{J}$）。** 膨脹（$\\Delta V>0$）故 $W$ 為正。\n\n### 例 2（中）：含單位換算（$\\text{kPa}$、$\\text{L}$）\n\n> 問：氣體喺定壓 $P=150\\ \\text{kPa}$ 下，由 $V_1=2.0\\ \\text{L}$ 膨脹到 $V_2=8.0\\ \\text{L}$。問做功 $W$？\n\n**第 1 步：把單位換成 $\\text{Pa}$ 同 $\\text{m}^3$（標換算）**\n\n$$P = 150\\ \\text{kPa} = 150\\times1000 = 1.5\\times10^{5}\\ \\text{Pa} \\quad\\text{（}\\text{kPa}\\to\\text{Pa}\\text{：}\\times1000\\text{）}$$\n\n$$V_1 = 2.0\\ \\text{L} = 2.0\\times10^{-3}\\ \\text{m}^3,\\quad V_2 = 8.0\\ \\text{L} = 8.0\\times10^{-3}\\ \\text{m}^3 \\quad\\text{（}\\text{L}\\to\\text{m}^3\\text{：}\\times10^{-3}\\text{）}$$\n\n**第 2 步：算 $\\Delta V$**\n\n$$\\Delta V = V_2 - V_1 = (8.0 - 2.0)\\times10^{-3} = 6.0\\times10^{-3}\\ \\text{m}^3 \\quad\\text{（末減初）}$$\n\n**第 3 步：套式(1) 並代入**\n\n$$W = P\\,\\Delta V = (1.5\\times10^{5}\\ \\text{Pa})\\times(6.0\\times10^{-3}\\ \\text{m}^3) \\quad\\text{（式(1) ＋ 代入第 1、2 步）}$$\n\n**第 4 步：相乘（次方相加 $10^{5}\\times10^{-3}=10^{2}$）**\n\n$$W = 1.5\\times6.0\\times10^{5-3}\\ \\text{J} = 9.0\\times10^{2}\\ \\text{J} \\quad\\text{（係數相乘、指數相加）}$$\n\n> **答案：$W = +900\\ \\text{J}$。** 呢題最易失分喺**冇換單位**：若直接 $150\\times6.0=900$，數字確實啱——因為 $\\text{kPa}\\times\\text{L}$ 恰好等於 $\\text{Pa}\\times\\text{m}^3$（$10^{3}\\times10^{-3}=1$），所以呢個特殊組合量綱都啱。但唔代表任何 $\\text{kPa}$／$\\text{L}$ 組合都咁啱好；養成**必先換成 $\\text{Pa}$、$\\text{m}^3$** 嘅習慣，先至適用所有情況（例如 $\\text{kPa}\\times\\text{m}^3$ 就差 $1000$ 倍）。\n\n### 例 3（較複雜）：先算 $W$，再代入 $\\Delta U=Q-W$\n\n> 問：氣體喺定壓 $P=1.0\\times10^{5}\\ \\text{Pa}$ 下吸入熱 $Q=600\\ \\text{J}$，同時體積由 $1.0\\times10^{-3}\\ \\text{m}^3$ 膨脹到 $4.0\\times10^{-3}\\ \\text{m}^3$。問內能變化 $\\Delta U$？\n\n**第 1 步：抄低已知（標來源）**\n\n$$P = 1.0\\times10^{5}\\ \\text{Pa},\\quad Q = +600\\ \\text{J} \\quad\\text{（題幹給定，吸熱故 }Q>0\\text{）}$$\n\n$$V_1 = 1.0\\times10^{-3}\\ \\text{m}^3,\\quad V_2 = 4.0\\times10^{-3}\\ \\text{m}^3 \\quad\\text{（題幹給定）}$$\n\n**第 2 步：算 $\\Delta V$**\n\n$$\\Delta V = (4.0 - 1.0)\\times10^{-3} = 3.0\\times10^{-3}\\ \\text{m}^3 \\quad\\text{（末減初，膨脹故正）}$$\n\n**第 3 步：用式(1) 算膨脹功 $W$**\n\n$$W = P\\,\\Delta V = (1.0\\times10^{5})\\times(3.0\\times10^{-3})\\ \\text{J} = 3.0\\times10^{2}\\ \\text{J} = 300\\ \\text{J} \\quad\\text{（式(1)，}10^{5}\\times10^{-3}=10^{2}\\text{）}$$\n\n**第 4 步：套第一定律 $\\Delta U=Q-W$（$S51$ 主式）**\n\n$$\\Delta U = Q - W \\quad\\text{（}S51\\text{ 第一定律主式）}$$\n\n**第 5 步：代入數字**\n\n$$\\Delta U = 600\\ \\text{J} - 300\\ \\text{J} \\quad\\text{（代入第 1、3 步）}$$\n\n**第 6 步：相減**\n\n$$\\Delta U = +300\\ \\text{J} \\quad\\text{（600 − 300 = 300）}$$\n\n> **答案：$\\Delta U = +300\\ \\text{J}$（內能升 $300\\ \\text{J}$）。** 物理意思：吸入嘅 $600\\ \\text{J}$ 熱，有 $300\\ \\text{J}$ 去咗推活塞做功（膨脹），淨低 $300\\ \\text{J}$ 先儲做內能。呢個就係定壓加熱嘅核心——**熱唔會全變內能，一部分被「膨脹做功」抽走**（正正係日後焓 $H$ 要把 $PV$ 一齊計入嘅原因）。\n\n### 例 4（混合・完整計算）：壓縮（負功）＋ 移項解未知 $Q$\n\n> 問：一個氣體系統被外界**壓縮**：定壓 $P=2.0\\times10^{5}\\ \\text{Pa}$，體積由 $5.0\\times10^{-3}\\ \\text{m}^3$ 縮到 $2.0\\times10^{-3}\\ \\text{m}^3$。測得呢個過程內能升咗 $\\Delta U=+700\\ \\text{J}$。問：(i) 系統做嘅功 $W$（連正負）？(ii) 過程中系統係吸熱定放熱、$Q$ 係幾多？\n\n**第 0 步：逐條列已知（標來源）**\n\n| 已知 | 符號 | 數值（帶號） | 來源 |\n|---|---|---|---|\n| 定壓 | $P$ | $2.0\\times10^{5}\\ \\text{Pa}$ | 題幹給定 |\n| 初體積 | $V_1$ | $5.0\\times10^{-3}\\ \\text{m}^3$ | 題幹給定 |\n| 末體積 | $V_2$ | $2.0\\times10^{-3}\\ \\text{m}^3$ | 題幹給定 |\n| 內能變化 | $\\Delta U$ | $+700\\ \\text{J}$ | 題幹給定 |\n\n**第 1 步：算 $\\Delta V$（壓縮，注意符號）**\n\n$$\\Delta V = V_2 - V_1 = (2.0 - 5.0)\\times10^{-3} = -3.0\\times10^{-3}\\ \\text{m}^3 \\quad\\text{（末減初，縮細故 }\\Delta V<0\\text{）}$$\n\n**第 2 步：用式(1) 算 $W$（解 (i)）**\n\n$$W = P\\,\\Delta V = (2.0\\times10^{5})\\times(-3.0\\times10^{-3})\\ \\text{J} \\quad\\text{（式(1)，代入第 1 步）}$$\n\n**第 3 步：相乘（正乘負得負）**\n\n$$W = -6.0\\times10^{2}\\ \\text{J} = -600\\ \\text{J} \\quad\\text{（係數 }2.0\\times(-3.0)=-6.0\\text{；}10^{5}\\times10^{-3}=10^{2}\\text{）}$$\n\n**第 4 步：把第一定律移項解 $Q$（解 (ii)）**\n\n$$\\Delta U = Q - W \\quad\\text{（}S51\\text{ 主式）}$$\n\n$$Q = \\Delta U + W \\quad\\text{（兩邊加 }W\\text{，把 }Q\\text{ 單獨留低）}$$\n\n**第 5 步：代入數字（留意 $W$ 自己係負）**\n\n$$Q = (+700\\ \\text{J}) + (-600\\ \\text{J}) \\quad\\text{（代入第 2、第 0 步）}$$\n\n**第 6 步：相加**\n\n$$Q = +100\\ \\text{J} \\quad\\text{（700 − 600 = 100，}Q>0\\text{ 故吸熱）}$$\n\n> **答案**：(i) $W = -600\\ \\text{J}$（係**負**功——因為氣體被壓縮，係外界對系統做功）。(ii) $Q = +100\\ \\text{J}$，故系統**吸熱** $100\\ \\text{J}$。呢題混合咗：**$\\Delta V<0$ 帶出負功** ＋ **由 $\\Delta U=Q-W$ 移項解 $Q$** ＋ **負號代入要小心**（$Q=\\Delta U+W=700+(-600)=100$）。物理意思：外界壓縮做咗 $600\\ \\text{J}$ 入系統，但內能只升咗 $700\\ \\text{J}$ 嘅其中一部分由壓縮功嚟……更準確講，系統一邊收到壓縮功、一邊仲吸咗少少熱（$100\\ \\text{J}$），兩者合起嚟令內能升 $700\\ \\text{J}$。\n\n---\n\n## 九、易混淆對比：唔好撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| $W=P\\Delta V$ 入面攞 $V_2$ 落去乘? | **唔係。** 攞嘅係 $\\Delta V=V_2-V_1$（變化量），唔係末體積 $V_2$。攞錯會大幅計多。 |\n| $\\text{kPa}$、$\\text{L}$ 可以直接代入算功? | **唔可以。** 必先換成 $\\text{Pa}$、$\\text{m}^3$，先至出 $\\text{J}$。唔換會差成千倍。 |\n| 壓縮時 $W$ 都係正? | **唔係。** 膨脹 $\\Delta V>0\\Rightarrow W>0$；壓縮 $\\Delta V<0\\Rightarrow W<0$（外界對系統做功）。符號跟住 $\\Delta V$ 走。 |\n| $\\Delta U=Q-W$ 同 $\\Delta U=Q+W$ 邊個啱? | **兩個都啱，係兩套慣例。** $-W$ 嗰套 $W$＝系統對外做功；$+W$ 嗰套 $W$＝外界對系統做功。本 App 統一用 $\\Delta U=Q-W$，揀定一套用到尾就唔會撈亂。 |\n| 定壓加熱，吸入嘅熱全部變內能? | **唔係（除非定容）。** 定壓會膨脹做功，部分熱去咗 $W=P\\Delta V$，只有淨低先變內能（見例 3）。定容（$W=0$）先係吸熱全變內能。 |\n| $W=P\\Delta V$ 任何過程都用得? | **唔係。** 只有**定壓**（$P$ 不變）先可以咁簡單乘。$P$ 一路變嗰陣要計面積／積分 $W=\\int P\\,\\mathrm{d}V$，本節唔深入。 |\n\n---\n\n## 十、一頁總表\n\n| 項目 | 內容／關係 | 一句講佢做咩 |\n|:--|:--|:--|\n| 定壓功（主式） | $W = P\\,\\Delta V$（式(1)） | 功 ＝ 壓力 × 體積變化 ＝ $P$–$V$ 圖線下面積 |\n| 體積變化 | $\\Delta V = V_2 - V_1$ | 膨脹 $>0$（$W>0$）／壓縮 $<0$（$W<0$） |\n| 單位 | $\\text{Pa}\\times\\text{m}^3 = \\text{N}\\cdot\\text{m} = \\text{J}$ | 代入前先換 $\\text{kPa}\\to\\text{Pa}$、$\\text{L}\\to\\text{m}^3$ |\n| 第一定律（接 $S51$） | $\\Delta U = Q - W$ | 內能變化 ＝ 吸熱 − 對外做功 |\n| 移項解未知 | $Q=\\Delta U+W$；$W=Q-\\Delta U$ | 由已知兩個量解第三個 |\n| 符號慣例 | $\\Delta U=Q-W$（$W$＝對外做功，本 App 用）；另套 $\\Delta U=Q+W$（$W$＝外界做功） | 揀定一套用到尾 |\n| 定壓 vs 定容 | 定壓：吸熱部分去做功；定容（$W=0$）：吸熱全變內能 | 定壓 $\\Delta U=Q-P\\Delta V$、定容 $\\Delta U=Q$ |\n| 適用範圍 | $W=P\\Delta V$ 只限定壓；$P$ 變要用 $\\int P\\,\\mathrm{d}V$ | 揀公式前先睇 $P$ 變唔變 |\n\n---\n\n## 十一、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1：定壓膨脹功嘅公式係?　(a) W = P + ΔV　(b) W = P × ΔV　(c) W = ΔU − Q　(d) W = P / ΔV\n- D2：式 W = P·ΔV 入面嘅 ΔV 係?　(a) 末體積 V₂　(b) 初體積 V₁　(c) 末體積減初體積 V₂ − V₁　(d) 兩者相加 V₂ + V₁\n\n**L2 概念理解**\n- D3：Pa × m³ 等於咩單位?　(a) N　(b) J（焦耳）　(c) W（瓦特）　(d) Pa\n- D4：氣體被**壓縮**（體積縮細），系統做嘅功 W 嘅正負係?　(a) W > 0（對外做功）　(b) W < 0（外界對系統做功）　(c) W = 0　(d) 唔一定\n\n**L3 單步應用**\n- D5：定壓 P = 1.0×10⁵ Pa，體積由 0.020 m³ 膨脹到 0.050 m³，做功 W =?　(a) 3000 J　(b) 5000 J　(c) 2000 J　(d) 7000 J\n- D6：定壓 P = 200 kPa，體積膨脹 ΔV = 0.010 m³，做功 W =?（記得換單位）　(a) 2 J　(b) 2000 J　(c) 200 J　(d) 20 J\n\n**L4 多步／含負號**\n- D7：氣體定壓 P = 1.0×10⁵ Pa 吸熱 Q = 500 J，同時由 1.0×10⁻³ m³ 膨脹到 3.0×10⁻³ m³，內能變化 ΔU =?　(a) +700 J　(b) +300 J　(c) +500 J　(d) +200 J\n- D8：氣體被壓縮，算得 W = −400 J，過程內能升 ΔU = +600 J，吸／放嘅熱 Q =?　(a) +1000 J　(b) +200 J　(c) −200 J　(d) +400 J\n\n**L5 綜合應用**\n- D9：定壓 P = 2.0×10⁵ Pa，體積由 4.0×10⁻³ m³ 縮到 1.0×10⁻³ m³（壓縮），同時放熱 Q = −500 J，內能變化 ΔU =?　(a) +100 J　(b) −1100 J　(c) +1100 J　(d) −100 J\n- D10：以下邊個講法**啱**?　(a) W = P·ΔV 任何過程都用得　(b) kPa 同 L 可以直接代入算功唔使換　(c) 定壓加熱時吸入嘅熱會分一部分去膨脹做功，唔會全變內能　(d) 壓縮時 W 一定係正\n\n**診斷答案**：D1 b｜D2 c｜D3 b｜D4 b｜D5 a｜D6 b｜D7 b｜D8 b｜D9 a｜D10 c\n\n> 卡喺 L1–L2 → 重睇第五節（主式 $W=P\\Delta V$、$\\Delta V=V_2-V_1$）同第六節（單位 $\\text{Pa}\\cdot\\text{m}^3=\\text{J}$）；D2 記「攞變化量唔係末值」，D4 記「壓縮 $\\Delta V<0\\Rightarrow W<0$」。卡喺 L3 → 重睇例 1、例 2：D5 = $1.0\\times10^{5}\\times0.030=3000$；D6 先換 $200\\ \\text{kPa}=2.0\\times10^{5}\\ \\text{Pa}$，再 $\\times0.010=2000\\ \\text{J}$。卡喺 L4 → 重睇例 3、例 4：D7 先算 $W=10^{5}\\times2.0\\times10^{-3}=200\\ \\text{J}$，再 $\\Delta U=500-200=300$；D8 移項 $Q=\\Delta U+W=600+(-400)=200$。卡喺 L5 → 重睇例 4：D9 壓縮 $\\Delta V=-3.0\\times10^{-3}$，$W=2.0\\times10^{5}\\times(-3.0\\times10^{-3})=-600\\ \\text{J}$，再 $\\Delta U=Q-W=(-500)-(-600)=+100$；D10 揀「定壓加熱部分熱去做功」（其餘三個分別誤以為任何過程都用 $P\\Delta V$／唔使換單位／壓縮 $W$ 為正）。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "識用 W＝P·ΔV 算定壓膨脹功:知道 ΔV＝V₂−V₁(攞變化量、唔係末體積),膨脹 ΔV>0 故 W>0、壓縮 ΔV<0 故 W<0"
+    },
+    {
+      "id": "c2",
+      "text": "代入前先換單位:kPa→Pa(×1000)、L→m³(×10⁻³),並講得出點解 Pa·m³＝N·m＝J"
+    },
+    {
+      "id": "c3",
+      "text": "識先用 W＝P·ΔV 算功、再代入 ΔU＝Q−W 算內能變化(如定壓吸熱膨脹:ΔU＝Q−P·ΔV)"
+    },
+    {
+      "id": "c4",
+      "text": "識由 ΔU＝Q−W 移項解未知量:Q＝ΔU＋W、W＝Q−ΔU,並能正確處理負號(如壓縮負功代入)"
+    },
+    {
+      "id": "c5",
+      "text": "講得出定壓加熱時吸入嘅熱唔會全變內能(部分去咗膨脹做功 P·ΔV),只有定容 W＝0 先全變內能"
+    },
+    {
+      "id": "c6",
+      "text": "分清兩套符號慣例:ΔU＝Q−W(W＝對外做功,本 App 用)vs ΔU＝Q+W(W＝外界做功),知道揀定一套用到尾;並知 W＝P·ΔV 只限定壓"
+    }
+  ],
+  "resources": [
+    {
+      "type": "video",
+      "label": "(選看)Khan Academy:Work done by a gas / PV work(定壓膨脹功 W＝P·ΔV)",
+      "url": "https://www.khanacademy.org"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "氣體喺定壓下膨脹,系統對外做嘅功 W 點樣計?",
+      "options": [
+        "W ＝ P × ΔV(壓力 × 體積變化)",
+        "W ＝ P ＋ ΔV(壓力 加 體積變化)",
+        "W ＝ P ÷ ΔV(壓力 除 體積變化)",
+        "W ＝ ΔU ÷ Q(內能變化 除 熱)"
+      ],
+      "answer": 0,
+      "explain": "定壓(壓力不變)時,系統對外做嘅膨脹功 W＝P·ΔV,即壓力乘以體積變化,亦即 P–V 圖上定壓線下面長方形嘅面積(高＝P、闊＝ΔV)。ΔV＝V₂−V₁,膨脹 ΔV>0 故 W>0。錯選嘅加/除都唔對量綱:只有 Pa × m³ 先等於 J(因為 Pa·m³＝N·m＝J)。記法:功 ＝ 壓力 × 活塞掃過嘅體積。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "計 W＝P·ΔV 時,壓力用 kPa、體積用 L 可以直接代入,出嚟就係焦耳(J)。",
+      "answer": false,
+      "explain": "錯。代入前一定要先換成 SI 單位:P 用 Pa(kPa→Pa 要 ×1000)、V 用 m³(L→m³ 要 ×10⁻³),咁乘出嚟先係 J,因為 Pa·m³＝N·m＝J。若用 kPa 同 L 直接乘,量綱錯、個數會差成千倍。記法:P 用 Pa、V 用 m³,乘出自動係 J。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "氣體喺定壓下吸熱膨脹,吸入嘅熱會點分配?",
+      "options": [
+        "部分去咗膨脹做功,淨低先變內能",
+        "全部變成內能",
+        "全部去咗做功、內能唔變",
+        "視乎壓力大細"
+      ],
+      "answer": 0,
+      "explain": "定壓加熱時氣體一定會膨脹,而膨脹就要對外做功 W＝P·ΔV,呢部分功會由吸入嘅熱抽走;所以由 ΔU＝Q−W 睇,內能變化 ΔU＝Q−W 必定細過 Q,即「淨低」先變內能,熱唔會全變內能。只有定容(體積唔變、ΔV＝0、W＝0)先會 ΔU＝Q,即吸熱全變內能。所以揀『部分去咗膨脹做功、淨低先變內能』。錯選『全部變成內能』漏咗膨脹做功;『全部去咗做功、內能唔變』錯,一般 ΔU≠0;熱嘅分配係由 W＝P·ΔV 決定,唔係單睇壓力大細。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "用 ΔU＝Q−W 解 Q,正確移項係邊個?",
+      "options": [
+        "Q ＝ ΔU ＋ W",
+        "Q ＝ ΔU − W",
+        "Q ＝ W − ΔU",
+        "Q ＝ ΔU × W"
+      ],
+      "answer": 0,
+      "explain": "由 ΔU＝Q−W 解 Q:兩邊同時加 W,左邊 ΔU＋W,右邊 Q−W＋W＝Q,所以 Q＝ΔU＋W。呢條係由已知 ΔU 同 W 反解未知熱 Q 嘅標準移項。要留意 W 自己可帶號:壓縮時 W<0,代入 Q＝ΔU＋W 時要連負號一齊加(例如 ΔU＝+700、W＝−600,Q＝700＋(−600))。錯選『Q＝ΔU−W』冇移走負號;『Q＝W−ΔU』左右掉轉;『Q＝ΔU×W』把減號當乘號,量綱都唔通。"
+    }
+  ],
+  "chatPracticeHints": [
+    "ΔV 攞變化量唔係末值",
+    "kPa、L 先換 Pa、m³",
+    "壓縮 ΔV<0 故 W<0"
+  ]
+}
