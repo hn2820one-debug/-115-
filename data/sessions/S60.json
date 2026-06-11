@@ -1,0 +1,106 @@
+{
+  "id": "S60",
+  "stage": 1,
+  "week": 4,
+  "order": 60,
+  "title": "原子堆積與密度",
+  "titleEn": "Atomic Packing & Density",
+  "platform": "callister",
+  "objective": "由 S59 嘅結構幾何，推出兩個可計可驗嘅量：原子堆積率 APF（=原子球總體積÷晶胞體積，代 a-R 關係後 R 約走，得結構固定純數 SC 0.52／BCC 0.68／FCC·HCP 0.74）同理論密度 ρ=nA/(V_C·N_A)。掌握『APF 同金屬種類無關、密度有關（仲乘原子量 A）』嘅分別，識做完整密度計算（重點：a 由 nm 換 cm 再立方、V_C=a³），並識反過嚟由實測密度比較各結構假設嚟反推 n／結構。為 S62/S63 第一階段大整理嘅計算題打底",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "important",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S59"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S60 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: calculation｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\nS59 把三大金屬結構（FCC／BCC／HCP）嘅**長相**、晶胞原子數 $n$、配位數同 $a\\text{-}R$ 關係齊備咗。本節要把呢啲幾何，化做兩個**可以計、可以對得上實驗**嘅數：第一個係<span class=\"term-zh\">原子堆積率</span>（<span class=\"term-en\">APF，atomic packing factor</span>）——一個晶胞入面，原子實際佔咗幾多體積比例；第二個係<span class=\"term-zh\">理論密度</span>（<span class=\"term-en\">theoretical density</span>）$\\rho$——由結構同原子量直接砌出嚟嘅密度。兩條式骨架一模一樣：**都係「晶胞入面有料嗰嚿」除「成個晶胞」**。一句記住：**APF ＝ 球體積 ÷ 晶胞體積；密度 ＝ 晶胞入面原子質量 ÷ 晶胞體積**。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：直接前置 **S59（三大金屬結構）**——你要由 S59 攞落三件嘢：每種結構嘅**晶胞原子數 $n$**（FCC $n=4$、BCC $n=2$、SC $n=1$）、**配位數**，同**$a\\text{-}R$ 關係**（FCC $a=2\\sqrt2\\,R$、BCC $a=\\dfrac{4R}{\\sqrt3}$、SC $a=2R$）。仲要用到 **S58** 嘅立方晶胞體積 $V_C=a^3$。數學工具上：球體積 $\\frac43\\pi R^3$（S58 已見）、開方／立方同有理化（S8）。\n- **新內容同已學嘅關係**：S59 净係講「原子坐喺邊、$a$ 同 $R$ 點換」；本節把呢啲幾何**入埋體積**——APF 把「原子球」同「晶胞盒」嘅體積相除，密度再進一步把「原子有幾重」（用返 S33 嘅<span class=\"term-zh\">原子量</span>（<span class=\"term-en\">atomic weight</span>））同<span class=\"term-zh\">亞佛加德羅常數</span>（<span class=\"term-en\">Avogadro's number</span>）擺入去。\n- **本節係邊節嘅地基**：APF／密度係 **S62／S63 第一階段大整理**嘅必考計算題型，亦係日後讀固態物理、材料分析（X 光繞射量 $a$ 反推密度核對）嘅基本功。\n- **如果未掌握就先補**：若 $n$ 或 $a\\text{-}R$ 關係生疏，先回看 S59 第四、五節；若「角原子點解只算 $\\tfrac18$」唔記得，回看 S58 第六節。\n\n---\n\n## 三、先講白話：盒入面塞咗幾多波子？\n\n把一個晶胞諗成一個**正方形盒**，入面塞住幾粒一樣大嘅<span class=\"term-zh\">硬球</span>（<span class=\"term-en\">hard sphere</span>）原子。無論你塞得幾密，球同球之間總有啲**罅隙**塞唔滿——APF 講嘅就係：**盒入面真正畀波子佔咗嘅體積，佔成個盒幾多 percent**。\n\n- FCC、HCP 塞得最密，APF $=0.74$（即 $74\\%$ 係波子、$26\\%$ 係空隙）。\n- BCC 鬆啲，APF $=0.68$。\n- SC 最鬆，APF $=0.52$。\n\n注意一件好緊要嘅事：**APF 只睇結構、唔睇係邊種金屬**——銅同鋁都係 FCC，兩者 APF 都係 $0.74$，因為 $R$ 喺計算入面會**約走**（下面推導見到）。但**密度**就唔同——密度仲要乘返「原子有幾重」，所以鉛（重）同鋁（輕）就算同係 FCC，密度都爭好遠。呢個「APF 同金屬種類無關、密度有關」嘅分別，係本節最易撈亂嘅位。\n\n---\n\n## 四、正式定義：APF 同理論密度\n\n**原子堆積率 APF。** 一個晶胞入面，**所有原子球嘅總體積** 除以 **晶胞嘅總體積**：\n\n$$\\text{APF}=\\dfrac{\\text{晶胞入面原子球總體積}}{\\text{晶胞體積}}=\\dfrac{n\\cdot\\frac43\\pi R^3}{V_C}$$\n\n其中 $n$ 係晶胞原子數（S59 攞落），$\\frac43\\pi R^3$ 係一粒原子球嘅體積，$V_C$ 係晶胞體積。APF 永遠係一個 $0$ 到 $1$ 之間嘅純數（冇單位）。\n\n**理論密度 $\\rho$。** 密度本身就係「質量 ÷ 體積」。把範圍鎖喺**一個晶胞**：分子係晶胞入面 $n$ 粒原子嘅總質量，分母係晶胞體積 $V_C$：\n\n$$\\rho=\\dfrac{\\text{晶胞入面原子總質量}}{\\text{晶胞體積}}=\\dfrac{n\\,A}{V_C\\,N_A}$$\n\n呢度 $A$ 係<span class=\"term-zh\">原子量</span>（<span class=\"term-en\">atomic weight</span>）（每 mol 嘅克數），$N_A$ 係<span class=\"term-zh\">亞佛加德羅常數</span>（<span class=\"term-en\">Avogadro's number</span>）（每 mol 有幾多粒原子）——除以 $N_A$ 就把「每 mol 質量」化成「每一粒原子質量」。下一節逐條正式推。\n\n> **兩條式骨架一樣**：APF 同密度**分母都係 $V_C$**（成個晶胞），分子一個係「球體積」、一個係「原子質量」。記住呢個對稱，兩條就唔會撈亂。\n\n---\n\n## 五、主公式：理論密度 $\\rho=\\dfrac{nA}{V_C N_A}$\n\n本節要**計**嘅核心，係理論密度。把第四節嗰句「晶胞質量 ÷ 晶胞體積」逐步砌成式。\n\n**第 1 步：一個晶胞入面有幾多原子嘅質量？** 晶胞有 $n$ 粒原子。一<span class=\"term-zh\">莫耳</span>（<span class=\"term-en\">mole</span>）原子重 $A$ 克（原子量定義），一 mol 有 $N_A$ 粒，所以**一粒原子**重 $\\dfrac{A}{N_A}$ 克：\n\n$$m_{\\text{一粒}}=\\dfrac{A}{N_A}\\quad\\text{（每 mol 重 }A\\text{ 克 ÷ 每 mol }N_A\\text{ 粒）}$$\n\n$$m_{\\text{晶胞}}=n\\cdot\\dfrac{A}{N_A}=\\dfrac{nA}{N_A}\\quad\\text{（晶胞有 }n\\text{ 粒，乘返 }n\\text{）}$$\n\n**第 2 步：密度 ＝ 晶胞質量 ÷ 晶胞體積**，分母代 $V_C$：\n\n$$\\rho=\\dfrac{m_{\\text{晶胞}}}{V_C}=\\dfrac{\\frac{nA}{N_A}}{V_C}\\quad\\text{（密度定義，分子用第 1 步）}$$\n\n**第 3 步：把雙層分數攤平**（分子分母同乘，整理成單層）：\n\n$$\\rho=\\dfrac{nA}{V_C\\,N_A}\\quad\\text{（}\\frac{nA}{N_A}\\div V_C=\\frac{nA}{V_C N_A}\\text{，分母合併）}\\tag{1}$$\n\n呢條就係本節主公式：\n\n$$\\boxed{\\,\\rho=\\dfrac{nA}{V_C\\,N_A}\\,}\\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $\\rho$ | <span class=\"term-zh\">理論密度</span>（<span class=\"term-en\">theoretical density</span>） | g/cm³ |\n| $n$ | <span class=\"term-zh\">晶胞原子數</span>（<span class=\"term-en\">atoms per unit cell</span>），由 S59 攞（FCC $4$、BCC $2$、SC $1$） | 個（無因次） |\n| $A$ | <span class=\"term-zh\">原子量</span>（<span class=\"term-en\">atomic weight</span>），每 mol 嘅克數 | g/mol |\n| $V_C$ | <span class=\"term-zh\">晶胞體積</span>（<span class=\"term-en\">unit cell volume</span>），立方晶胞 $V_C=a^3$ | cm³ |\n| $N_A$ | <span class=\"term-zh\">亞佛加德羅常數</span>（<span class=\"term-en\">Avogadro's number</span>）$=6.022\\times10^{23}$ /mol | /mol |\n\n> **單位要對得返 g/cm³**：因為 $A$ 用 g/mol、$N_A$ 用 /mol，$mol$ 約走，淨返 g；分母 $V_C$ 要用 **cm³**（所以 $a$ 要先由 nm 換做 cm，$1\\ \\text{nm}=10^{-7}\\ \\text{cm}$）。呢個換算係本節最大失分位，第十節例 4 會逐步示範。\n\n---\n\n## 六、衍生公式：APF 嘅通式（$R$ 約走，得純數）\n\nAPF 嘅式第四節已寫低，本節把佢**逐結構展開**，等你見到「點解 $R$ 約走、APF 只剩純數」。先寫通式：\n\n$$\\text{APF}=\\dfrac{n\\cdot\\frac43\\pi R^3}{a^3}\\tag{2}$$\n\n**式(2) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $\\text{APF}$ | <span class=\"term-zh\">原子堆積率</span>（<span class=\"term-en\">atomic packing factor</span>） | 無因次（$0\\sim1$） |\n| $n$ | 晶胞原子數（FCC $4$、BCC $2$、SC $1$） | 個 |\n| $R$ | <span class=\"term-zh\">原子半徑</span>（<span class=\"term-en\">atomic radius</span>） | nm |\n| $a$ | <span class=\"term-zh\">晶格常數</span>（<span class=\"term-en\">lattice parameter</span>），$V_C=a^3$ | nm |\n\n關鍵一步：把 S59 嘅 $a\\text{-}R$ 關係代入 $a^3$，$R$ 就會喺分子分母**約走**。下面以 **FCC** 為例逐行推（$n=4$、$a=2\\sqrt2\\,R$）：\n\n$$\\text{APF}=\\dfrac{4\\cdot\\frac43\\pi R^3}{a^3}\\quad\\text{（式(2) 代 }n=4\\text{）}$$\n\n$$a^3=(2\\sqrt2\\,R)^3=2^3(\\sqrt2)^3 R^3=8\\cdot2\\sqrt2\\,R^3=16\\sqrt2\\,R^3\\quad\\text{（}(\\sqrt2)^3=2\\sqrt2\\text{，逐項立方）}$$\n\n$$\\text{APF}=\\dfrac{\\frac{16}{3}\\pi R^3}{16\\sqrt2\\,R^3}\\quad\\text{（分子 }4\\times\\frac43=\\frac{16}{3}\\text{，分母代上式）}$$\n\n$$\\text{APF}=\\dfrac{\\frac{16}{3}\\pi}{16\\sqrt2}\\quad\\text{（分子分母同除 }R^3\\text{，}R\\text{ 約走）}$$\n\n$$\\text{APF}=\\dfrac{\\pi}{3\\sqrt2}=\\dfrac{\\pi}{3\\sqrt2}\\cdot\\dfrac{\\sqrt2}{\\sqrt2}=\\dfrac{\\pi\\sqrt2}{6}\\approx0.74\\quad\\text{（約走 }16\\text{，有理化分母）}$$\n\n> 由頭到尾 **$R$ 完全約走**——所以 FCC 嘅 APF 必定 $0.74$，無論係銅、鋁、金邊隻金屬都一樣。同樣手法（代 BCC $a=\\frac{4R}{\\sqrt3}$）得 $0.68$，代 SC $a=2R$ 得 $0.52$。**配位數越大、APF 越大**（FCC/HCP $12\\to0.74$ ＞ BCC $8\\to0.68$ ＞ SC $6\\to0.52$），呢個次序要記實。\n\n---\n\n## 七、概念延伸：APF、配位數、密度三者點扣埋\n\n把三個量擺埋一齊睇，會見到一條清晰嘅因果鏈：\n\n- **配位數 ↑**（每粒原子貼住嘅鄰居多）→ 原子塞得越逼 → **APF ↑**（空隙少）。FCC/HCP（CN $=12$）最密、SC（CN $=6$）最鬆。\n- **APF 只睇「結構塞得幾密」，唔睇原子有幾重**——所以**同金屬種類無關**。\n- **密度 ＝ 結構（$n$、$a$）× 原子有幾重（$A$）**——所以**同金屬種類有關**。兩隻都係 FCC 嘅金屬，APF 一樣（$0.74$）但密度可以爭好遠（鉛 $11.3$ vs 鋁 $2.7$ g/cm³），因為 $A$ 同 $a$ 唔同。\n\n| 結構 | 配位數 CN | $n$ | APF |\n|---|---|---|---|\n| <span class=\"term-zh\">簡單立方</span>（<span class=\"term-en\">SC</span>） | $6$ | $1$ | $0.52$ |\n| <span class=\"term-zh\">體心立方</span>（<span class=\"term-en\">BCC</span>） | $8$ | $2$ | $0.68$ |\n| <span class=\"term-zh\">面心立方</span>（<span class=\"term-en\">FCC</span>） | $12$ | $4$ | $0.74$ |\n| <span class=\"term-zh\">六方最密堆積</span>（<span class=\"term-en\">HCP</span>） | $12$ | $6$ | $0.74$ |\n\n---\n\n## 八、次要公式：APF 也可寫成「球體積 ÷ 晶胞」嘅一般式\n\n當題目唔肯畀 $a\\text{-}R$ 關係、净係畀你 $R$ 同實測 $a$（例如 X 光繞射量到嘅），就唔好硬代結構式，直接用最原始嘅定義代數：\n\n$$\\text{APF}=\\dfrac{n\\cdot\\frac43\\pi R^3}{a^3}\\tag{3}$$\n\n**式(3) 符號表**（同式(2)，只係用途係「直接代實測數」）\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $n$ | 晶胞原子數 | 個 |\n| $R$ | 原子半徑（實測或查表） | nm |\n| $a$ | 實測晶格常數 | nm |\n\n> **式(2) vs 式(3) 分別**：式(2) 係**先代結構 $a\\text{-}R$ 關係**（$R$ 約走、得固定純數 $0.74$/$0.68$/$0.52$）；式(3) 係**直接代實際數字**（唔約 $R$，逐個數計）。理論上同一結構兩者結果一樣，但**如果實測 $a$ 同理想關係有偏差**（真實晶體唔係完美硬球），用式(3) 會算到稍為唔同嘅 APF——呢正係課本用嚟核對「硬球模型有幾準」嘅手法。\n\n---\n\n## 九、睇圖：FCC 一個面點樣「沿面對角線掂實」（含讀圖導引）\n\n下面係 FCC 一個面（正方形）嘅俯視示意：四隻角各一粒原子、面中心一粒原子，**面對角線**上三粒原子（角→面心→角）一粒挨一粒掂實。呢張圖就係「APF 點解 $R$ 約走」嘅幾何根。\n\n<svg viewBox=\"0 0 360 360\" width=\"100%\" style=\"max-width:360px;display:block;margin:0 auto;background:transparent;\">\n  <rect x=\"60\" y=\"60\" width=\"240\" height=\"240\" fill=\"none\" stroke=\"#64748b\" stroke-width=\"1.5\"/>\n  <line x1=\"60\" y1=\"300\" x2=\"300\" y2=\"60\" stroke=\"#f5c842\" stroke-width=\"2\" stroke-dasharray=\"6 4\"/>\n  <circle cx=\"60\" cy=\"60\" r=\"34\" fill=\"#4a9eff\" fill-opacity=\"0.55\" stroke=\"#4a9eff\" stroke-width=\"1.5\"/>\n  <circle cx=\"300\" cy=\"60\" r=\"34\" fill=\"#4a9eff\" fill-opacity=\"0.55\" stroke=\"#4a9eff\" stroke-width=\"1.5\"/>\n  <circle cx=\"60\" cy=\"300\" r=\"34\" fill=\"#4a9eff\" fill-opacity=\"0.55\" stroke=\"#4a9eff\" stroke-width=\"1.5\"/>\n  <circle cx=\"300\" cy=\"300\" r=\"34\" fill=\"#4a9eff\" fill-opacity=\"0.55\" stroke=\"#4a9eff\" stroke-width=\"1.5\"/>\n  <circle cx=\"180\" cy=\"180\" r=\"34\" fill=\"#f06060\" fill-opacity=\"0.6\" stroke=\"#f06060\" stroke-width=\"1.5\"/>\n  <text x=\"180\" y=\"44\" text-anchor=\"middle\" fill=\"#cbd5e1\" font-size=\"13\" font-family=\"sans-serif\">a（邊長＝晶格常數）</text>\n  <text x=\"245\" y=\"135\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"13\" font-family=\"sans-serif\">面對角線 a√2</text>\n  <text x=\"180\" y=\"186\" text-anchor=\"middle\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\">面心</text>\n  <text x=\"180\" y=\"345\" text-anchor=\"middle\" fill=\"#e2e8f0\" font-size=\"13\" font-family=\"sans-serif\">沿面對角線：角→面心→角，剛好 4R＝a√2</text>\n</svg>\n\n**讀圖導引（呢張圖點睇，非座標系圖）**\n\n① **正方形邊框**：晶胞一個面，邊長就係<span class=\"term-zh\">晶格常數</span>（<span class=\"term-en\">lattice parameter</span>）$a$。四隻角同正中心各一粒原子（FCC 面心嗰粒）。\n② **黃色虛線（面對角線）**：長度由畢氏定理 $=a\\sqrt2$。沿呢條線，原子係**角→面心→角**咁一粒挨一粒掂實。\n③ **關鍵特徵——4R＝a√2**：面對角線上排到「半徑 $R$＋直徑 $2R$＋半徑 $R$」＝ $4R$，即 $a\\sqrt2=4R$，移項就係 S59 嘅 $a=2\\sqrt2\\,R$。呢條代入 $a^3$，就令 APF 入面個 $R$ 約走。\n④ **最容易睇錯嘅地方**：原子係**沿面對角線掂、唔係沿邊掂**（沿邊嗰個係 SC）。若你誤當「沿邊 $a=2R$」去計 FCC，APF 會錯。另外呢張只係**一個面**嘅俯視，真實 FCC 係立體，六個面都有面心原子。\n\n---\n\n## 十、Worked Examples（由易到難，逐步、每個數字標來源）\n\n> 本節係計算節，例題由「直接代 APF 通式」、去「代結構關係令 $R$ 約走」、再到「完整密度計算連單位換算」、最後「反過嚟由密度核對結構」。\n\n### 例 1（易）：簡單立方 SC 嘅 APF\n\n> 已知 SC 結構：$n=1$、原子沿邊掂故 $a=2R$。求 APF。\n\n**第 1 步：寫出 APF 通式（式(2)），代 $n=1$**\n\n$$\\text{APF}=\\dfrac{1\\cdot\\frac43\\pi R^3}{a^3}\\quad\\text{（式(2)，}n=1\\text{ 題幹給定）}$$\n\n**第 2 步：代 $a=2R$，算 $a^3$**\n\n$$a^3=(2R)^3=8R^3\\quad\\text{（}2^3=8\\text{，}R^3\\text{ 保留）}$$\n\n**第 3 步：代入分母，約走 $R^3$**\n\n$$\\text{APF}=\\dfrac{\\frac43\\pi R^3}{8R^3}=\\dfrac{\\frac43\\pi}{8}\\quad\\text{（分子分母同除 }R^3\\text{，}R\\text{ 約走）}$$\n\n**第 4 步：化簡求值**\n\n$$\\text{APF}=\\dfrac{4\\pi}{3\\times8}=\\dfrac{\\pi}{6}\\approx0.524\\quad\\text{（}\\tfrac43\\div8=\\tfrac{4}{24}=\\tfrac16\\text{）}$$\n\n> **答案：SC 嘅 APF $=\\dfrac{\\pi}{6}\\approx0.52$。** 留意 $R$ 約走咗——APF 同係邊種原子無關。\n\n### 例 2（中）：體心立方 BCC 嘅 APF\n\n> 已知 BCC：$n=2$、沿體對角線掂故 $a=\\dfrac{4R}{\\sqrt3}$。求 APF。\n\n**第 1 步：式(2) 代 $n=2$**\n\n$$\\text{APF}=\\dfrac{2\\cdot\\frac43\\pi R^3}{a^3}=\\dfrac{\\frac83\\pi R^3}{a^3}\\quad\\text{（}2\\times\\frac43=\\frac83\\text{）}$$\n\n**第 2 步：算 $a^3$（連有理化嘅立方）**\n\n$$a^3=\\left(\\dfrac{4R}{\\sqrt3}\\right)^3=\\dfrac{4^3R^3}{(\\sqrt3)^3}=\\dfrac{64R^3}{3\\sqrt3}\\quad\\text{（}4^3=64\\text{，}(\\sqrt3)^3=3\\sqrt3\\text{）}$$\n\n**第 3 步：代入分母，約走 $R^3$**\n\n$$\\text{APF}=\\dfrac{\\frac83\\pi R^3}{\\frac{64R^3}{3\\sqrt3}}=\\dfrac{\\frac83\\pi}{\\frac{64}{3\\sqrt3}}\\quad\\text{（同除 }R^3\\text{）}$$\n\n**第 4 步：除法變乘倒數，化簡**\n\n$$\\text{APF}=\\dfrac83\\pi\\times\\dfrac{3\\sqrt3}{64}=\\dfrac{8\\times3\\sqrt3}{3\\times64}\\pi=\\dfrac{\\sqrt3}{8}\\pi\\quad\\text{（約走 }3\\text{ 同 }8\\text{，}\\tfrac{8}{64}=\\tfrac18\\text{）}$$\n\n**第 5 步：求值**\n\n$$\\text{APF}=\\dfrac{\\sqrt3\\,\\pi}{8}\\approx\\dfrac{1.732\\times3.1416}{8}\\approx0.680\\quad\\text{（}\\sqrt3\\approx1.732\\text{）}$$\n\n> **答案：BCC 嘅 APF $=\\dfrac{\\sqrt3\\,\\pi}{8}\\approx0.68$。** 比 SC 密（CN 由 $6$ 升到 $8$），但仍鬆過 FCC。\n\n### 例 3（較複雜）：FCC 銅嘅理論密度（完整單位換算）\n\n> 銅係 FCC：$n=4$、原子半徑 $R=0.128\\ \\text{nm}$、原子量 $A=63.5\\ \\text{g/mol}$、$N_A=6.022\\times10^{23}\\ /\\text{mol}$。求理論密度 $\\rho$。\n\n**第 0 步：把每個數字嘅來源寫清楚**\n\n| 量 | 數值 | 來源 |\n|---|---|---|\n| $n$ | $4$ | FCC，S59 給定 |\n| $R$ | $0.128\\ \\text{nm}$ | 題幹給定（查表值） |\n| $A$ | $63.5\\ \\text{g/mol}$ | 題幹給定（銅原子量） |\n| $N_A$ | $6.022\\times10^{23}\\ /\\text{mol}$ | 常數 |\n\n**第 1 步：由 $R$ 求 $a$（FCC：$a=2\\sqrt2\\,R$）**\n\n$$a=2\\sqrt2\\times0.128=2\\times1.414\\times0.128=0.362\\ \\text{nm}\\quad\\text{（}\\sqrt2\\approx1.414\\text{，}R\\text{ 第 0 步）}$$\n\n**第 2 步：$a$ 由 nm 換做 cm（密度要 g/cm³）**\n\n$$a=0.362\\ \\text{nm}\\times10^{-7}\\ \\tfrac{\\text{cm}}{\\text{nm}}=3.62\\times10^{-8}\\ \\text{cm}\\quad\\text{（}1\\ \\text{nm}=10^{-7}\\ \\text{cm}\\text{，單位換算）}$$\n\n**第 3 步：算晶胞體積 $V_C=a^3$**\n\n$$V_C=(3.62\\times10^{-8})^3=4.74\\times10^{-23}\\ \\text{cm}^3\\quad\\text{（}3.62^3\\approx47.4\\text{，指數 }(-8)\\times3=-24\\text{）}$$\n\n**第 4 步：代主公式式(1)**\n\n$$\\rho=\\dfrac{nA}{V_C\\,N_A}=\\dfrac{4\\times63.5}{(4.74\\times10^{-23})\\times(6.022\\times10^{23})}\\quad\\text{（各數第 0、3 步代入）}$$\n\n**第 5 步：分子分母分別算**\n\n$$\\text{分子}=4\\times63.5=254\\ \\text{g/mol}\\quad\\text{（}n\\times A\\text{）}$$\n\n$$\\text{分母}=4.74\\times10^{-23}\\times6.022\\times10^{23}=28.5\\quad\\text{（}10^{-23}\\times10^{23}=10^0=1\\text{，}\\text{cm}^3\\text{）}$$\n\n**第 6 步：相除得密度**\n\n$$\\rho=\\dfrac{254}{28.5}\\approx8.91\\ \\text{g/cm}^3\\quad\\text{（單位：g/mol÷(cm}^3\\cdot/\\text{mol)＝g/cm}^3\\text{）}$$\n\n> **答案：銅理論密度 $\\rho\\approx8.91\\ \\text{g/cm}^3$。** 同實測值 $8.94\\ \\text{g/cm}^3$ 好接近——硬球模型相當準。**最易錯位**：第 2 步唔換 nm→cm，密度會差成 $10^{21}$ 倍。\n\n### 例 4（混合・完整計算）：由密度反推結構\n\n> 某金屬密度 $\\rho=7.87\\ \\text{g/cm}^3$、原子量 $A=55.85\\ \\text{g/mol}$、原子半徑 $R=0.124\\ \\text{nm}$。佢係 FCC（$n=4$）定 BCC（$n=2$）？\n\n**第 0 步：策略**——分別假設 FCC 同 BCC，各自算出理論密度，睇邊個夾返 $7.87$。\n\n**第 1 步：算兩種假設下嘅 $a$（各自嘅 $a\\text{-}R$ 關係）**\n\n$$a_{\\text{FCC}}=2\\sqrt2\\times0.124=0.351\\ \\text{nm}=3.51\\times10^{-8}\\ \\text{cm}\\quad\\text{（FCC 關係＋換算）}$$\n\n$$a_{\\text{BCC}}=\\dfrac{4\\times0.124}{\\sqrt3}=\\dfrac{0.496}{1.732}=0.286\\ \\text{nm}=2.86\\times10^{-8}\\ \\text{cm}\\quad\\text{（BCC 關係＋換算）}$$\n\n**第 2 步：各自算 $V_C=a^3$**\n\n$$V_{\\text{FCC}}=(3.51\\times10^{-8})^3=4.32\\times10^{-23}\\ \\text{cm}^3\\quad\\text{（}3.51^3\\approx43.2\\text{）}$$\n\n$$V_{\\text{BCC}}=(2.86\\times10^{-8})^3=2.34\\times10^{-23}\\ \\text{cm}^3\\quad\\text{（}2.86^3\\approx23.4\\text{）}$$\n\n**第 3 步：FCC 假設（$n=4$）代式(1)**\n\n$$\\rho_{\\text{FCC}}=\\dfrac{4\\times55.85}{(4.32\\times10^{-23})(6.022\\times10^{23})}=\\dfrac{223.4}{26.0}\\approx8.59\\ \\text{g/cm}^3\\quad\\text{（代入並相除）}$$\n\n**第 4 步：BCC 假設（$n=2$）代式(1)**\n\n$$\\rho_{\\text{BCC}}=\\dfrac{2\\times55.85}{(2.34\\times10^{-23})(6.022\\times10^{23})}=\\dfrac{111.7}{14.1}\\approx7.92\\ \\text{g/cm}^3\\quad\\text{（代入並相除）}$$\n\n**第 5 步：對比實測，揀夾返嗰個**\n\n$$|\\rho_{\\text{BCC}}-7.87|=0.05\\ \\ll\\ |\\rho_{\\text{FCC}}-7.87|=0.72\\quad\\text{（BCC 夾得近好多）}$$\n\n> **答案：呢隻金屬係 BCC（其實就係室溫嘅鐵 Fe）。** 思路：唔同結構 $n$ 同 $a$ 唔同 → 算出嘅理論密度唔同 → 同實測一比就揀得返結構。呢題同時用咗 $a\\text{-}R$ 關係、單位換算、式(1)、同合理性核對，係本節最完整嘅綜合題。\n\n---\n\n## 十一、易混淆對比：唔好把呢幾件事撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| APF 同金屬種類有關？ | **無關**。APF 入面 $R$ 會約走，只剩結構決定嘅純數（FCC $0.74$、BCC $0.68$、SC $0.52$）。銅同鋁都係 FCC，APF 都係 $0.74$。 |\n| 密度同金屬種類有關？ | **有關**。式(1) 仲乘咗原子量 $A$、用咗該金屬嘅 $a$，所以鉛同鋁就算同係 FCC，密度都爭好遠。 |\n| FCC 沿邊掂（$a=2R$）？ | **唔係**。FCC 沿**面對角線**掂，$a=2\\sqrt2\\,R$；$a=2R$ 係 SC。代錯會令 APF／密度全錯。 |\n| $a$ 唔使換單位？ | **要**。密度要 g/cm³，$a$ 必須由 nm 換做 cm（$\\times10^{-7}$）再立方，否則差 $10^{21}$ 倍。 |\n| APF 同密度公式無關？ | **同源**。兩條**分母都係 $V_C$**；APF 分子係球體積、密度分子係原子質量。記住呢個對稱就唔會撈亂。 |\n\n---\n\n## 十二、一頁總表\n\n| 項目 | 公式／結果 | 備注 |\n|:--|:--|:--|\n| 理論密度（主公式） | $\\rho=\\dfrac{nA}{V_C N_A}$ | 式(1)，$V_C=a^3$；單位 g/cm³ |\n| APF 通式 | $\\text{APF}=\\dfrac{n\\cdot\\frac43\\pi R^3}{a^3}$ | 式(2)/式(3)，代 $a\\text{-}R$ 後 $R$ 約走 |\n| SC APF | $\\dfrac{\\pi}{6}\\approx0.52$ | $n=1$、$a=2R$、CN $=6$ |\n| BCC APF | $\\dfrac{\\sqrt3\\,\\pi}{8}\\approx0.68$ | $n=2$、$a=\\dfrac{4R}{\\sqrt3}$、CN $=8$ |\n| FCC／HCP APF | $\\dfrac{\\pi\\sqrt2}{6}\\approx0.74$ | FCC $n=4$、CN $=12$（最密） |\n| 晶格常數體積 | $V_C=a^3$ | 立方晶胞；$a$ 先 nm→cm |\n| 單位換算 | $1\\ \\text{nm}=10^{-7}\\ \\text{cm}$ | 密度計算必做，否則錯 $10^{21}$ 倍 |\n| 亞佛加德羅常數 | $N_A=6.022\\times10^{23}\\ /\\text{mol}$ | 把每 mol 化成每粒 |\n| 反推結構 | 比較各假設 $\\rho$ 同實測 | 揀夾得最近嗰個 $n$／結構 |\n\n---\n\n## 十三、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1：APF（原子堆積率）係邊兩個量相除？(a) 晶胞質量 ÷ 晶胞體積　(b) 原子球總體積 ÷ 晶胞體積　(c) 配位數 ÷ 原子數　(d) 原子量 ÷ 體積\n- D2：理論密度公式 $\\rho=\\dfrac{nA}{V_C N_A}$ 入面，$N_A$ 係咩？(a) 晶胞原子數　(b) 原子量　(c) 亞佛加德羅常數　(d) 晶格常數\n\n**L2 概念理解**\n- D3：以下邊個結構 APF 最大？(a) SC　(b) BCC　(c) FCC　(d) 三個一樣\n- D4：兩隻金屬都係 FCC，佢哋嘅 APF？(a) 一定相同（都係 0.74）　(b) 視乎原子量　(c) 視乎密度　(d) 視乎溫度\n\n**L3 單步應用**\n- D5：FCC 嘅晶胞原子數 $n$ 同 $a\\text{-}R$ 關係係？(a) $n=2$、$a=2R$　(b) $n=4$、$a=2\\sqrt2R$　(c) $n=2$、$a=\\dfrac{4R}{\\sqrt3}$　(d) $n=4$、$a=2R$\n- D6：算密度時，$a=0.36\\ \\text{nm}$ 要先換做幾多 cm？(a) $0.36\\times10^{-9}$　(b) $0.36\\times10^{-7}$　(c) $0.36\\times10^{7}$　(d) 唔使換\n\n**L4 多步計算**\n- D7：BCC（$n=2$），$V_C=2.0\\times10^{-23}\\ \\text{cm}^3$、$A=50\\ \\text{g/mol}$，密度約等於？(a) $4.1\\ \\text{g/cm}^3$　(b) $8.3\\ \\text{g/cm}^3$　(c) $16.6\\ \\text{g/cm}^3$　(d) $0.5\\ \\text{g/cm}^3$\n- D8：SC 嘅 APF $=\\dfrac{\\pi}{6}$，數值約等於？(a) $0.32$　(b) $0.52$　(c) $0.68$　(d) $0.74$\n\n**L5 綜合應用**\n- D9：某金屬密度同 FCC 假設算出嘅理論密度差好遠、但同 BCC 假設算出嘅好接近，最合理結論係？(a) 計錯數　(b) 佢係 BCC　(c) 佢係 FCC　(d) 佢唔係晶體\n- D10：「銅同鉛都係 FCC，所以兩者密度一樣」——啱定錯？(a) 啱，同結構同密度　(b) 錯，APF 一樣但密度仲要睇原子量 $A$ 同 $a$，鉛重好多　(c) 啱，因為 APF 都係 0.74　(d) 要睇溫度\n\n**診斷答案**：D1 b｜D2 c｜D3 c｜D4 a｜D5 b｜D6 b｜D7 b｜D8 b｜D9 b｜D10 b\n\n> 卡喺 L1–L2 → 重睇第四節（兩條式定義）同第六、七節（APF 同金屬無關）；卡喺 L3 → 重睇第五節主公式、第九節讀圖（FCC $a\\text{-}R$）同例 1；卡喺 L4 → 重睇例 2（APF 化簡）同例 3（密度連單位換算）；卡喺 L5 → 重睇例 4（由密度反推結構）同第十一節易混淆表。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出 APF＝原子球總體積÷晶胞體積、密度＝晶胞原子質量÷晶胞體積，兩條式分母都係 V_C"
+    },
+    {
+      "id": "c2",
+      "text": "記得三大結構嘅 APF：SC 0.52、BCC 0.68、FCC／HCP 0.74，並知配位數越大 APF 越大"
+    },
+    {
+      "id": "c3",
+      "text": "識把 a-R 關係（FCC a=2√2R、BCC a=4R/√3、SC a=2R）代入 APF 通式，見到 R 約走、APF 只剩純數"
+    },
+    {
+      "id": "c4",
+      "text": "識用主公式 ρ=nA/(V_C·N_A) 算理論密度，並記得 a 要由 nm 換 cm（×10⁻⁷）再立方先得 g/cm³"
+    },
+    {
+      "id": "c5",
+      "text": "分得清 APF 同金屬種類無關（R 約走）、密度同金屬種類有關（乘原子量 A），例如鉛同鋁同係 FCC 但密度爭好遠"
+    },
+    {
+      "id": "c6",
+      "text": "識由實測密度反推結構：分別假設 FCC／BCC 算理論密度，揀夾返實測嗰個（如鐵反推得 BCC）"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "（選看）Callister Materials Science Ch.3：Density Computations 範例",
+      "url": "https://www.wiley.com"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "原子堆積率 APF（atomic packing factor）係邊兩個量相除？",
+      "options": [
+        "原子球總體積 ÷ 晶胞體積",
+        "晶胞質量 ÷ 晶胞體積",
+        "配位數 ÷ 晶胞原子數",
+        "原子量 A ÷ 亞佛加德羅常數 N_A"
+      ],
+      "answer": 0,
+      "explain": "APF＝晶胞入面所有原子球體積 n·(4/3)πR³ 除以晶胞體積 V_C，係一個 0～1 嘅純數。常見錯選『晶胞質量÷晶胞體積』——嗰個係密度 ρ，唔係 APF；兩條式分母同樣係 V_C，但分子一個係球體積、一個係原子質量，唔好撈亂。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "銅同鋁都係 FCC 結構，所以兩者嘅 APF 都係 0.74。",
+      "answer": true,
+      "explain": "啱。APF 通式代入 a-R 關係後，原子半徑 R 會喺分子分母約走，淨低淨係由結構決定嘅純數——FCC 一律 0.74，同係邊種金屬無關。但要分清：密度就唔同，密度仲要乘原子量 A、用該金屬嘅 a，所以銅同鋁密度爭好遠。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "理論密度公式 ρ＝nA／(V_C·N_A) 計 FCC 金屬時，以下邊個步驟做漏會令答案差成 10²¹ 倍？",
+      "options": [
+        "把晶格常數 a 由 nm 換做 cm 再立方",
+        "用 n=4（FCC 晶胞原子數）",
+        "除以亞佛加德羅常數 N_A",
+        "用該金屬嘅原子量 A"
+      ],
+      "answer": 0,
+      "explain": "密度要 g/cm³，所以 V_C 必須用 cm³，即 a 要先由 nm 換 cm（1 nm=10⁻⁷ cm）再立方。漏咗呢步，V_C 會細 (10⁷)³=10²¹ 倍，密度即大 10²¹ 倍。其餘三項都要做，但唔做唔會造成單位級數錯。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "BCC 嘅 APF（0.68）大過 FCC 嘅 APF（0.74）。",
+      "answer": false,
+      "explain": "錯，啱啱掉轉。配位數越大、原子塞得越密、APF 越大：FCC／HCP 配位數 12、APF 0.74（最密）＞ BCC 配位數 8、APF 0.68 ＞ SC 配位數 6、APF 0.52。所以係 FCC 0.74 大過 BCC 0.68。"
+    }
+  ],
+  "chatPracticeHints": [
+    "a 漏換 nm→cm 算密度",
+    "FCC 誤用 a=2R（應 2√2R）",
+    "APF 當咗同金屬種類有關"
+  ]
+}

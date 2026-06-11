@@ -1,0 +1,63 @@
+{
+  "objective": "把 S58『單位晶胞＋數原子數 n』落實到金屬世界最常見嘅三種結構：面心立方（FCC，face-centered cubic）、體心立方（BCC，body-centered cubic）、六方最密堆積（HCP，hexagonal close-packed）。要分得清每種嘅四件事：原子坐位（FCC 8 角＋6 面心、BCC 8 角＋1 體心、HCP 六方）、晶胞原子數 n（FCC 4、BCC 2、HCP 6）、配位數 CN（FCC/HCP 12、BCC 8）、同埋原子半徑 R 同晶格常數 a 嘅幾何關係。核心係用同一條畢氏邏輯（接觸線長 ＝ 沿線原子直徑數）推出 SC 沿邊 a=2R、FCC 沿面對角線 a=2√2R、BCC 沿體對角線 a=4R/√3，並識反解 R（如 BCC 鐵 a=0.287 nm → R≈0.124 nm；FCC 鋁 R=0.143 nm → a≈0.405 nm）。亦要明 FCC 同 HCP 一樣密（CN 12、APF 0.74），分別淨係疊層次序 ABCABC vs ABAB。為 S60 原子堆積與密度（APF）打底——APF 要先有 n 同 a-R 關係先算到",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "報得出 FCC、BCC、HCP 三種結構嘅原子坐位（FCC 8 角＋6 面心、BCC 8 角＋1 體心、HCP 六方）同晶胞原子數 n（FCC 4、BCC 2、HCP 6）" },
+    { "id": "c2", "text": "講得出配位數（coordination number）＝一粒原子最近鄰嘅原子數；報得出 FCC 同 HCP 都係 12、BCC 係 8、SC 係 6" },
+    { "id": "c3", "text": "知道每種結構『邊一串原子先掂實』：SC 沿邊、FCC 沿面對角線、BCC 沿體對角線；明白唔可把 BCC 當成 a=2R" },
+    { "id": "c4", "text": "識用畢氏定理推三條 a-R 關係：SC a=2R、FCC a=2√2R（面對角線 a√2=4R）、BCC a=4R/√3（體對角線 a√3=4R）" },
+    { "id": "c5", "text": "識畀晶格常數 a 反解原子半徑 R（FCC R=a√2/4、BCC R=a√3/4），並算返典型例如 BCC 鐵 a=0.287 nm → R≈0.124 nm、FCC 鋁 R=0.143 nm → a≈0.405 nm" },
+    { "id": "c6", "text": "講得出 FCC 同 HCP 一樣密（CN 都係 12、APF 都係 0.74），分別淨係原子層疊嘅次序 FCC＝ABCABC、HCP＝ABAB；知道 HCP 用六方晶胞、理想 c/a≈1.633" }
+  ],
+  "resources": [
+    { "type": "link", "label": "（選看）DoITPoMS：Crystallography（FCC/BCC/HCP 互動 3D，可轉動睇接觸方向）", "url": "https://www.doitpoms.ac.uk/tlplib/crystallography3/index.php" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "面心立方（FCC）單位晶胞嘅原子坐喺邊？",
+      "options": [
+        "只係 8 隻角",
+        "8 隻角 ＋ 6 個面中心",
+        "8 隻角 ＋ 1 個體中心",
+        "只係 6 個面中心"
+      ],
+      "answer": 1,
+      "explain": "FCC ＝ 8 隻角各一粒（各算 ⅛，共 1 粒）＋ 6 個面中心各一粒（各算 ½，共 3 粒），晶胞原子數 n＝4。錯選『8 角＋1 體中心』係 BCC（n＝2）；『只係 8 角』係簡單立方 SC（n＝1）。記住：面心立方就係喺立方體每個面正中央塞多一粒。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "配位數（coordination number）係指咩？FCC 同 HCP 嘅配位數係幾多？",
+      "options": [
+        "晶胞原子數；FCC＝4、HCP＝6",
+        "一粒原子最近鄰嘅原子數目；FCC 同 HCP 都係 12",
+        "晶格常數 a 嘅大細；都係 0.36 nm",
+        "面嘅數目；都係 6"
+      ],
+      "answer": 1,
+      "explain": "配位數 ＝ 一粒原子周圍貼實佢嘅最近鄰原子數目，越大代表堆得越密。FCC 同 HCP 都係 12（最密），BCC 係 8、SC 係 6。注意唔好同晶胞原子數 n 撈亂：CN 講『一粒原子周圍幾多鄰居』，n 講『一個晶胞等效幾多粒』（FCC n＝4、BCC n＝2）。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "體心立方（BCC）入面，原子係沿立方體嘅邊互相掂實，所以 a＝2R。",
+      "answer": false,
+      "explain": "錯。BCC 沿邊嘅角原子之間有窿、唔掂；真正掂實嗰串係沿『體對角線』——角原子→體心原子→對角角原子，被中央原子撐住。體對角線長 a√3，排 2 個原子直徑，所以 a√3＝4R，即 a＝4R/√3。把 BCC 當成 a＝2R 係本節最高頻嘅失分位。沿面對角線掂嗰個先係 FCC（a√2＝4R，a＝2√2R）。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "FCC 同 HCP 嘅配位數都係 12、堆積率（APF）都係 0.74，一樣咁密；兩者分別淨係原子層疊嘅次序（FCC＝ABCABC、HCP＝ABAB）。",
+      "answer": true,
+      "explain": "啱。FCC 同 HCP 本質都係同一堆最密球，配位數同係 12、APF 同係 0.74，差別只在第三層落喺邊：FCC 第三層落新窿位（ABCABC，到第四層先重複），HCP 第三層正正疊返第一層（ABAB）。所以 FCC 揀立方晶胞、HCP 揀六方晶胞（理想 c/a≈1.633）。BCC 唔同：CN 8、APF 0.68，冇 FCC/HCP 咁密。"
+    }
+  ],
+  "chatPracticeHints": [
+    "BCC 誤當沿邊 a=2R",
+    "撈亂配位數同晶胞原子數 n",
+    "FCC/BCC 對角線揀錯"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "objective": "由 S59 嘅結構幾何，推出兩個可計可驗嘅量：原子堆積率 APF（=原子球總體積÷晶胞體積，代 a-R 關係後 R 約走，得結構固定純數 SC 0.52／BCC 0.68／FCC·HCP 0.74）同理論密度 ρ=nA/(V_C·N_A)。掌握『APF 同金屬種類無關、密度有關（仲乘原子量 A）』嘅分別，識做完整密度計算（重點：a 由 nm 換 cm 再立方、V_C=a³），並識反過嚟由實測密度比較各結構假設嚟反推 n／結構。為 S62/S63 第一階段大整理嘅計算題打底",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "講得出 APF＝原子球總體積÷晶胞體積、密度＝晶胞原子質量÷晶胞體積，兩條式分母都係 V_C" },
+    { "id": "c2", "text": "記得三大結構嘅 APF：SC 0.52、BCC 0.68、FCC／HCP 0.74，並知配位數越大 APF 越大" },
+    { "id": "c3", "text": "識把 a-R 關係（FCC a=2√2R、BCC a=4R/√3、SC a=2R）代入 APF 通式，見到 R 約走、APF 只剩純數" },
+    { "id": "c4", "text": "識用主公式 ρ=nA/(V_C·N_A) 算理論密度，並記得 a 要由 nm 換 cm（×10⁻⁷）再立方先得 g/cm³" },
+    { "id": "c5", "text": "分得清 APF 同金屬種類無關（R 約走）、密度同金屬種類有關（乘原子量 A），例如鉛同鋁同係 FCC 但密度爭好遠" },
+    { "id": "c6", "text": "識由實測密度反推結構：分別假設 FCC／BCC 算理論密度，揀夾返實測嗰個（如鐵反推得 BCC）" }
+  ],
+  "resources": [
+    { "type": "link", "label": "（選看）Callister Materials Science Ch.3：Density Computations 範例", "url": "https://www.wiley.com" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "原子堆積率 APF（atomic packing factor）係邊兩個量相除？",
+      "options": [
+        "原子球總體積 ÷ 晶胞體積",
+        "晶胞質量 ÷ 晶胞體積",
+        "配位數 ÷ 晶胞原子數",
+        "原子量 A ÷ 亞佛加德羅常數 N_A"
+      ],
+      "answer": 0,
+      "explain": "APF＝晶胞入面所有原子球體積 n·(4/3)πR³ 除以晶胞體積 V_C，係一個 0～1 嘅純數。常見錯選『晶胞質量÷晶胞體積』——嗰個係密度 ρ，唔係 APF；兩條式分母同樣係 V_C，但分子一個係球體積、一個係原子質量，唔好撈亂。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "basic",
+      "q": "銅同鋁都係 FCC 結構，所以兩者嘅 APF 都係 0.74。",
+      "answer": true,
+      "explain": "啱。APF 通式代入 a-R 關係後，原子半徑 R 會喺分子分母約走，淨低淨係由結構決定嘅純數——FCC 一律 0.74，同係邊種金屬無關。但要分清：密度就唔同，密度仲要乘原子量 A、用該金屬嘅 a，所以銅同鋁密度爭好遠。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "理論密度公式 ρ＝nA／(V_C·N_A) 計 FCC 金屬時，以下邊個步驟做漏會令答案差成 10²¹ 倍？",
+      "options": [
+        "把晶格常數 a 由 nm 換做 cm 再立方",
+        "用 n=4（FCC 晶胞原子數）",
+        "除以亞佛加德羅常數 N_A",
+        "用該金屬嘅原子量 A"
+      ],
+      "answer": 0,
+      "explain": "密度要 g/cm³，所以 V_C 必須用 cm³，即 a 要先由 nm 換 cm（1 nm=10⁻⁷ cm）再立方。漏咗呢步，V_C 會細 (10⁷)³=10²¹ 倍，密度即大 10²¹ 倍。其餘三項都要做，但唔做唔會造成單位級數錯。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "BCC 嘅 APF（0.68）大過 FCC 嘅 APF（0.74）。",
+      "answer": false,
+      "explain": "錯，啱啱掉轉。配位數越大、原子塞得越密、APF 越大：FCC／HCP 配位數 12、APF 0.74（最密）＞ BCC 配位數 8、APF 0.68 ＞ SC 配位數 6、APF 0.52。所以係 FCC 0.74 大過 BCC 0.68。"
+    }
+  ],
+  "chatPracticeHints": [
+    "a 漏換 nm→cm 算密度",
+    "FCC 誤用 a=2R（應 2√2R）",
+    "APF 當咗同金屬種類有關"
+  ]
+}

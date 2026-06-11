@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S53', title: '熵與第二定律（直覺）', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
-  { id: 'S54', title: '比熱與熱容', tier: 'core', cognition: 'calculation', extension: 'life', platform: 'ka' },
-  { id: 'S55', title: '熱傳導概念', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'callister' },
-  { id: 'S56', title: '熱膨脹（TEC）', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'callister' },
   { id: 'S57', title: '晶體與非晶', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S58', title: '單位晶胞概念', tier: 'core', cognition: 'concept', extension: 'none', platform: 'callister' },
+  { id: 'S59', title: '三大金屬結構', tier: 'core', cognition: 'recall', extension: 'none', platform: 'doitpoms' },
+  { id: 'S60', title: '原子堆積與密度', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'callister' },
+  { id: 'S61', title: '晶面與晶向（入門）', tier: 'bridge', cognition: 'concept', extension: 'none', platform: 'doitpoms' },
 ]
 
 const TIERDESC = {
