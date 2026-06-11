@@ -1,0 +1,69 @@
+{
+  "objective": "搞清三種最常見金屬晶體結構——面心立方(FCC)、體心立方(BCC)、六方最密堆積(HCP)——嘅原子擺位,並把三件關鍵事量化:(1)每晶胞真正屬於佢嘅原子數 N(角原子算⅛、面心算½、體心算1整粒),得 FCC N=4、BCC N=2、HCP N=6;(2)由『原子相黐嘅密排方向』用畢氏定理推出 R 同 a 嘅幾何關係——FCC 沿面對角線 √2·a=4R(a=2√2·R)、BCC 沿體對角線 √3·a=4R(a=4R/√3);(3)配位數 CN——FCC 12、HCP 12、BCC 8,並知 FCC 同 HCP 一樣密(APF 都係0.74),分別淨在堆疊次序(FCC=ABCABC、HCP=ABABAB)。能由 R 互算 a、由 a 反推 R。為下節 S69 堆積因子(APF)同 S70 理論密度計算打底——嗰兩節要直接攞本節嘅 N 同 R–a 關係嚟計",
+  "fieldLink": "",
+  "checkpoints": [
+    { "id": "c1", "text": "講得出三種結構嘅原子擺位:FCC=8角+6面心、BCC=8角+1體心、HCP=六方最密堆;並識用攤分規則(角⅛、面心½、體心1)" },
+    { "id": "c2", "text": "親手數得出每晶胞原子數:FCC N=8×⅛+6×½=4、BCC N=8×⅛+1=2、HCP N=6" },
+    { "id": "c3", "text": "搵得出密排方向:FCC=面對角線(√2·a=4R)、BCC=體對角線(√3·a=4R);記得『面2、體3』,唔會對調" },
+    { "id": "c4", "text": "識由 R 算 a(FCC a=2√2·R)、由 a 反推 R(BCC R=√3·a/4),計算逐步唔跳" },
+    { "id": "c5", "text": "講得出配位數:FCC 12、HCP 12、BCC 8;唔會把 N(晶胞原子數)同 CN(配位數)撈埋" },
+    { "id": "c6", "text": "明白 FCC 同 HCP 一樣密(CN 都係12、APF 都係0.74),分別只在第三層堆疊次序(FCC=ABCABC、HCP=ABABAB)" }
+  ],
+  "resources": [
+    { "type": "link", "label": "（選看）DoITPoMS:Crystallography——互動旋轉睇 FCC／BCC／HCP 晶胞同密排方向", "url": "https://www.doitpoms.ac.uk/tlplib/crystallography3/index.php" }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "立方晶胞嘅一個『角原子』,每個單位晶胞真正攤到幾多?",
+      "options": [
+        "1(整粒,角原子獨佔)",
+        "½(同一個隔籬晶胞共用)",
+        "⅛(畀周圍 8 個晶胞共用)",
+        "¼(同 3 個晶胞共用)"
+      ],
+      "answer": 2,
+      "explain": "立方體每個角同時係周圍 8 個晶胞嘅共用角,所以一個角原子每晶胞只算 ⅛。面心原子畀 2 個晶胞共用算 ½,體心原子先至獨佔算 1 整粒。把角原子當整粒(1)係數 N 時最常見嘅錯。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "面心立方(FCC)每個單位晶胞真正屬於佢嘅原子數 N 係?",
+      "options": [
+        "2(8×⅛+1)",
+        "4(8×⅛+6×½)",
+        "6(8角+6面心唔攤分)",
+        "8(8 個角各算 1)"
+      ],
+      "answer": 1,
+      "explain": "FCC=8 個角各 ⅛ 共貢獻 8×⅛=1,加 6 個面心各 ½ 共 6×½=3,合計 N=4。選 2 係 BCC 嘅答案;選 6、8 係冇做攤分嘅錯誤數法。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "FCC 同 BCC 嘅原子相黐方向唔同:FCC 沿面對角線(√2·a=4R),BCC 沿體對角線(√3·a=4R)。",
+      "answer": true,
+      "explain": "啱。FCC 原子喺面上沿面對角線粒貼粒,面對角線長 √2·a,上面排 4 個半徑,所以 √2·a=4R。BCC 原子由角穿過體心去對角,沿體對角線相黐,體對角線長 √3·a,亦排 4 個半徑,所以 √3·a=4R。記法『面 2、體 3』。BCC 千祈唔好用面對角線——BCC 面對角線上其實冇原子相黐。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "關於 FCC 同 HCP 嘅密度,以下邊句啱?",
+      "options": [
+        "FCC 密好多,HCP 接近簡單立方",
+        "兩者一樣密:配位數 CN 都係 12、APF 都係 0.74,分別只在第三層堆疊次序(FCC=ABCABC、HCP=ABABAB)",
+        "HCP 嘅配位數係 8,所以冇 FCC 密",
+        "FCC 唔屬於最密堆積"
+      ],
+      "answer": 1,
+      "explain": "FCC 同 HCP 都係最密堆積:每粒原子有 12 個最近鄰居(CN=12),堆積因子 APF 都係 0.74,密度一樣。唯一分別係第三層擺去邊——HCP 坐返第一層正上(ABABAB),FCC 坐去新位(ABCABC)。CN=8 係 BCC,唔係 HCP。"
+    }
+  ],
+  "chatPracticeHints": [
+    "角算⅛面心算½體心算1唔好當整粒",
+    "FCC面對角線√2、BCC體對角線√3唔好對調",
+    "N係晶胞原子數,CN係鄰居數,兩件事"
+  ]
+}

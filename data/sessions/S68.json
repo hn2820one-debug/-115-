@@ -1,0 +1,112 @@
+{
+  "id": "S68",
+  "stage": 2,
+  "week": 5,
+  "order": 68,
+  "title": "Ch.3 晶體結構（一）",
+  "titleEn": "Ch.3 Crystal Structures I",
+  "platform": "callister",
+  "objective": "搞清三種最常見金屬晶體結構——面心立方(FCC)、體心立方(BCC)、六方最密堆積(HCP)——嘅原子擺位,並把三件關鍵事量化:(1)每晶胞真正屬於佢嘅原子數 N(角原子算⅛、面心算½、體心算1整粒),得 FCC N=4、BCC N=2、HCP N=6;(2)由『原子相黐嘅密排方向』用畢氏定理推出 R 同 a 嘅幾何關係——FCC 沿面對角線 √2·a=4R(a=2√2·R)、BCC 沿體對角線 √3·a=4R(a=4R/√3);(3)配位數 CN——FCC 12、HCP 12、BCC 8,並知 FCC 同 HCP 一樣密(APF 都係0.74),分別淨在堆疊次序(FCC=ABCABC、HCP=ABABAB)。能由 R 互算 a、由 a 反推 R。為下節 S69 堆積因子(APF)同 S70 理論密度計算打底——嗰兩節要直接攞本節嘅 N 同 R–a 關係嚟計",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "core",
+  "cognition": "concept",
+  "prereq": [
+    "S59"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S68 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: concept｜platform: callister｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n呢節學三種最常見嘅金屬<span class=\"term-zh\">晶體結構</span>（<span class=\"term-en\">crystal structure</span>）——<span class=\"term-zh\">面心立方</span>（<span class=\"term-en\">FCC, face-centered cubic</span>）、<span class=\"term-zh\">體心立方</span>（<span class=\"term-en\">BCC, body-centered cubic</span>）同<span class=\"term-zh\">六方最密堆積</span>（<span class=\"term-en\">HCP, hexagonal close-packed</span>），把佢哋三件最關鍵嘅事**一次過分清楚**：（1）原子點樣排（即原子擺喺<span class=\"term-zh\">單位晶胞</span>（<span class=\"term-en\">unit cell</span>）邊度）；（2）每個晶胞**真正屬於佢嘅原子數** $N$（角／面／體心原子要按比例攤分）；（3）<span class=\"term-zh\">配位數</span>（<span class=\"term-en\">coordination number, CN</span>）即每粒原子最近有幾多個鄰居。核心一句：**三種結構嘅分別，全部由「原子擺位」決定，而「原子擺位」一旦定咗，每晶胞原子數 $N$、配位數 CN，同埋<span class=\"term-zh\">原子半徑</span> $R$ 同<span class=\"term-zh\">晶格常數</span>（<span class=\"term-en\">lattice parameter</span>）$a$ 嘅幾何關係就全部跟住唯一定死。** 本節主公式就係把「邊條方向上嘅原子兩兩相黐（密排方向）」呢個事實，翻譯成 $R$ 同 $a$ 嘅一條代數關係，畀你之後（S69 APF、S70 密度）直接攞嚟計。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：直接接 <span class=\"term-zh\">S59 三大金屬結構</span>（FCC／BCC／HCP 初步認識）同 <span class=\"term-zh\">S58 單位晶胞概念</span>（晶胞、晶格常數 $a$ 嘅定義）。亦用到 <span class=\"term-zh\">S57 晶體與非晶</span>（長程有序嘅觀念）。幾何上會用到**畢氏定理**（對角線長度）同**開方／平方**（S15–S16 數學底）——本節嘅推導淨係「喺立方體入面搵一條對角線」，唔難，但要逐步跟。\n- **新內容同已學嘅關係**：S59 只係話「有 FCC、BCC、HCP 三種」、畀你睇過圖；本節把佢哋**量化兼證明**——親手數出每晶胞原子數 $N$（角原子點解只算 $\\tfrac18$）、親手由幾何推出 $R$ 同 $a$ 嘅關係（FCC 沿面對角線、BCC 沿體對角線原子相黐）。所以本節係 S59 嘅「補完＋上計算軌道」。\n- **本節係邊節嘅地基**：呢三條 $R$–$a$ 關係係**S69 堆積因子（APF）**同**S70 理論密度計算**嘅唯一入口——APF 要用 $N$、原子體積同晶胞體積 $a^3$；密度要用 $N$、原子量同 $a^3$。冇本節嘅 $N$ 同 $R$–$a$ 關係，後面兩節寸步難行。亦係 **S71 晶面晶向（Miller 指數）**嘅空間感基礎。\n- **如果未掌握就先補**：若你對「晶胞、晶格常數 $a$」仲陌生，**先回看 S58**；若連 FCC／BCC／HCP 三個樣都未見過，**先回看 S59**；若畢氏定理／開方手生，回看 S15–S16。\n\n---\n\n## 三、先講白話：執橙仔點堆先最慳位\n\n想像你喺生果鋪要把一大堆橙仔（當每粒係硬波子，大細一樣）擺入一個箱。你會點擺？\n\n- **求其擺（簡單立方）**：每粒橙正上、正下、前後左右都啱啱對齊，好似棋盤格層層疊。整齊，但**好多空位**，浪費空間——所以金屬幾乎冇用呢種。\n- **下一層橙窿位塞低層橙之間（最密堆積）**：你梗係會把上層橙仔**坐落底層橙之間嘅凹位**，咁先慳位、先穩陣。呢種「層層坐落凹位」嘅堆法，就係**最密堆積**，FCC 同 HCP 兩種就係用呢個方法堆出嚟，分別只在於**第三層**坐返第一層正上（HCP）定坐去新位（FCC）。\n- **BCC**：中間夾一粒——立方體八個角各一粒，正中心再塞一粒。冇 FCC／HCP 咁密，但好多金屬（如鐵、鉻、鎢）正正係咁排。\n\n> 一句記住：**「FCC 同 HCP 係最密堆（橙坐凹位），BCC 中間夾一粒，簡單立方太浪費冇人用。」** 本節就係把呢個「點堆」嘅直覺，化成可以計嘅幾何（每晶胞幾多粒、原子半徑同晶格常數點掛鈎）。\n\n---\n\n## 四、正式定義：單位晶胞、每晶胞原子數 $N$、配位數 CN\n\n**<span class=\"term-zh\">單位晶胞</span>（<span class=\"term-en\">unit cell</span>）**：晶體入面**重複出嚟嘅最細結構單位**，好似砌圖嘅一塊，無限排出去就成個晶體。立方晶胞嘅邊長叫<span class=\"term-zh\">晶格常數</span> $a$。\n\n**點數每晶胞原子數 $N$（最易失分位）**：一粒原子坐喺晶胞邊個位，就決定佢有幾多「屬於呢個晶胞」——因為角／邊／面上嘅原子係同隔籬晶胞**共用**嘅，要按比例攤分：\n\n| 原子位置 | 同幾多個晶胞共用 | 每晶胞攤到 |\n|---|---|---|\n| 角（<span class=\"term-en\">corner</span>，立方體 8 個角） | 8 個晶胞共用 | 每個角原子算 $\\tfrac18$ |\n| 面心（<span class=\"term-en\">face center</span>，6 個面中心） | 2 個晶胞共用 | 每個面心原子算 $\\tfrac12$ |\n| 體心（<span class=\"term-en\">body center</span>，正中央 1 粒） | 唔同人共用，獨佔 | 算 $1$（整粒） |\n\n**<span class=\"term-zh\">配位數</span>（<span class=\"term-en\">coordination number, CN</span>）**：一粒原子周圍**最近、距離相等**嘅鄰居數目。CN 越大，堆得越密。\n\n**<span class=\"term-zh\">密排方向</span>（<span class=\"term-en\">close-packed direction</span>）**：晶胞入面**原子兩兩實際相黐（球面相觸）嗰條方向**。「原子相黐」即係沿呢條線量度，長度 $=$ 整數粒原子直徑 $=$ 整數 $\\times 2R$。**搵啱呢條方向，就搵到 $R$ 同 $a$ 嘅關係**——呢個係本節主公式嘅來源。\n\n| 結構 | 原子相黐沿邊條線（密排方向） | 嗰條線長度 |\n|---|---|---|\n| FCC | **面對角線**（<span class=\"term-en\">face diagonal</span>）| $\\sqrt{2}\\,a$，上面排住 4 個半徑（角＋面心＋角，共 $4R$）|\n| BCC | **體對角線**（<span class=\"term-en\">body diagonal</span>）| $\\sqrt{3}\\,a$，上面排住 4 個半徑（角＋體心＋角，共 $4R$）|\n| 簡單立方（對照）| **立方邊**（<span class=\"term-en\">cube edge</span>）| $a$，排住 2 個半徑（共 $2R$）|\n\n---\n\n## 五、主公式：原子相黐方向 → $R$ 同 $a$ 嘅幾何關係\n\n「原子相黐」一句話就係：沿密排方向量度，**晶胞嗰條對角線（或邊）嘅長度，啱啱等於排喺上面嗰串原子嘅直徑總和**。把呢個事實寫成等式，就係本節主公式：\n\n$$\\boxed{\\,(\\text{密排方向長度}) = (\\text{該方向上原子數})\\times 2R\\,} \\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| 密排方向長度 | 晶胞入面原子相黐嗰條線嘅幾何長度（FCC 用面對角線 $\\sqrt2\\,a$、BCC 用體對角線 $\\sqrt3\\,a$）| m（米）或 nm |\n| $a$ | <span class=\"term-zh\">晶格常數</span>（<span class=\"term-en\">lattice parameter</span>），立方晶胞邊長 | m 或 nm |\n| $R$ | <span class=\"term-zh\">原子半徑</span>（<span class=\"term-en\">atomic radius</span>），把原子當硬球嘅半徑 | m 或 nm |\n| $2R$ | 一粒原子嘅直徑 | m 或 nm |\n\n**呢條式喺度講咩？** 佢唔係新定律，純粹係「原子相黐＝球面貼住」嘅幾何翻譯：你只要喺立方體入面搵啱**邊條線上嘅原子真係粒貼粒**（密排方向），數清楚嗰條線上由一端到另一端**經過幾多粒原子半徑**（每粒原子貢獻直徑 $2R$），再用畢氏定理寫出嗰條線嘅長度，兩者一畫等號，就解到 $R$ 同 $a$ 嘅關係。下面分 FCC、BCC 各推一次。\n\n**衍生關係式(2)：FCC——沿面對角線推 $a$ 同 $R$**\n\nFCC 嘅原子沿**面對角線**相黐：一個正方形面，對角線上由一個角原子（貢獻 $R$）、中間面心原子（貢獻 $2R$，整粒直徑）、到對角嗰個角原子（貢獻 $R$），合共 $R+2R+R=4R$。而正方形（邊長 $a$）嘅對角線長由畢氏定理係 $\\sqrt{a^2+a^2}$：\n\n$$\\text{面對角線長} = \\sqrt{a^2+a^2} \\quad\\text{（畢氏定理：直角三角形兩股都係 }a\\text{，斜邊即對角線）}$$\n\n$$\\text{面對角線長} = \\sqrt{2a^2} = \\sqrt{2}\\,a \\quad\\text{（提出 }a^2\\text{ 開方：}\\sqrt{2a^2}=\\sqrt2\\cdot\\sqrt{a^2}=\\sqrt2\\,a\\text{）}$$\n\n$$\\sqrt{2}\\,a = 4R \\quad\\text{（套式(1)：面對角線長度 = 對角線上 4 個半徑）} \\tag{2}$$\n\n$$a = \\dfrac{4R}{\\sqrt{2}} = 2\\sqrt{2}\\,R \\quad\\text{（兩邊同除 }\\sqrt2\\text{；再把 }4/\\sqrt2=4\\sqrt2/2=2\\sqrt2\\text{ 有理化）}$$\n\n**衍生關係式(3)：BCC——沿體對角線推 $a$ 同 $R$**\n\nBCC 嘅原子沿**體對角線**（由立方體一個角穿過正中心去到對面角）相黐：對角線上由角原子（$R$）、中心原子（$2R$）、到對面角原子（$R$），合共 $4R$。而立方體（邊長 $a$）嘅體對角線長要用兩次畢氏定理：\n\n$$\\text{底面對角線長} = \\sqrt{a^2+a^2} = \\sqrt{2}\\,a \\quad\\text{（先求底面正方形對角線，同式(2) 一樣）}$$\n\n$$\\text{體對角線長} = \\sqrt{(\\sqrt{2}\\,a)^2 + a^2} \\quad\\text{（再用畢氏定理：底面對角線 }\\sqrt2 a\\text{ 同高 }a\\text{ 為兩股）}$$\n\n$$\\text{體對角線長} = \\sqrt{2a^2 + a^2} = \\sqrt{3a^2} = \\sqrt{3}\\,a \\quad\\text{（}(\\sqrt2 a)^2=2a^2\\text{，加 }a^2=3a^2\\text{，開方得 }\\sqrt3\\,a\\text{）}$$\n\n$$\\sqrt{3}\\,a = 4R \\quad\\text{（套式(1)：體對角線長度 = 對角線上 4 個半徑）} \\tag{3}$$\n\n$$a = \\dfrac{4R}{\\sqrt{3}} = \\dfrac{4\\sqrt{3}}{3}\\,R \\quad\\text{（兩邊同除 }\\sqrt3\\text{；有理化 }4/\\sqrt3=4\\sqrt3/3\\text{）}$$\n\n> 一眼記法：**FCC 面對角線 $\\sqrt2\\,a=4R$；BCC 體對角線 $\\sqrt3\\,a=4R$。** 兩條都係「$4R$」（因為對角線上都係角＋中＋角＝4 個半徑），分別淨係 FCC 用 $\\sqrt2$（面對角線）、BCC 用 $\\sqrt3$（體對角線）。記住「面 2、體 3」就唔會撈亂。\n\n---\n\n## 六、每晶胞原子數 $N$ 同配位數 CN：三種結構逐個數\n\n**FCC 每晶胞原子數**：8 個角各 $\\tfrac18$，加 6 個面心各 $\\tfrac12$。\n\n$$N_{\\text{FCC}} = 8\\times\\tfrac18 + 6\\times\\tfrac12 = 1 + 3 = 4 \\quad\\text{（角貢獻 }8\\times\\tfrac18=1\\text{；面心貢獻 }6\\times\\tfrac12=3\\text{；相加得 4）} \\tag{4}$$\n\n**BCC 每晶胞原子數**：8 個角各 $\\tfrac18$，加正中心 1 粒整粒。\n\n$$N_{\\text{BCC}} = 8\\times\\tfrac18 + 1 = 1 + 1 = 2 \\quad\\text{（角貢獻 }8\\times\\tfrac18=1\\text{；體心整粒算 }1\\text{；相加得 2）} \\tag{5}$$\n\n**HCP 每晶胞原子數**：標準六方晶胞（teaching cell）入面有 6 粒（角原子、面心原子按比例攤分 + 中層 3 粒內部原子合計）。\n\n$$N_{\\text{HCP}} = 6 \\quad\\text{（標準六方晶胞:上下兩個面各 6 個角原子攤 }\\tfrac16\\text{（}6\\times\\tfrac16=1\\text{）加 1 個面心攤 }\\tfrac12\\text{，每面貢獻 }1+\\tfrac12=1.5\\text{，兩面共 3，加中層 3 粒內部原子各算整粒 1 共 3，合計 }1.5+1.5+3=6） \\tag{6}$$\n\n| 結構 | 每晶胞原子數 $N$ | 配位數 CN | 一句記 |\n|---|---|---|---|\n| 簡單立方（對照）| $1$ | $6$ | 最浪費，金屬唔用 |\n| BCC | $2$ | $8$ | 角＋中夾一粒 |\n| FCC | $4$ | $12$ | 最密之一，面心 6 粒 |\n| HCP | $6$ | $12$ | 最密之一，同 FCC 一樣密 |\n\n> 重點：**FCC 同 HCP 都係最密堆積，CN 都係 12**（每粒原子有 12 個最近鄰居），佢哋嘅密度（APF）一樣，分別淨在第三層堆嘅位置（FCC＝ABCABC…、HCP＝ABABAB…）。**BCC CN＝8，冇咁密。** 唔好把「$N$（每晶胞原子數）」同「CN（配位數）」撈埋——$N$ 講「晶胞入面有幾多粒」，CN 講「一粒原子周圍有幾多鄰居」，係兩件唔同事。\n\n---\n\n## 七、概念延伸：FCC vs HCP 點解一樣密、堆疊次序係關鍵\n\nFCC 同 HCP 兩種都係「橙坐凹位」嘅最密堆積，CN＝12、APF 一樣（後節 S69 會算到都係 $0.74$）。佢哋唯一分別係**第三層擺去邊**：\n\n- **HCP**：第三層原子坐返**第一層正上**（凹位對齊第一層），堆疊次序 **ABABAB…**。\n- **FCC**：第三層原子坐去**全新位置**（避開第一、二層），堆疊次序 **ABCABCABC…**，呢個 ABC 重複睇落去就係面心立方。\n\n> 一句串連：**FCC＝ABCABC（密排面係 {111}）、HCP＝ABABAB；兩者一樣密（CN 12、APF 0.74），分別只在第三層坐返舊位定坐新位。** 呢個堆疊次序之後喺差排、相變（如鋼嘅 FCC↔BCC 轉變）都會再出現，係好底層嘅幾何。\n\n---\n\n## 八、睇圖：三種立方晶胞同密排方向（含讀圖導引）\n\n下面三個示意圖：左 FCC（角 8＋面心 6）、中 BCC（角 8＋體心 1）、右簡單立方對照。紅線標出**原子相黐嘅密排方向**（FCC 面對角線、BCC 體對角線）。\n\n<svg viewBox=\"0 0 600 230\" width=\"100%\" style=\"max-width:600px;display:block;margin:0 auto;background:transparent;\">\n  <!-- FCC -->\n  <text x=\"95\" y=\"20\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"14\" font-family=\"sans-serif\">FCC（面心立方）</text>\n  <!-- 立方框 -->\n  <rect x=\"40\" y=\"50\" width=\"90\" height=\"90\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1.3\"/>\n  <line x1=\"40\" y1=\"50\" x2=\"70\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"130\" y1=\"50\" x2=\"160\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"130\" y1=\"140\" x2=\"160\" y2=\"125\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"70\" y1=\"35\" x2=\"160\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"160\" y1=\"35\" x2=\"160\" y2=\"125\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <!-- 角原子 -->\n  <circle cx=\"40\" cy=\"50\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"130\" cy=\"50\" r=\"5\" fill=\"#4a9eff\"/>\n  <circle cx=\"40\" cy=\"140\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"130\" cy=\"140\" r=\"5\" fill=\"#4a9eff\"/>\n  <circle cx=\"70\" cy=\"35\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"160\" cy=\"35\" r=\"5\" fill=\"#4a9eff\"/>\n  <!-- 面心原子 -->\n  <circle cx=\"85\" cy=\"95\" r=\"5\" fill=\"#f06060\"/>\n  <circle cx=\"100\" cy=\"42\" r=\"5\" fill=\"#f06060\"/>\n  <circle cx=\"145\" cy=\"87\" r=\"5\" fill=\"#f06060\"/>\n  <!-- 面對角線（紅虛=密排方向） -->\n  <line x1=\"40\" y1=\"140\" x2=\"130\" y2=\"50\" stroke=\"#f06060\" stroke-width=\"1.6\" stroke-dasharray=\"4 3\"/>\n  <text x=\"95\" y=\"165\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"10\" font-family=\"sans-serif\">面對角線 √2·a=4R</text>\n  <text x=\"95\" y=\"180\" text-anchor=\"middle\" fill=\"#cbd5e1\" font-size=\"10\" font-family=\"sans-serif\">N=4, CN=12</text>\n\n  <!-- BCC -->\n  <text x=\"300\" y=\"20\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"14\" font-family=\"sans-serif\">BCC（體心立方）</text>\n  <rect x=\"250\" y=\"50\" width=\"90\" height=\"90\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1.3\"/>\n  <line x1=\"250\" y1=\"50\" x2=\"280\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"340\" y1=\"50\" x2=\"370\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"340\" y1=\"140\" x2=\"370\" y2=\"125\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"280\" y1=\"35\" x2=\"370\" y2=\"35\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <line x1=\"370\" y1=\"35\" x2=\"370\" y2=\"125\" stroke=\"#94a3b8\" stroke-width=\"1\"/>\n  <circle cx=\"250\" cy=\"50\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"340\" cy=\"50\" r=\"5\" fill=\"#4a9eff\"/>\n  <circle cx=\"250\" cy=\"140\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"340\" cy=\"140\" r=\"5\" fill=\"#4a9eff\"/>\n  <circle cx=\"280\" cy=\"35\" r=\"5\" fill=\"#4a9eff\"/><circle cx=\"370\" cy=\"35\" r=\"5\" fill=\"#4a9eff\"/>\n  <!-- 體心原子 -->\n  <circle cx=\"310\" cy=\"88\" r=\"5.5\" fill=\"#2dd4bf\"/>\n  <!-- 體對角線（紅虛=密排方向） -->\n  <line x1=\"250\" y1=\"140\" x2=\"370\" y2=\"35\" stroke=\"#f06060\" stroke-width=\"1.6\" stroke-dasharray=\"4 3\"/>\n  <text x=\"300\" y=\"165\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"10\" font-family=\"sans-serif\">體對角線 √3·a=4R</text>\n  <text x=\"300\" y=\"180\" text-anchor=\"middle\" fill=\"#cbd5e1\" font-size=\"10\" font-family=\"sans-serif\">N=2, CN=8</text>\n\n  <!-- 簡單立方 -->\n  <text x=\"500\" y=\"20\" text-anchor=\"middle\" fill=\"#64748b\" font-size=\"13\" font-family=\"sans-serif\">簡單立方（對照）</text>\n  <rect x=\"455\" y=\"50\" width=\"80\" height=\"80\" fill=\"none\" stroke=\"#64748b\" stroke-width=\"1.2\"/>\n  <line x1=\"455\" y1=\"50\" x2=\"480\" y2=\"38\" stroke=\"#64748b\" stroke-width=\"0.9\"/>\n  <line x1=\"535\" y1=\"50\" x2=\"560\" y2=\"38\" stroke=\"#64748b\" stroke-width=\"0.9\"/>\n  <line x1=\"535\" y1=\"130\" x2=\"560\" y2=\"118\" stroke=\"#64748b\" stroke-width=\"0.9\"/>\n  <line x1=\"480\" y1=\"38\" x2=\"560\" y2=\"38\" stroke=\"#64748b\" stroke-width=\"0.9\"/>\n  <line x1=\"560\" y1=\"38\" x2=\"560\" y2=\"118\" stroke=\"#64748b\" stroke-width=\"0.9\"/>\n  <circle cx=\"455\" cy=\"50\" r=\"4.5\" fill=\"#94a3b8\"/><circle cx=\"535\" cy=\"50\" r=\"4.5\" fill=\"#94a3b8\"/>\n  <circle cx=\"455\" cy=\"130\" r=\"4.5\" fill=\"#94a3b8\"/><circle cx=\"535\" cy=\"130\" r=\"4.5\" fill=\"#94a3b8\"/>\n  <circle cx=\"480\" cy=\"38\" r=\"4.5\" fill=\"#94a3b8\"/><circle cx=\"560\" cy=\"38\" r=\"4.5\" fill=\"#94a3b8\"/>\n  <text x=\"497\" y=\"160\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"10\" font-family=\"sans-serif\">邊長 a=2R</text>\n  <text x=\"497\" y=\"175\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"10\" font-family=\"sans-serif\">N=1, CN=6</text>\n\n  <text x=\"300\" y=\"212\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"10\" font-family=\"sans-serif\">藍=角原子(⅛)｜紅=面心(½)｜青=體心(1整粒)｜紅虛線=原子相黐嘅密排方向</text>\n</svg>\n\n**讀圖導引（非座標系圖：直接描述各結構特徵）**\n\n① **每個結構嘅原子擺位**：FCC＝8 個角（藍，各 $\\tfrac18$）＋6 個面中心（紅，各 $\\tfrac12$）；BCC＝8 個角（藍）＋正中心 1 粒（青，整粒）；簡單立方＝淨係 8 個角。\n② **紅虛線＝密排方向**：FCC 紅線喺**面**上（面對角線 $\\sqrt2\\,a$）；BCC 紅線**穿過立方體中心**（體對角線 $\\sqrt3\\,a$）。原子就係沿呢條紅線粒貼粒，所以紅線長＝$4R$。\n③ **每個結構嘅 $N$ 同 CN**：圖下標咗——FCC（$N{=}4$, CN${=}12$）、BCC（$N{=}2$, CN${=}8$）、簡單立方（$N{=}1$, CN${=}6$）。\n④ **最容易睇錯嘅地方**：（a）面心原子坐喺**面正中央**、唔係邊上——所以攤分係 $\\tfrac12$（兩個晶胞共用一個面）唔係 $\\tfrac18$；（b）BCC 中心嗰粒係**整粒獨佔**（算 1），唔好當佢同角原子一樣攤 $\\tfrac18$；（c）BCC 嘅原子相黐係**體對角線**唔係面對角線——BCC 面對角線上原子其實冇相黐（中間冇面心原子），呢個係最常錯嘅；（d）唔好把 $N$（晶胞原子數）同 CN（配位數）兩個數字撈埋。\n\n---\n\n## 九、Worked Examples（由易到難，逐步、每個數字標來源）\n\n> 本節集中喺「數 $N$」同「由 $R$–$a$ 關係互算」。難度由判讀／數原子，去到完整代入算晶格常數。\n\n### 例 1（易）：數 FCC 每晶胞原子數 $N$\n\n> 問：面心立方（FCC）每個單位晶胞真正屬於佢嘅原子數 $N$ 係幾多？\n\n**第 1 步：列出 FCC 嘅原子位置同攤分**\n\n$$\\text{8 個角，每個算 }\\tfrac18 \\quad\\text{；}\\quad \\text{6 個面心，每個算 }\\tfrac12 \\quad\\text{（第四節攤分表）}$$\n\n**第 2 步：角原子貢獻**\n\n$$8\\times\\tfrac18 = 1 \\quad\\text{（8 個角各 }\\tfrac18\\text{，相乘得 1）}$$\n\n**第 3 步：面心原子貢獻**\n\n$$6\\times\\tfrac12 = 3 \\quad\\text{（6 個面各 }\\tfrac12\\text{，相乘得 3）}$$\n\n**第 4 步：相加**\n\n$$N_{\\text{FCC}} = 1 + 3 = 4 \\quad\\text{（角 + 面心）}$$\n\n> **答案：$N_{\\text{FCC}}=4$。** 關鍵：角算 $\\tfrac18$、面心算 $\\tfrac12$，唔好當每粒都係整粒。\n\n### 例 2（中）：由原子半徑 $R$ 算 FCC 晶格常數 $a$\n\n> 已知銅（Cu）係 FCC，原子半徑 $R=0.128\\ \\mathrm{nm}$。求晶格常數 $a$。\n\n**第 1 步：寫出 FCC 嘅 $R$–$a$ 關係（式2）**\n\n$$a = 2\\sqrt{2}\\,R \\quad\\text{（式(2) 整理得，FCC 沿面對角線 }\\sqrt2 a=4R\\text{）}$$\n\n**第 2 步：代入 $R$（題幹給定）**\n\n$$a = 2\\sqrt{2}\\times 0.128 \\quad\\text{（}R=0.128\\ \\mathrm{nm}\\text{，題幹給定）}$$\n\n**第 3 步：算 $2\\sqrt2$**\n\n$$2\\sqrt{2} = 2\\times 1.414 = 2.828 \\quad\\text{（}\\sqrt2\\approx1.414\\text{，查／記）}$$\n\n**第 4 步：相乘得 $a$**\n\n$$a = 2.828\\times 0.128 = 0.362\\ \\mathrm{nm} \\quad\\text{（第 3 步 × 第 2 步嘅 }R\\text{）}$$\n\n> **答案：$a \\approx 0.362\\ \\mathrm{nm}$。** （與 Cu 實測 $a\\approx0.3615\\ \\mathrm{nm}$ 吻合。）最易錯：FCC 用 $\\sqrt2$（面對角線）唔係 $\\sqrt3$。\n\n### 例 3（較複雜）：由晶格常數 $a$ 反推 BCC 原子半徑 $R$\n\n> 已知鐵（α-Fe）係 BCC，晶格常數 $a=0.287\\ \\mathrm{nm}$。求原子半徑 $R$。\n\n**第 1 步：寫出 BCC 嘅 $R$–$a$ 關係（式3）**\n\n$$\\sqrt{3}\\,a = 4R \\quad\\text{（式(3)，BCC 沿體對角線原子相黐）}$$\n\n**第 2 步：解出 $R$（兩邊同除 4）**\n\n$$R = \\dfrac{\\sqrt{3}\\,a}{4} \\quad\\text{（把式(3) 兩邊同除 4，孤立 }R\\text{）}$$\n\n**第 3 步：代入 $a$（題幹給定）並算 $\\sqrt3\\,a$**\n\n$$\\sqrt{3}\\,a = 1.732\\times 0.287 = 0.497\\ \\mathrm{nm} \\quad\\text{（}\\sqrt3\\approx1.732\\text{；}a=0.287\\text{ 題幹給定）}$$\n\n**第 4 步：除以 4 得 $R$**\n\n$$R = \\dfrac{0.497}{4} = 0.124\\ \\mathrm{nm} \\quad\\text{（第 3 步 ÷ 4）}$$\n\n> **答案：$R \\approx 0.124\\ \\mathrm{nm}$。** （與 Fe 實測 $R\\approx0.124\\ \\mathrm{nm}$ 吻合。）最易錯：BCC 用 $\\sqrt3$（體對角線）唔係 $\\sqrt2$；又或者漏咗除以 4。\n\n### 例 4（混合・完整計算）：同一原子半徑下，FCC vs BCC 邊個晶格常數大？\n\n> 假設某金屬原子半徑 $R=0.140\\ \\mathrm{nm}$，分別當佢係 FCC 同 BCC，算各自晶格常數 $a$，並比較。\n\n**第 1 步：FCC 用式(2) 算 $a_{\\text{FCC}}$**\n\n$$a_{\\text{FCC}} = 2\\sqrt{2}\\,R = 2.828\\times 0.140 = 0.396\\ \\mathrm{nm} \\quad\\text{（}2\\sqrt2\\approx2.828\\text{；}R\\text{ 題幹給定）}$$\n\n**第 2 步：BCC 由式(3) 解出 $a$ 公式**\n\n$$\\sqrt{3}\\,a = 4R \\;\\Rightarrow\\; a_{\\text{BCC}} = \\dfrac{4R}{\\sqrt{3}} \\quad\\text{（式(3) 兩邊同除 }\\sqrt3\\text{，孤立 }a\\text{）}$$\n\n**第 3 步：算 $\\dfrac{4}{\\sqrt3}$**\n\n$$\\dfrac{4}{\\sqrt{3}} = \\dfrac{4}{1.732} = 2.309 \\quad\\text{（}\\sqrt3\\approx1.732\\text{，相除）}$$\n\n**第 4 步：代入算 $a_{\\text{BCC}}$**\n\n$$a_{\\text{BCC}} = 2.309\\times 0.140 = 0.323\\ \\mathrm{nm} \\quad\\text{（第 3 步 × }R\\text{）}$$\n\n**第 5 步：比較**\n\n$$a_{\\text{FCC}} = 0.396\\ \\mathrm{nm} \\;>\\; a_{\\text{BCC}} = 0.323\\ \\mathrm{nm} \\quad\\text{（同一 }R\\text{ 下相比）}$$\n\n> **答案：同一原子半徑下 $a_{\\text{FCC}}(0.396)>a_{\\text{BCC}}(0.323)\\ \\mathrm{nm}$。** 物理意義：FCC 嘅密排方向係面對角線（$\\sqrt2 a=4R$），BCC 係體對角線（$\\sqrt3 a=4R$），$\\sqrt3>\\sqrt2$ 所以同一 $4R$ 之下 BCC 嘅 $a$ 較細。**最易錯：把 FCC／BCC 嘅 $\\sqrt2$／$\\sqrt3$ 對調，或者用咗錯嘅對角線（BCC 千祈唔好用面對角線）。**\n\n---\n\n## 十、易混淆對比：唔好把呢幾件事撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| 角原子算成整粒（1）？ | **唔係**。立方體角原子畀 8 個晶胞共用，每晶胞只算 $\\tfrac18$；面心算 $\\tfrac12$；體心先至算整粒 1。 |\n| FCC 同 BCC 都用面對角線？ | **唔係**。FCC 原子沿**面對角線**相黐（$\\sqrt2 a=4R$）；BCC 沿**體對角線**（$\\sqrt3 a=4R$）。BCC 面對角線上其實冇原子相黐。 |\n| $\\sqrt2$ 對 $\\sqrt3$ 邊個邊個？ | **面對角線 $\\sqrt2$、體對角線 $\\sqrt3$**（「面 2、體 3」）。所以 FCC 用 $\\sqrt2$、BCC 用 $\\sqrt3$。 |\n| $N$（晶胞原子數）＝CN（配位數）？ | **唔係，兩件事**。$N$ 講「呢個晶胞入面有幾多粒」（FCC 4、BCC 2、HCP 6）；CN 講「一粒原子有幾多最近鄰居」（FCC 12、BCC 8、HCP 12）。 |\n| FCC 同 HCP 邊個密啲？ | **一樣密**。兩者都係最密堆積、CN 都係 12、APF 都係 0.74，分別淨在堆疊次序（FCC ABCABC、HCP ABABAB）。 |\n| 解 $a$ 漏咗有理化或開方錯？ | $a_{\\text{FCC}}=\\tfrac{4R}{\\sqrt2}=2\\sqrt2 R$；$a_{\\text{BCC}}=\\tfrac{4R}{\\sqrt3}=\\tfrac{4\\sqrt3}{3}R$。記住係先寫對角線等式，再除得 $a$。 |\n\n---\n\n## 十一、一頁總表\n\n| 項目 | 公式／結果 | 備注 |\n|:--|:--|:--|\n| 原子相黐通式（主公式）| 密排方向長度 $=$（方向上原子數）$\\times 2R$ | 式(1)，所有 $R$–$a$ 關係嘅源頭 |\n| FCC：$R$–$a$ 關係 | $\\sqrt{2}\\,a=4R \\;\\Rightarrow\\; a=2\\sqrt{2}\\,R$ | 式(2)，沿**面對角線** |\n| BCC：$R$–$a$ 關係 | $\\sqrt{3}\\,a=4R \\;\\Rightarrow\\; a=\\dfrac{4R}{\\sqrt{3}}=\\dfrac{4\\sqrt3}{3}R$ | 式(3)，沿**體對角線** |\n| FCC 每晶胞原子數 | $N=8\\times\\tfrac18+6\\times\\tfrac12=4$ | 式(4) |\n| BCC 每晶胞原子數 | $N=8\\times\\tfrac18+1=2$ | 式(5) |\n| HCP 每晶胞原子數 | $N=6$ | 式(6)，標準六方晶胞 |\n| 配位數 CN | FCC 12｜HCP 12｜BCC 8｜簡單立方 6 | FCC、HCP 最密 |\n| FCC vs HCP | 都係最密堆、CN 12；FCC=ABCABC、HCP=ABABAB | 分別在堆疊次序 |\n| 攤分規則 | 角 $\\tfrac18$｜面心 $\\tfrac12$｜體心 $1$ | 數 $N$ 必用 |\n\n---\n\n## 十二、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1：立方晶胞嘅**角原子**，每個晶胞攤到幾多？(a) 1（整粒）　(b) $\\tfrac12$　(c) $\\tfrac14$　(d) $\\tfrac18$\n- D2：FCC 嘅全名係？(a) 體心立方　(b) 面心立方　(c) 六方最密堆積　(d) 簡單立方\n\n**L2 概念理解**\n- D3：FCC 每個單位晶胞嘅原子數 $N$ 係？(a) 2　(b) 4　(c) 6　(d) 8\n- D4：以下對「配位數 CN」嘅描述邊個啱？(a) 晶胞入面總原子數　(b) 一粒原子最近、距離相等嘅鄰居數目　(c) 晶格常數　(d) 原子半徑\n\n**L3 單步應用**\n- D5：FCC 嘅原子相黐（密排）方向係邊條？(a) 立方邊　(b) 面對角線　(c) 體對角線　(d) 任何方向\n- D6：BCC 嘅 $R$ 同 $a$ 關係係？(a) √2·a=4R　(b) √3·a=4R　(c) a=2R　(d) √2·a=2R\n\n**L4 多步應用（計算／判讀）**\n- D7：已知某 FCC 金屬 R=0.13 nm，晶格常數 a=2√2·R 約為？(a) 0.18 nm　(b) 0.26 nm　(c) 0.37 nm　(d) 0.52 nm\n- D8：BCC 每晶胞原子數 N 點計？(a) 8×⅛=1　(b) 8×⅛+6×½=4　(c) 8×⅛+1=2　(d) 8×1=8\n\n**L5 綜合應用**\n- D9：FCC 同 HCP 相比，以下邊句啱？(a) FCC 密好多　(b) 兩者一樣密(CN 都係 12、APF 都係 0.74)，分別在堆疊次序　(c) HCP CN 係 8　(d) FCC 唔係最密堆\n- D10：「BCC 嘅原子沿面對角線相黐，所以 √2·a=4R」——啱定錯？(a) 啱　(b) 錯，BCC 係沿**體對角線**相黐，應為 √3·a=4R　(c) 啱，BCC 同 FCC 一樣　(d) 要睇溫度\n\n**診斷答案**：D1 d｜D2 b｜D3 b｜D4 b｜D5 b｜D6 b｜D7 c｜D8 c｜D9 b｜D10 b\n\n> 卡喺 L1–L2 → 重睇第四節（攤分表、晶胞／CN 定義）；卡喺 L3 → 重睇第五節主公式同 FCC／BCC 逐行推導（特別係「面 2、體 3」），配例 2、例 3；卡喺 L4 → 重睇第六節數 $N$（例 1、D8）同第九節例 2 嘅代入流程；卡喺 L5 → 重睇第七節「FCC vs HCP 堆疊次序」同第八節讀圖（密排方向）。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出三種結構嘅原子擺位:FCC=8角+6面心、BCC=8角+1體心、HCP=六方最密堆;並識用攤分規則(角⅛、面心½、體心1)"
+    },
+    {
+      "id": "c2",
+      "text": "親手數得出每晶胞原子數:FCC N=8×⅛+6×½=4、BCC N=8×⅛+1=2、HCP N=6"
+    },
+    {
+      "id": "c3",
+      "text": "搵得出密排方向:FCC=面對角線(√2·a=4R)、BCC=體對角線(√3·a=4R);記得『面2、體3』,唔會對調"
+    },
+    {
+      "id": "c4",
+      "text": "識由 R 算 a(FCC a=2√2·R)、由 a 反推 R(BCC R=√3·a/4),計算逐步唔跳"
+    },
+    {
+      "id": "c5",
+      "text": "講得出配位數:FCC 12、HCP 12、BCC 8;唔會把 N(晶胞原子數)同 CN(配位數)撈埋"
+    },
+    {
+      "id": "c6",
+      "text": "明白 FCC 同 HCP 一樣密(CN 都係12、APF 都係0.74),分別只在第三層堆疊次序(FCC=ABCABC、HCP=ABABAB)"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "（選看）DoITPoMS:Crystallography——互動旋轉睇 FCC／BCC／HCP 晶胞同密排方向",
+      "url": "https://www.doitpoms.ac.uk/tlplib/crystallography3/index.php"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "立方晶胞嘅一個『角原子』,每個單位晶胞真正攤到幾多?",
+      "options": [
+        "1(整粒,角原子獨佔)",
+        "½(同一個隔籬晶胞共用)",
+        "⅛(畀周圍 8 個晶胞共用)",
+        "¼(同 3 個晶胞共用)"
+      ],
+      "answer": 2,
+      "explain": "立方體每個角同時係周圍 8 個晶胞嘅共用角,所以一個角原子每晶胞只算 ⅛。面心原子畀 2 個晶胞共用算 ½,體心原子先至獨佔算 1 整粒。把角原子當整粒(1)係數 N 時最常見嘅錯。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "面心立方(FCC)每個單位晶胞真正屬於佢嘅原子數 N 係?",
+      "options": [
+        "2(8×⅛+1)",
+        "4(8×⅛+6×½)",
+        "6(8角+6面心唔攤分)",
+        "8(8 個角各算 1)"
+      ],
+      "answer": 1,
+      "explain": "FCC=8 個角各 ⅛ 共貢獻 8×⅛=1,加 6 個面心各 ½ 共 6×½=3,合計 N=4。選 2 係 BCC 嘅答案;選 6、8 係冇做攤分嘅錯誤數法。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "FCC 同 BCC 嘅原子相黐方向唔同:FCC 沿面對角線(√2·a=4R),BCC 沿體對角線(√3·a=4R)。",
+      "answer": true,
+      "explain": "啱。FCC 原子喺面上沿面對角線粒貼粒,面對角線長 √2·a,上面排 4 個半徑,所以 √2·a=4R。BCC 原子由角穿過體心去對角,沿體對角線相黐,體對角線長 √3·a,亦排 4 個半徑,所以 √3·a=4R。記法『面 2、體 3』。BCC 千祈唔好用面對角線——BCC 面對角線上其實冇原子相黐。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "關於 FCC 同 HCP 嘅密度,以下邊句啱?",
+      "options": [
+        "FCC 密好多,HCP 接近簡單立方",
+        "兩者一樣密:配位數 CN 都係 12、APF 都係 0.74,分別只在第三層堆疊次序(FCC=ABCABC、HCP=ABABAB)",
+        "HCP 嘅配位數係 8,所以冇 FCC 密",
+        "FCC 唔屬於最密堆積"
+      ],
+      "answer": 1,
+      "explain": "FCC 同 HCP 都係最密堆積:每粒原子有 12 個最近鄰居(CN=12),堆積因子 APF 都係 0.74,密度一樣。唯一分別係第三層擺去邊——HCP 坐返第一層正上(ABABAB),FCC 坐去新位(ABCABC)。CN=8 係 BCC,唔係 HCP。"
+    }
+  ],
+  "chatPracticeHints": [
+    "角算⅛面心算½體心算1唔好當整粒",
+    "FCC面對角線√2、BCC體對角線√3唔好對調",
+    "N係晶胞原子數,CN係鄰居數,兩件事"
+  ]
+}

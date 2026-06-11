@@ -19,10 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S61', title: '晶面與晶向（入門）', tier: 'bridge', cognition: 'concept', extension: 'none', platform: 'doitpoms' },
-  { id: 'S62', title: '第一階段大整理（一）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
-  { id: 'S63', title: '第一階段大整理（二）', tier: 'tool', cognition: 'calculation', extension: 'none', platform: 'self' },
-  { id: 'S64', title: '第一階段收尾 + 輸出', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S65', title: 'Ch.2 重讀（一）', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S66', title: 'Ch.2 重讀（二）：能量-距離曲線', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S67', title: 'Ch.2 課後題', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'callister' },
+  { id: 'S68', title: 'Ch.3 晶體結構（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'callister' },
+  { id: 'S69', title: 'Ch.3 晶體結構（二）：APF', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'callister' },
 ]
 
 const TIERDESC = {
