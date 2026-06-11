@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S28', title: '斜率與曲線解讀（現場應用）', tier: 'tool', cognition: 'chartread', extension: 'packaging', platform: 'self' },
-  { id: 'S29', title: '數學總複習（一）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
-  { id: 'S30', title: '數學總複習（二）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
-  { id: 'S31', title: '數學自我檢定', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'paul' },
-  { id: 'S32', title: '數學收尾', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S39', title: '鍵結與材料性質', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S40', title: '鍵能與鍵長', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
+  { id: 'S41', title: '化學計量基礎', tier: 'bridge', cognition: 'calculation', extension: 'none', platform: 'ka' },
+  { id: 'S42', title: '化學反應與能量', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
 ]
 
 const TIERDESC = {
