@@ -19,11 +19,10 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S57', title: '晶體與非晶', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S58', title: '單位晶胞概念', tier: 'core', cognition: 'concept', extension: 'none', platform: 'callister' },
-  { id: 'S59', title: '三大金屬結構', tier: 'core', cognition: 'recall', extension: 'none', platform: 'doitpoms' },
-  { id: 'S60', title: '原子堆積與密度', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'callister' },
   { id: 'S61', title: '晶面與晶向（入門）', tier: 'bridge', cognition: 'concept', extension: 'none', platform: 'doitpoms' },
+  { id: 'S62', title: '第一階段大整理（一）', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S63', title: '第一階段大整理（二）', tier: 'tool', cognition: 'calculation', extension: 'none', platform: 'self' },
+  { id: 'S64', title: '第一階段收尾 + 輸出', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
 ]
 
 const TIERDESC = {
