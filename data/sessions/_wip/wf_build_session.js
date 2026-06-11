@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S65', title: 'Ch.2 重讀（一）', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S66', title: 'Ch.2 重讀（二）：能量-距離曲線', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S67', title: 'Ch.2 課後題', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'callister' },
-  { id: 'S68', title: 'Ch.3 晶體結構（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'callister' },
-  { id: 'S69', title: 'Ch.3 晶體結構（二）：APF', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'callister' },
+  { id: 'S70', title: '密度計算', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'callister' },
+  { id: 'S71', title: '晶面晶向（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'doitpoms' },
+  { id: 'S72', title: '晶面晶向（二）：晶面間距', tier: 'core', cognition: 'calculation', extension: 'research', platform: 'callister' },
+  { id: 'S73', title: '多晶與單晶', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'doitpoms' },
+  { id: 'S74', title: '各向異性', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
 ]
 
 const TIERDESC = {

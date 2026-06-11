@@ -1,0 +1,113 @@
+{
+  "id": "S70",
+  "stage": 2,
+  "week": 5,
+  "order": 70,
+  "title": "密度計算",
+  "titleEn": "Theoretical Density Calculation",
+  "platform": "callister",
+  "objective": "搞清理論密度——假設晶體完美無缺陷,由單位晶胞嘅原子組成計出嘅密度,即晶胞入面所有原子嘅質量 ÷ 晶胞體積。掌握主公式 ρ = n·A / (V_C·N_A),認得佢同 S69 APF 公式係孖生(分母同係晶胞體積,分子由原子體積 4/3·πR³ 換成原子質量 A/N_A)。識用四步流程親手算:寫主公式→把 a 由 nm 換成 cm(×10⁻⁷)再立方→代入 n(FCC 4、BCC 2)、A(原子量)、N_A(6.022×10²³)→分子分母各自化簡(指數對消 10⁻²³×10²³=1)相除。處理得到單位換算(g/cm³ 要求 a 用 cm)、分得清 n(每晶胞,個位數)同 N_A(每莫耳)、A(每莫耳質量)同一粒原子質量 A/N_A。識反用式 n=ρ·V_C·N_A/A 反推每晶胞原子數判結構(≈4→FCC、≈2→BCC)。明白密度唔似 APF——R 唔對消、要實際代入,密度有單位唔係純幾何量。明白理論 vs 實測:實測通常略低,差距反映空孔等缺陷。為下節晶面晶向及後續點缺陷、固溶體、合金密度估算打底",
+  "isCore": true,
+  "status": "done",
+  "gradImportance": "essential",
+  "tier": "core",
+  "cognition": "calculation",
+  "prereq": [
+    "S69",
+    "S60"
+  ],
+  "assessWeight": "medium",
+  "extension": "none",
+  "gradCourse": [
+    "general"
+  ],
+  "content": "<!-- S70 合成最終版｜新規範 v2（粵語書面語）｜tier: core 深講｜cognition: calculation｜platform: callister｜gradCourse: [\"general\"]｜extension: none -->\n<!-- 專業詞用 span class 包裹，全形（）分隔，App 端渲染中文淺灰、英文顯眼 -->\n\n## 一、總綱\n\n呢節學由晶體結構**親手算出金屬嘅<span class=\"term-zh\">理論密度</span>（<span class=\"term-en\">theoretical density</span>）**——即係單憑「咩結構（FCC／BCC）＋原子量＋原子半徑」，唔使秤、唔使量，就計到一立方厘米嗰嚿金屬應該有幾重。一句講晒：**密度就係「一個<span class=\"term-zh\">單位晶胞</span>（<span class=\"term-en\">unit cell</span>）入面所有原子嘅質量」除以「單位晶胞嘅體積」**——同上節（S69）算 APF 嘅流程**幾乎一模一樣**，淨係把分子由「原子嘅體積」換成「原子嘅質量」。主公式只係一條分數：分子＝每晶胞原子數 $n$ × 一粒原子嘅質量（原子量 $A$ ÷ <span class=\"term-zh\">亞佛加厥常數</span>（<span class=\"term-en\">Avogadro's number</span>）$N_A$），分母＝晶胞體積 $V_C$。本節重點唔係背公式，而係**識得四步代落去、處理單位換算（nm→cm）、最後同課本實測密度對照**——因為「理論 vs 實測」嘅微小差距，正正係之後講<span class=\"term-zh\">點缺陷</span>（<span class=\"term-en\">point defect</span>）、空孔、雜質嘅入口。\n\n---\n\n## 二、銜接點\n\n- **本節依賴**：直接接 <span class=\"term-zh\">S69 APF</span>——本節主公式同 APF 公式係**孖生**：APF 分子用「原子體積 $\\frac43\\pi R^3$」、密度分子用「原子質量 $A/N_A$」，分母同樣係晶胞體積。每晶胞原子數 $n$（FCC $n{=}4$、BCC $n{=}2$）由 <span class=\"term-zh\">S68 晶體結構</span> 數得；晶胞體積由 S68／S69 嘅 $R$–$a$ 關係（FCC $\\sqrt2\\,a{=}4R$、BCC $\\sqrt3\\,a{=}4R$）化成 $a^3$。亦接 <span class=\"term-zh\">S60 原子堆積與密度</span>（密度初步觀念）。數學底用到**立方／開方**（S15–S16）、**單位換算**同**科學記數法**乘除。\n- **新內容同已學嘅關係**：S69 教你「晶胞入面原子佔幾多**體積**」；本節教你「晶胞入面原子有幾多**質量**」。同一個晶胞、同一個 $n$、同一條 $R$–$a$ 關係——只係把「球體積」換成「原子量除以亞佛加厥常數」。學識本節，等於把 APF 嘅四步流程**再用一次**。\n- **本節係邊節嘅地基**：理論密度係**材料最基本嘅可驗證預測**。「理論密度同實測密度有差距」係之後 <span class=\"term-zh\">點缺陷</span>（空孔令密度偏低）、<span class=\"term-zh\">固溶體</span>（替代／間隙原子改變質量同體積）、<span class=\"term-zh\">合金</span>密度估算嘅起點。亦係 X 光繞射定出 $a$ 之後，反推「呢隻到底係咩結構」嘅手段。\n- **如果未掌握就先補**：若你數唔出 $n$（角 $\\tfrac18$、面心 $\\tfrac12$、體心 $1$）或者唔記得 $\\sqrt2\\,a{=}4R$／$\\sqrt3\\,a{=}4R$ 點嚟，**先回看 S68／S69**；若立方 $a^3$、科學記數法乘除手生，**回看 S15–S16**；若亞佛加厥常數、莫耳、原子量呢啲化學量模糊，**回看 S41（化學計量基礎）**。\n\n---\n\n## 三、先講白話：秤一個箱，估成棟樓\n\n密度即係「一嚿嘢有幾實淨」——同一體積之下，鉛緊係比鋁重好多。問題係：點解唔使真係攞秤去秤，淨係知道「咩結構＋原子幾重＋原子幾大」就計到密度?\n\n> 諗住一棟由無數個一模一樣嘅**透明方箱**（單位晶胞）砌成嘅樓。**成棟樓嘅密度，同淨係一個箱嘅密度一定一樣**（因為箱箱相同）。所以唔使理成棟樓，**淨係計一個箱：箱入面啲原子加埋幾重，除以個箱嘅體積**，就係密度。\n\n- 「箱入面幾多粒原子」＝ $n$（FCC 4、BCC 2，S68 數過）。\n- 「一粒原子幾重」＝原子量 $A$（每**莫耳**幾克）÷ 一莫耳有幾多粒（亞佛加厥常數 $N_A\\approx6.022\\times10^{23}$）。\n- 「個箱幾大」＝ $a^3$（由 $R$ 經 $R$–$a$ 關係算返出嚟）。\n\n> 一句記住：**密度＝（箱入面原子總重）÷（箱體積）＝ $\\dfrac{n\\,A}{V_C\\,N_A}$。** 同 APF 唯一分別：APF 數「體積佔幾多」，密度數「質量有幾多」。\n\n---\n\n## 四、正式定義：理論密度\n\n**<span class=\"term-zh\">理論密度</span>（<span class=\"term-en\">theoretical density</span>）$\\rho$**：假設晶體完美無缺陷（冇空孔、冇雜質），由單位晶胞嘅原子組成計出嘅密度——即「一個單位晶胞入面所有原子嘅質量」除以「該單位晶胞嘅體積」。因為晶體係同一個晶胞無限重複，呢個比值就等於成嚿材料嘅密度。\n\n| 概念 | 意思 | 點得出 |\n|---|---|---|\n| 晶胞原子總質量（分子）| 晶胞內原子數 $n$ × 一粒原子質量 | $n\\times\\dfrac{A}{N_A}$（$n$ 由 S68 數、$A$＝原子量、$N_A$＝亞佛加厥常數）|\n| 晶胞體積（分母）| 一個單位晶胞嘅體積 | 立方晶胞係 $V_C=a^3$（$a$ 由 $R$ 經 $R$–$a$ 關係算）|\n| 理論密度 $\\rho$ | 分子 ÷ 分母 | 一個有單位嘅數（g/cm³）|\n\n> 關鍵觀念：**密度同 APF 係孖生公式。** APF＝$\\dfrac{n\\cdot\\frac43\\pi R^3}{a^3}$（量體積佔比、純數）；密度＝$\\dfrac{nA}{a^3 N_A}$（量質量、有單位 g/cm³）。**分母完全一樣（晶胞體積）；分子由「原子體積」換成「原子質量」**。記住呢個對應，本節就係 S69 嘅倒模。\n\n---\n\n## 五、主公式：理論密度定義式\n\n把「箱入面原子總重 ÷ 箱體積」直接寫成分數，就係本節主公式：\n\n$$\\boxed{\\;\\rho=\\dfrac{n\\,A}{V_C\\,N_A}\\;}\\tag{1}$$\n\n**式(1) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $\\rho$ | <span class=\"term-zh\">理論密度</span>（<span class=\"term-en\">theoretical density</span>）| g/cm³ |\n| $n$ | 每單位晶胞真正屬於佢嘅原子數（S68：FCC 4、BCC 2、簡單立方 1）| 無單位（個）|\n| $A$ | <span class=\"term-zh\">原子量</span>（<span class=\"term-en\">atomic weight</span>），每莫耳質量 | g/mol |\n| $V_C$ | <span class=\"term-zh\">單位晶胞體積</span>（<span class=\"term-en\">unit cell volume</span>），立方晶胞 $V_C=a^3$ | cm³ |\n| $N_A$ | <span class=\"term-zh\">亞佛加厥常數</span>（<span class=\"term-en\">Avogadro's number</span>）| $6.022\\times10^{23}$ 個/mol |\n\n**呢條式喺度講咩？** 分子 $n\\,A$：把「每晶胞 $n$ 粒原子」乘「每莫耳質量 $A$」——但 $A$ 係「每**莫耳**（即 $N_A$ 粒）幾克」，所以要喺分母擺返一個 $N_A$ 把「莫耳」化返做「個」，先至係「$n$ 粒原子嘅實際克數」。分母 $V_C\\,N_A$＝晶胞體積乘亞佛加厥常數，幫單位埋尾。**單位逐項對：$\\dfrac{(\\text{個})(\\text{g/mol})}{(\\text{cm}^3)(\\text{個/mol})}=\\dfrac{\\text{g}}{\\text{cm}^3}$**——「個」同「個」、「mol」同「mol」啱啱對消，淨返 g/cm³，啱啱係密度單位。\n\n**衍生式(2)：把分母 $V_C=a^3$ 用 $R$ 表示（同 S69 一樣）**\n\n立方晶胞 $V_C=a^3$；若題目只畀原子半徑 $R$ 而冇畀 $a$，就用 S68／S69 嘅 $R$–$a$ 關係先算 $a$：\n\n$$V_C=a^3=\\begin{cases}(2\\sqrt2\\,R)^3=16\\sqrt2\\,R^3 & \\text{FCC（}\\sqrt2\\,a{=}4R\\text{）}\\\\[4pt]\\left(\\dfrac{4R}{\\sqrt3}\\right)^3=\\dfrac{64R^3}{3\\sqrt3} & \\text{BCC（}\\sqrt3\\,a{=}4R\\text{）}\\end{cases}\\tag{2}$$\n\n**式(2) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $V_C$ | <span class=\"term-zh\">單位晶胞體積</span>（<span class=\"term-en\">unit cell volume</span>）| cm³ |\n| $a$ | 晶格常數（<span class=\"term-en\">lattice parameter</span>）| cm（題目常用 nm，立方前先換 cm）|\n| $R$ | <span class=\"term-zh\">原子半徑</span>（<span class=\"term-en\">atomic radius</span>）| cm（代入前先由 nm 換 cm）|\n\n> 式(2) 完全係 S69 式(2) 嘅照搬——**密度公式分母同 APF 公式分母係同一條嘢**。所以本節只要識 S69，分母已經唔使再學。\n\n**衍生式(3)：反用——由實測密度反推每晶胞原子數 $n$（定結構）**\n\n把式(1) 兩邊解出 $n$，就可以「畀密度、原子量、$a$，反推 $n$」，再對返 FCC（4）／BCC（2）就知係咩結構：\n\n$$n=\\dfrac{\\rho\\,V_C\\,N_A}{A}\\tag{3}$$\n\n**式(3) 符號表**：符號同式(1) 完全相同（$n$、$\\rho$、$A$、$V_C$、$N_A$，意義同單位見式(1) 符號表），只係調轉解出 $n$。\n\n> 式(3) 點嚟：式(1) 兩邊乘 $V_C N_A$ 得 $\\rho V_C N_A=nA$，再兩邊除 $A$。X 光繞射量到 $a$（即 $V_C$）之後，配合已知密度同原子量，就靠呢條式判結構。\n\n---\n\n## 六、最易跣低嘅一步：單位換算（nm → cm）\n\n理論密度幾乎**全部錯都錯喺單位**。原子半徑 $R$、晶格常數 $a$ 通常以 **nm** 畀，但密度標準單位係 **g/cm³**，所以 $V_C=a^3$ 一定要先把 $a$ 由 nm 換成 cm 至立方。換算鏈如下（逐格背熟）：\n\n$$1\\ \\mathrm{nm}=10^{-9}\\ \\mathrm{m}=10^{-7}\\ \\mathrm{cm}\\quad\\text{（}1\\text{ m}{=}100\\text{ cm}{=}10^2\\text{ cm；}10^{-9}\\times10^{2}{=}10^{-7}\\text{）}\\tag{4}$$\n\n**式(4) 符號表**\n\n| 符號 | 意義 | 單位 |\n|---|---|---|\n| $1\\ \\mathrm{nm}$ | 一<span class=\"term-zh\">納米</span>（<span class=\"term-en\">nanometre</span>）| $10^{-7}$ cm |\n| $a$（nm）| 晶格常數（題目常用 nm）| 換成 cm 先立方 |\n\n> 立方之後：若 $a=0.287\\ \\mathrm{nm}=0.287\\times10^{-7}\\ \\mathrm{cm}=2.87\\times10^{-8}\\ \\mathrm{cm}$，則 $a^3=(2.87\\times10^{-8})^3\\ \\mathrm{cm^3}$。**千祈唔好用 nm 立方完先除——指數會差成 $10^{21}$ 倍，密度即刻離譜。** 訣竅：**換成 cm（$\\times10^{-7}$）先立方**，全程 g 同 cm，密度自然落喺 $10^0\\sim10^1$ g/cm³（金屬一般 $2\\sim20$）合理範圍。\n\n---\n\n## 七、Worked Examples（由易到難，逐步、每個數字標來源）\n\n> 本節集中喺「親手把理論密度算出嚟」同「反推結構」。難度由直接代（已畀 $a$），去到要先算 $a$、再到反用判結構、最後綜合對照實測。\n\n### 例 1（易）：已畀 $a$，直接算 BCC 鐵嘅理論密度\n\n> 問：鐵（Fe）係 BCC，$n{=}2$，原子量 $A{=}55.85\\ \\mathrm{g/mol}$，晶格常數 $a{=}0.287\\ \\mathrm{nm}$。求理論密度。（$N_A{=}6.022\\times10^{23}$）\n\n**第 1 步：寫主公式**\n\n$$\\rho=\\dfrac{n\\,A}{a^3\\,N_A}\\quad\\text{（式(1)，}V_C{=}a^3\\text{）}$$\n\n**第 2 步：把 $a$ 由 nm 換成 cm**\n\n$$a=0.287\\ \\mathrm{nm}=0.287\\times10^{-7}\\ \\mathrm{cm}=2.87\\times10^{-8}\\ \\mathrm{cm}\\quad\\text{（式(4)：}1\\text{ nm}{=}10^{-7}\\text{ cm）}$$\n\n**第 3 步：算 $a^3$**\n\n$$a^3=(2.87\\times10^{-8})^3=2.87^3\\times10^{-24}=23.64\\times10^{-24}=2.364\\times10^{-23}\\ \\mathrm{cm^3}\\quad\\text{（}2.87^3{\\approx}23.64\\text{；}(10^{-8})^3{=}10^{-24}\\text{）}$$\n\n**第 4 步：代入所有數**\n\n$$\\rho=\\dfrac{2\\times55.85}{(2.364\\times10^{-23})\\times(6.022\\times10^{23})}\\quad\\text{（}n{=}2\\text{、}A{=}55.85\\text{（題幹）；}a^3\\text{（第 3 步）；}N_A\\text{（查表））}$$\n\n**第 5 步：分子分母各自化簡**\n\n$$\\rho=\\dfrac{111.7}{(2.364\\times6.022)\\times10^{-23+23}}=\\dfrac{111.7}{14.24\\times10^{0}}=\\dfrac{111.7}{14.24}\\quad\\text{（分子 }2{\\times}55.85{=}111.7\\text{；分母 }2.364{\\times}6.022{=}14.24\\text{、}10^{-23}{\\times}10^{23}{=}10^0{=}1\\text{）}$$\n\n**第 6 步：相除**\n\n$$\\rho=\\dfrac{111.7}{14.24}\\approx7.84\\ \\mathrm{g/cm^3}\\quad\\text{（相除）}$$\n\n> **答案：$\\rho_{\\text{Fe}}\\approx7.84\\ \\mathrm{g/cm^3}$。** 課本實測鐵約 $7.87\\ \\mathrm{g/cm^3}$，幾乎一樣——好接近因為鐵晶體缺陷少。最易錯：第 2 步漏咗 nm→cm，或者第 5 步指數冇對消（$10^{-23}\\times10^{23}{=}1$ 係令數值落返合理範圍嘅關鍵）。\n\n### 例 2（中）：只畀原子半徑 $R$，先算 $a$ 再算 FCC 銅嘅密度\n\n> 問：銅（Cu）係 FCC，$n{=}4$，$A{=}63.55\\ \\mathrm{g/mol}$，原子半徑 $R{=}0.128\\ \\mathrm{nm}$。求理論密度。\n\n**第 1 步：由 $R$–$a$ 關係算 $a$（S69）**\n\n$$\\sqrt2\\,a=4R\\;\\Rightarrow\\;a=\\dfrac{4R}{\\sqrt2}=2\\sqrt2\\,R=2\\sqrt2\\times0.128=2\\times1.4142\\times0.128=0.362\\ \\mathrm{nm}\\quad\\text{（FCC 面對角線；}2\\sqrt2{\\approx}2.828\\text{）}$$\n\n**第 2 步：把 $a$ 換成 cm 並立方**\n\n$$a=0.362\\ \\mathrm{nm}=3.62\\times10^{-8}\\ \\mathrm{cm}\\;\\Rightarrow\\;a^3=(3.62\\times10^{-8})^3=47.4\\times10^{-24}=4.74\\times10^{-23}\\ \\mathrm{cm^3}\\quad\\text{（}3.62^3{\\approx}47.4\\text{）}$$\n\n**第 3 步：寫主公式並代入**\n\n$$\\rho=\\dfrac{n\\,A}{a^3\\,N_A}=\\dfrac{4\\times63.55}{(4.74\\times10^{-23})\\times(6.022\\times10^{23})}\\quad\\text{（}n{=}4\\text{（FCC）、}A{=}63.55\\text{（題幹）；}N_A\\text{（查表））}$$\n\n**第 4 步：分子分母各自化簡**\n\n$$\\rho=\\dfrac{254.2}{(4.74\\times6.022)\\times10^{0}}=\\dfrac{254.2}{28.54}\\quad\\text{（分子 }4{\\times}63.55{=}254.2\\text{；分母 }4.74{\\times}6.022{=}28.54\\text{、}10^{-23}{\\times}10^{23}{=}1\\text{）}$$\n\n**第 5 步：相除**\n\n$$\\rho=\\dfrac{254.2}{28.54}\\approx8.91\\ \\mathrm{g/cm^3}\\quad\\text{（相除）}$$\n\n> **答案：$\\rho_{\\text{Cu}}\\approx8.91\\ \\mathrm{g/cm^3}$**（課本實測銅約 $8.94\\ \\mathrm{g/cm^3}$，吻合）。最易錯：第 1 步攞咗 BCC 嘅 $\\sqrt3$（FCC 一定係**面對角線 $\\sqrt2$**）；或者第 2 步用 $0.362$ nm 直接立方冇換 cm。\n\n### 例 3（較複雜）：反用式(3)——畀密度同 $a$，反推每晶胞原子數判結構\n\n> 問：某金屬密度 $\\rho{=}19.3\\ \\mathrm{g/cm^3}$、原子量 $A{=}196.97\\ \\mathrm{g/mol}$（金 Au）、晶格常數 $a{=}0.408\\ \\mathrm{nm}$。求每晶胞原子數 $n$，判斷係 FCC 定 BCC?\n\n**第 1 步：寫反用式(3)**\n\n$$n=\\dfrac{\\rho\\,a^3\\,N_A}{A}\\quad\\text{（式(3)，}V_C{=}a^3\\text{）}$$\n\n**第 2 步：把 $a$ 換 cm 並立方**\n\n$$a=0.408\\ \\mathrm{nm}=4.08\\times10^{-8}\\ \\mathrm{cm}\\;\\Rightarrow\\;a^3=(4.08\\times10^{-8})^3=67.9\\times10^{-24}=6.79\\times10^{-23}\\ \\mathrm{cm^3}\\quad\\text{（}4.08^3{\\approx}67.9\\text{）}$$\n\n**第 3 步：代入分子（$\\rho\\,a^3\\,N_A$）**\n\n$$\\rho\\,a^3\\,N_A=19.3\\times(6.79\\times10^{-23})\\times(6.022\\times10^{23})\\quad\\text{（}\\rho{=}19.3\\text{、}a^3\\text{（第 2 步）、}N_A\\text{（查表））}$$\n\n**第 4 步：化簡分子**\n\n$$\\rho\\,a^3\\,N_A=19.3\\times6.79\\times6.022\\times10^{0}=19.3\\times40.9=789.3\\quad\\text{（}6.79{\\times}6.022{=}40.9\\text{；}10^{-23}{\\times}10^{23}{=}1\\text{）}$$\n\n**第 5 步：除原子量 $A$**\n\n$$n=\\dfrac{789.3}{196.97}\\approx4.0\\quad\\text{（除 }A{=}196.97\\text{（題幹））}$$\n\n> **答案：$n\\approx4$ → 係 FCC**（金確係 FCC）。最易錯：把算出嚟嘅 $n$ 強行湊成整數之前唔對結構（$n$ 應接近 2 或 4，若計出 $3.5$ 多數係 $a$ 或單位代錯）；或者反用式時冇先解出 $n$ 就亂代。\n\n### 例 4（混合・完整計算）：理論 vs 實測——由密度差估空孔比例\n\n> 問：(a) 鋁（Al，FCC，$n{=}4$，$A{=}26.98\\ \\mathrm{g/mol}$，$R{=}0.143\\ \\mathrm{nm}$）嘅理論密度係幾多? (b) 若實測密度只係 $2.66\\ \\mathrm{g/cm^3}$，理論同實測差幾多 %? 呢個差可能反映咩?\n\n**(a) 算理論密度**\n\n**第 1 步：由 $R$ 算 $a$（FCC，$\\sqrt2\\,a{=}4R$）**\n\n$$a=2\\sqrt2\\,R=2.828\\times0.143=0.404\\ \\mathrm{nm}=4.04\\times10^{-8}\\ \\mathrm{cm}\\quad\\text{（}2\\sqrt2{\\approx}2.828\\text{；nm→cm）}$$\n\n**第 2 步：算 $a^3$**\n\n$$a^3=(4.04\\times10^{-8})^3=65.9\\times10^{-24}=6.59\\times10^{-23}\\ \\mathrm{cm^3}\\quad\\text{（}4.04^3{\\approx}65.9\\text{）}$$\n\n**第 3 步：代主公式**\n\n$$\\rho=\\dfrac{4\\times26.98}{(6.59\\times10^{-23})\\times(6.022\\times10^{23})}=\\dfrac{107.9}{6.59\\times6.022}=\\dfrac{107.9}{39.69}\\approx2.72\\ \\mathrm{g/cm^3}\\quad\\text{（}n{=}4\\text{、}A{=}26.98\\text{；分母 }6.59{\\times}6.022{=}39.69\\text{）}$$\n\n**(b) 理論 vs 實測差**\n\n**第 4 步：算相對差**\n\n$$\\dfrac{\\rho_{\\text{理}}-\\rho_{\\text{測}}}{\\rho_{\\text{理}}}=\\dfrac{2.72-2.66}{2.72}=\\dfrac{0.06}{2.72}\\approx0.022=2.2\\%\\quad\\text{（理論 }2.72\\text{（(a)）、實測 }2.66\\text{（題幹））}$$\n\n**第 5 步：解讀**\n\n$$\\rho_{\\text{測}}<\\rho_{\\text{理}}\\;\\Rightarrow\\;\\text{實際晶體有空孔／缺陷，少咗質量}\\quad\\text{（完美晶體假設冇缺陷，實際有，故實測偏低）}$$\n\n> **答案：(a) 鋁理論密度約 $2.72\\ \\mathrm{g/cm^3}$；(b) 實測比理論低約 $2.2\\%$。** 實測通常**略低於**理論，因為真實晶體有<span class=\"term-zh\">空孔</span>（<span class=\"term-en\">vacancy</span>）等缺陷，少咗質量但體積無減——呢個微小差距正係之後講點缺陷濃度嘅入口。最易錯：(a) 漏單位換算；(b) 分母用實測（應用理論作基準）。\n\n---\n\n## 八、易混淆對比：唔好把呢幾件事撈亂\n\n| 容易混 | 正確理解 |\n|---|---|\n| 密度公式同 APF 公式無關? | **係孖生**。密度 $\\dfrac{nA}{a^3 N_A}$、APF $\\dfrac{n\\frac43\\pi R^3}{a^3}$——**分母一樣（晶胞體積）**，只係分子由「原子質量」換「原子體積」。識 APF 就識密度。 |\n| 原子量 $A$ 同一粒原子質量係同一樣? | **唔係**。$A$ 係**每莫耳**（$N_A$ 粒）嘅質量（g/mol）；一粒原子質量＝$A/N_A$。所以公式分母要有 $N_A$ 幫手換算。 |\n| $a$ 用 nm 直接立方就得? | **唔得**。密度單位 g/cm³，$a$ 一定先換 **cm**（$\\times10^{-7}$）至立方，否則差 $10^{21}$ 倍。 |\n| $n$ 同 $N_A$ 係同一樣嘢? | **完全唔同**。$n$＝每**晶胞**原子數（2 或 4，個位數）；$N_A$＝每**莫耳**原子數（$6.022\\times10^{23}$）。兩者都喺公式但角色唔同。 |\n| FCC 用 $\\sqrt2$ 定 $\\sqrt3$? | **FCC 面對角線 $\\sqrt2\\,a{=}4R$；BCC 體對角線 $\\sqrt3\\,a{=}4R$**（S68）。攞錯 $a$ 全錯。 |\n| 理論密度一定等於實測? | **唔一定**。理論假設完美無缺陷；實測通常**略低**（有空孔／缺陷）。差距本身有意義。 |\n| 計密度都唔使知 $R$ 嘅實際值（似 APF）? | **要知**。同 APF 唔同，密度**唔係純幾何量**：$R$（或 $a$）唔對消，要實際代入算 $V_C$。APF 先至 $R$ 對消。 |\n\n---\n\n## 九、睇圖：密度公式同 APF 公式嘅孖生對應（含讀圖導引）\n\n左圖：把「一個晶胞」拆成「分子（原子總質量）÷ 分母（晶胞體積）」。右圖：並排密度 vs APF 兩條公式，標出「分母相同、分子互換」。\n\n<svg viewBox=\"0 0 600 250\" width=\"100%\" style=\"max-width:600px;display:block;margin:0 auto;background:transparent;\">\n  <!-- 左：一個晶胞拆解 -->\n  <text x=\"150\" y=\"22\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"13\" font-family=\"sans-serif\">一個單位晶胞 = 質量 ÷ 體積</text>\n  <rect x=\"80\" y=\"45\" width=\"140\" height=\"140\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1.4\"/>\n  <circle cx=\"80\" cy=\"45\" r=\"14\" fill=\"#4a9eff\" fill-opacity=\"0.6\"/>\n  <circle cx=\"220\" cy=\"45\" r=\"14\" fill=\"#4a9eff\" fill-opacity=\"0.6\"/>\n  <circle cx=\"80\" cy=\"185\" r=\"14\" fill=\"#4a9eff\" fill-opacity=\"0.6\"/>\n  <circle cx=\"220\" cy=\"185\" r=\"14\" fill=\"#4a9eff\" fill-opacity=\"0.6\"/>\n  <circle cx=\"150\" cy=\"115\" r=\"20\" fill=\"#f06060\" fill-opacity=\"0.9\"/>\n  <text x=\"150\" y=\"119\" text-anchor=\"middle\" fill=\"#0b1220\" font-size=\"10\" font-family=\"sans-serif\">n 粒</text>\n  <text x=\"150\" y=\"205\" text-anchor=\"middle\" fill=\"#f06060\" font-size=\"10\" font-family=\"sans-serif\">分子: n·(A/N_A) 質量</text>\n  <text x=\"150\" y=\"222\" text-anchor=\"middle\" fill=\"#94a3b8\" font-size=\"10\" font-family=\"sans-serif\">分母: a³ 體積</text>\n  <text x=\"150\" y=\"238\" text-anchor=\"middle\" fill=\"#2dd4bf\" font-size=\"11\" font-family=\"sans-serif\">ρ = 質量 ÷ 體積</text>\n\n  <!-- 右：兩公式對應 -->\n  <text x=\"450\" y=\"22\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"13\" font-family=\"sans-serif\">密度 vs APF：孖生</text>\n  <rect x=\"320\" y=\"50\" width=\"250\" height=\"60\" fill=\"none\" stroke=\"#f06060\" stroke-width=\"1.3\" rx=\"6\"/>\n  <text x=\"335\" y=\"80\" fill=\"#f06060\" font-size=\"12\" font-family=\"sans-serif\">密度 ρ = n·(A/N_A) / a³</text>\n  <text x=\"335\" y=\"100\" fill=\"#cbd5e1\" font-size=\"10\" font-family=\"sans-serif\">分子 = 原子「質量」</text>\n  <rect x=\"320\" y=\"130\" width=\"250\" height=\"60\" fill=\"none\" stroke=\"#4a9eff\" stroke-width=\"1.3\" rx=\"6\"/>\n  <text x=\"335\" y=\"160\" fill=\"#4a9eff\" font-size=\"12\" font-family=\"sans-serif\">APF = n·(4/3·πR³) / a³</text>\n  <text x=\"335\" y=\"180\" fill=\"#cbd5e1\" font-size=\"10\" font-family=\"sans-serif\">分子 = 原子「體積」</text>\n  <line x1=\"445\" y1=\"110\" x2=\"445\" y2=\"130\" stroke=\"#f5c842\" stroke-width=\"1.2\" stroke-dasharray=\"3 2\"/>\n  <text x=\"450\" y=\"215\" text-anchor=\"middle\" fill=\"#f5c842\" font-size=\"10\" font-family=\"sans-serif\">分母 a³ 一樣，分子互換</text>\n</svg>\n\n**讀圖導引（非座標系圖：直接描述各結構特徵）**\n\n① **左圖係咩**：一個單位晶胞（方框），角原子＋面心／體心原子合共 $n$ 粒（圖示意 FCC 角＋面心）。把佢分成上下兩件——上件＝「分子」（$n$ 粒原子嘅總質量 $n\\cdot A/N_A$）；下件＝「分母」（晶胞體積 $a^3$）。密度就係上 ÷ 下。\n② **右圖係咩**：密度（紅框）同 APF（藍框）兩條公式並排。兩框**分母 $a^3$ 一樣**（黃虛線連住）；分別淨係分子——密度用「質量 $A/N_A$」、APF 用「體積 $\\frac43\\pi R^3$」。\n③ **每個特徵代表咩**：紅框分子＝質量（故密度有單位 g/cm³）；藍框分子＝體積（故 APF 係純數無單位）。$n$、$a^3$ 兩者共用。\n④ **最容易睇錯嘅地方**：（a）以為密度同 APF 係兩件完全唔同嘅嘢——其實係孖生，分母相同。（b）以為密度都似 APF 咁 $R$ 會對消——**唔會**，密度要實際代入 $a$／$R$ 數值。（c）把分子嘅 $A$（每莫耳）當成一粒原子質量——要先除 $N_A$。\n\n---\n\n## 十、一頁總表\n\n| 項目 | 公式／結果 | 備注 |\n|:--|:--|:--|\n| 理論密度（主公式）| $\\rho=\\dfrac{n\\,A}{V_C\\,N_A}$ | 式(1)，分子＝原子總質量、分母＝晶胞體積×$N_A$ |\n| 晶胞體積（立方）| $V_C=a^3$ | 用 cm 嘅 $a$ 立方 |\n| 由 $R$ 算 $a^3$（FCC）| $a^3=16\\sqrt2\\,R^3$（$\\sqrt2\\,a{=}4R$）| 同 S69 式(2) |\n| 由 $R$ 算 $a^3$（BCC）| $a^3=\\dfrac{64R^3}{3\\sqrt3}$（$\\sqrt3\\,a{=}4R$）| 同 S69 式(2) |\n| 反推原子數（判結構）| $n=\\dfrac{\\rho\\,V_C\\,N_A}{A}$ | 式(3)，$n{\\approx}4$→FCC、$\\approx2$→BCC |\n| 單位換算 | $1\\ \\mathrm{nm}=10^{-7}\\ \\mathrm{cm}$ | 換 cm 先立方（最易錯）|\n| 與 APF 關係 | 分母同，分子：質量 $A/N_A$ vs 體積 $\\frac43\\pi R^3$ | 孖生公式 |\n| 亞佛加厥常數 | $N_A=6.022\\times10^{23}$ 個/mol | 把「莫耳」化「個」|\n| 理論 vs 實測 | 實測通常略低 | 因有空孔／缺陷（少質量）|\n| 典型結果（核對）| Fe 7.84、Cu 8.91、Al 2.72 g/cm³ | 同課本實測吻合 |\n\n---\n\n## 十一、診斷題組（Diagnostic Quiz｜識別自己卡喺邊一層）\n\n> 逐題答，睇吓由邊一層開始錯，就知要補邊度。答案喺最底。全部 single-select。\n\n**L1 基礎定義**\n- D1：理論密度公式 $\\rho=\\dfrac{nA}{V_C N_A}$ 入面，$\\rho$ 嘅單位係? (a) 無單位　(b) g/cm³　(c) g/mol　(d) cm³\n- D2：公式入面 $N_A$（亞佛加厥常數）嘅作用係? (a) 數每晶胞原子數　(b) 把「每莫耳質量」化成「每粒原子質量」（莫耳化個）　(c) 量晶胞體積　(d) 原子半徑\n\n**L2 概念理解**\n- D3：密度公式同 APF 公式嘅關係係? (a) 完全無關　(b) 孖生——分母（晶胞體積）一樣，分子由原子體積換成原子質量　(c) 完全一樣　(d) 密度係 APF 嘅平方\n- D4：$n$ 同 $N_A$ 嘅分別係? (a) 同一樣嘢　(b) $n$＝每晶胞原子數（個位數），$N_A$＝每莫耳原子數（$6.022\\times10^{23}$）　(c) $n$ 大過 $N_A$　(d) 兩個都係常數 $6.022\\times10^{23}$\n\n**L3 單步應用**\n- D5：晶格常數 $a{=}0.287\\ \\mathrm{nm}$，換成 cm 係? (a) $0.287\\times10^{-9}$ cm　(b) $2.87\\times10^{-8}$ cm　(c) $2.87\\times10^{-7}$ cm　(d) $0.287$ cm\n- D6：FCC 金屬，每晶胞原子數 $n$ 應代邊個? (a) $n{=}2$　(b) $n{=}4$　(c) $n{=}1$　(d) $n{=}6$\n\n**L4 多步應用（計算／判讀）**\n- D7：BCC 鐵（$n{=}2$、$A{=}55.85$、$a{=}0.287$ nm）理論密度約等於? (a) 2.7 g/cm³　(b) 7.8 g/cm³　(c) 19 g/cm³　(d) 0.78 g/cm³\n- D8：用反用式算出某金屬 $n\\approx4$，最可能係邊種結構? (a) 簡單立方　(b) BCC　(c) FCC　(d) HCP\n\n**L5 綜合應用**\n- D9：某金屬實測密度比理論密度低約 2%，最合理嘅解釋係? (a) 計錯　(b) 真實晶體有空孔／缺陷，少咗質量　(c) 原子量錯　(d) 亞佛加厥常數變咗\n- D10：「算理論密度同算 APF 一樣，$R$ 會上下對消唔使知數值」——啱定錯? (a) 啱　(b) 錯，密度唔係純幾何量，$a$／$R$ 要實際代入算 $V_C$，唔對消　(c) 啱，密度都係純數　(d) 要睇溫度\n\n**診斷答案**：D1 b｜D2 b｜D3 b｜D4 b｜D5 b｜D6 b｜D7 b｜D8 c｜D9 b｜D10 b\n\n> 卡喺 L1–L2 → 重睇第四節（定義）同第五節主公式＋符號表（搞清 $\\rho$ 單位、$N_A$ 點解喺分母、密度同 APF 孖生）；卡喺 L3 → 重睇第六節單位換算（nm→cm）同第五節 $n$ 嘅取值（FCC 4／BCC 2）；卡喺 L4 → 重睇第七節例 1–3 嘅四步流程（寫式→換 cm→代入→化簡相除），特別係指數對消 $10^{-23}\\times10^{23}{=}1$；卡喺 L5 → 重睇第七節例 4（理論 vs 實測）同第八節易混淆表（密度唔係純幾何量、實測略低嘅原因）。\n",
+  "fieldLink": "",
+  "checkpoints": [
+    {
+      "id": "c1",
+      "text": "講得出理論密度定義:假設完美無缺陷,晶胞內原子總質量 ÷ 晶胞體積=密度(因晶胞無限重複,等於成嚿材料密度)"
+    },
+    {
+      "id": "c2",
+      "text": "默得出主公式 ρ=n·A/(V_C·N_A),講得出分子(n 粒原子總質量 n·A/N_A)、分母(晶胞體積 V_C=a³ 乘 N_A 幫單位埋尾)各代表咩"
+    },
+    {
+      "id": "c3",
+      "text": "認得密度同 APF 係孖生:分母(晶胞體積)一樣,分子由原子體積 4/3·πR³ 換成原子質量 A/N_A;故密度公式分母同 APF 完全一樣"
+    },
+    {
+      "id": "c4",
+      "text": "親手用四步算到 BCC 鐵 ρ≈7.84 g/cm³(n=2、A=55.85、a=0.287 nm),先把 a 換 cm(2.87×10⁻⁸)再立方,指數 10⁻²³×10²³=1 對消後相除"
+    },
+    {
+      "id": "c5",
+      "text": "解釋得到單位換算係最易錯位:a 一定先由 nm 換 cm(×10⁻⁷)至立方,否則差 10²¹ 倍;分得清 n(每晶胞 2/4)同 N_A(每莫耳 6.022×10²³)"
+    },
+    {
+      "id": "c6",
+      "text": "識用反用式 n=ρ·V_C·N_A/A 反推原子數判結構(≈4→FCC、≈2→BCC),並知實測密度通常略低於理論(因空孔等缺陷少咗質量)"
+    }
+  ],
+  "resources": [
+    {
+      "type": "link",
+      "label": "（選看）Callister Materials Science Ch.3 Example——理論密度逐步計算範例(鐵、銅)",
+      "url": "https://www.doitpoms.ac.uk/tlplib/crystallography3/index.php"
+    }
+  ],
+  "charts": [],
+  "quiz": [
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "理論密度主公式 ρ = n·A / (V_C·N_A) 算出嚟嘅 ρ,單位係下面邊個?",
+      "options": [
+        "無單位(純數)",
+        "g/cm³",
+        "g/mol",
+        "cm³"
+      ],
+      "answer": 1,
+      "explain": "密度=質量 ÷ 體積,單位 g/cm³。逐項對消:分子(個)(g/mol) ÷ 分母(cm³)(個/mol),『個』同『個』、『mol』同『mol』對消,淨返 g/cm³。選 g/mol 係原子量 A 嘅單位、cm³ 係體積、純數係 APF——三個都唔係密度。"
+    },
+    {
+      "type": "single",
+      "difficulty": "basic",
+      "q": "密度主公式入面個 N_A(亞佛加厥常數,6.022×10²³)起咩作用?",
+      "options": [
+        "數出每個晶胞入面有幾多粒原子",
+        "把原子量 A(每莫耳質量)化返做『每一粒原子嘅質量』,即莫耳化做個",
+        "量度單位晶胞嘅體積",
+        "代表原子半徑"
+      ],
+      "answer": 1,
+      "explain": "A 係『每莫耳(即 N_A 粒)幾克』,除返 N_A 先至係一粒原子嘅克數,所以分母要擺 N_A 把『莫耳』化『個』。數每晶胞原子數嗰個係 n(FCC 4、BCC 2,個位數),同 N_A 唔同——千祈唔好撈埋。"
+    },
+    {
+      "type": "single",
+      "difficulty": "standard",
+      "q": "算理論密度時,晶格常數 a 通常以 nm 畀,但密度單位係 g/cm³。以下邊一項描述嘅換算方向係啱嘅?",
+      "options": [
+        "唔使換 a 本身,只需要把算出嚟嘅 a³ 由 nm³ 換 cm³",
+        "先把 a 由 nm 換 cm(×10⁻⁷),再立方得 cm³",
+        "nm 同 cm 立方出嚟結果一樣,唔使換",
+        "先把 a 立方,再把 nm³ 直接當 cm³ 用"
+      ],
+      "answer": 1,
+      "explain": "正確方向係先把 a 由 nm 換成 cm(1 nm=10⁻⁷ cm),再立方得 cm³,全程 g 同 cm 對齊,密度先會落喺合理範圍。其餘三項都係常見錯位:用 nm 直接立方(或把 nm³ 當 cm³)會差成 10²¹ 倍;以為兩個單位立方結果一樣更加錯。換算嘅具體數值留喺聊天室親手練。"
+    },
+    {
+      "type": "truefalse",
+      "difficulty": "standard",
+      "q": "理論密度公式同 APF 公式係孖生:兩條分母(晶胞體積)完全一樣,只係分子由原子體積 4/3·πR³ 換成原子質量 A/N_A;但同 APF 唔同,算密度時 R(或 a)唔會上下對消,要實際代入數值。",
+      "answer": true,
+      "explain": "啱。APF=n·(4/3·πR³)/a³、密度=n·A/(a³·N_A),分母同係晶胞體積 a³,分子互換(體積↔質量)。但 APF 係純幾何量(R³ 上下對消、唔使知 R 數值),密度唔係——密度有單位 g/cm³,要實際代入 a(或 R)算晶胞體積,唔對消。把密度當 APF 咁以為 R 會消去就會計唔出數。"
+    }
+  ],
+  "chatPracticeHints": [
+    "a要先換cm(×10⁻⁷)再立方",
+    "分母擺N_A把莫耳化個",
+    "密度唔似APF,R唔對消要代數值"
+  ]
+}
