@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S48', title: 'Week 3 檢討 + 輸出', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
-  { id: 'S49', title: '溫度與熱', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
-  { id: 'S50', title: '熱力學第零定律', tier: 'core', cognition: 'concept', extension: 'none', platform: 'ka' },
-  { id: 'S51', title: '熱力學第一定律（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'ka' },
-  { id: 'S52', title: '熱力學第一定律（二）', tier: 'core', cognition: 'calculation', extension: 'none', platform: 'ka' },
+  { id: 'S53', title: '熵與第二定律（直覺）', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
+  { id: 'S54', title: '比熱與熱容', tier: 'core', cognition: 'calculation', extension: 'life', platform: 'ka' },
+  { id: 'S55', title: '熱傳導概念', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'callister' },
+  { id: 'S56', title: '熱膨脹（TEC）', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'callister' },
+  { id: 'S57', title: '晶體與非晶', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
 ]
 
 const TIERDESC = {
