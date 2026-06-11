@@ -19,11 +19,11 @@ const A = {
 }
 // 本批要建嘅課節。續做時改呢個陣列。
 const SESSIONS = [
-  { id: 'S38', title: '共價鍵深入', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S39', title: '鍵結與材料性質', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S40', title: '鍵能與鍵長', tier: 'core', cognition: 'concept', extension: 'life', platform: 'callister' },
-  { id: 'S41', title: '化學計量基礎', tier: 'bridge', cognition: 'calculation', extension: 'none', platform: 'ka' },
-  { id: 'S42', title: '化學反應與能量', tier: 'core', cognition: 'concept', extension: 'life', platform: 'ka' },
+  { id: 'S43', title: '化學平衡（一）', tier: 'core', cognition: 'concept', extension: 'none', platform: 'junyi' },
+  { id: 'S44', title: '化學平衡（二）：溫度影響', tier: 'core', cognition: 'concept', extension: 'life', platform: 'junyi' },
+  { id: 'S45', title: '氧化還原基礎', tier: 'core', cognition: 'concept', extension: 'packaging', platform: 'ka' },
+  { id: 'S46', title: 'Week 3 整理', tier: 'tool', cognition: 'synthesis', extension: 'none', platform: 'self' },
+  { id: 'S47', title: 'Week 3 練習', tier: 'tool', cognition: 'concept', extension: 'none', platform: 'callister' },
 ]
 
 const TIERDESC = {
