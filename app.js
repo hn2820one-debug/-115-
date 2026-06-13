@@ -316,8 +316,9 @@ function mergeUserStates(a, b) {
   // streak：longest 取最大；current/lastStudyDate 取較近一次學習
   out.streak.longest = Math.max(a.streak?.longest || 0, b.streak?.longest || 0);
   const aD = a.streak?.lastStudyDate || '', bD = b.streak?.lastStudyDate || '';
-  if (aD >= bD) { out.streak.current = a.streak?.current || 0; out.streak.lastStudyDate = aD || null; }
-  else          { out.streak.current = b.streak?.current || 0; out.streak.lastStudyDate = bD || null; }
+  if (aD > bD)      { out.streak.current = a.streak?.current || 0; out.streak.lastStudyDate = aD || null; }
+  else if (aD < bD) { out.streak.current = b.streak?.current || 0; out.streak.lastStudyDate = bD || null; }
+  else              { out.streak.current = Math.max(a.streak?.current || 0, b.streak?.current || 0); out.streak.lastStudyDate = aD || null; }  // 同日：取較大連續日數，唔好任揀一邊
 
   // 學習分鐘：取最大（避免重複裝置相加灌水，且永不縮水）
   out.totalMinutes = Math.max(a.totalMinutes || 0, b.totalMinutes || 0);
@@ -443,7 +444,10 @@ const DriveStore = (() => {
   let _status    = 'idle'; // 'idle'|'syncing'|'ok'|'error'
 
   function _cfg()         { try { return JSON.parse(localStorage.getItem(CFG_KEY)||'{}'); } catch { return {}; } }
-  function _setCfg(patch) { localStorage.setItem(CFG_KEY, JSON.stringify({..._cfg(),...patch})); }
+  function _setCfg(patch) {
+    try { localStorage.setItem(CFG_KEY, JSON.stringify({..._cfg(),...patch})); }
+    catch (e) { console.error('_setCfg failed (storage quota?)', e); if (typeof showToast === 'function') showToast('儲存空間不足，設定未能儲存', 'error'); }
+  }
   function _clientId()    { return _cfg().driveClientId || ''; }
   function _tokenOk()     { return !!(_token?.value && Date.now() < _token.expiry - 60000); }
 
@@ -852,6 +856,14 @@ function navigate(pageId, params = {}) {
     const fs = el('formula-sidebar'); if (fs) fs.remove();
     const ft = el('formula-tab');     if (ft) ft.remove();
     window.removeEventListener('scroll', window._readScroll);
+    // 釋放本課所有 3D 容器（停 RAF、移除 window 監聽、釋放 WebGL）與屬於本課的 Chart.js 實例
+    qsa('#pg-lesson .chart-wrap').forEach(_dispose3D);
+    Object.entries(appState._charts || {}).forEach(([k, ch]) => {
+      if (ch && ch.canvas && ch.canvas.closest && ch.canvas.closest('#pg-lesson')) {
+        try { ch.destroy(); } catch (e) {}
+        delete appState._charts[k];
+      }
+    });
   }
 
   qsa('.page').forEach(p => p.classList.remove('active'));
@@ -1860,7 +1872,8 @@ function renderLessonContent(id, session) {
   // U26: term tooltips for key material science terms
   _applyTermTooltips(area);
 
-  // U22: text selection → add to glossary
+  // U22: text selection → add to glossary（先移除舊 listener，避免重訪同一課時喺 area 累積）
+  area.removeEventListener('mouseup', _onTextSelect);
   area.addEventListener('mouseup', _onTextSelect);
 
   // Mount inline charts now that markup + KaTeX are in place
@@ -2395,20 +2408,28 @@ function _applyTermTooltips(area) {
   const replacements = [];
   let node;
   while ((node = walker.nextNode())) {
+    // 跳過已經喺 abbr / KaTeX / script / style 入面嘅文字，避免重套或破壞公式
+    if (node.parentNode && node.parentNode.closest && node.parentNode.closest('abbr, .katex, script, style')) continue;
     for (const [term, def] of Object.entries(TERM_MAP)) {
-      if (node.textContent.includes(term)) {
-        replacements.push({ node, term, def });
-        break;
-      }
+      const idx = node.textContent.indexOf(term);   // 用 indexOf：唔使 regex（避免元字元爆＋中文詞界匹配唔到）
+      if (idx >= 0) { replacements.push({ node, term, def, idx }); break; }
     }
   }
   for (const { node, term, def } of replacements) {
-    const span = document.createElement('span');
-    span.innerHTML = node.textContent.replace(
-      new RegExp(`\\b${term}\\b`, 'g'),
-      `<abbr title="${def}" style="text-decoration:underline dotted;cursor:help;color:inherit;">${term}</abbr>`
-    );
-    node.parentNode?.replaceChild(span, node);
+    const text = node.textContent;
+    const frag = document.createDocumentFragment();
+    let pos = 0, idx;
+    while ((idx = text.indexOf(term, pos)) >= 0) {     // 處理同一節點內所有出現（保留舊版「全部套」行為）
+      if (idx > pos) frag.appendChild(document.createTextNode(text.slice(pos, idx)));
+      const ab = document.createElement('abbr');
+      ab.textContent = term;                            // textContent：唔會把 < & 等當 HTML 重新解析
+      ab.setAttribute('title', def);                    // setAttribute 自動轉義，def 含引號都安全
+      ab.style.cssText = 'text-decoration:underline dotted;cursor:help;color:inherit;';
+      frag.appendChild(ab);
+      pos = idx + term.length;
+    }
+    if (pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+    node.parentNode?.replaceChild(frag, node);
   }
 }
 
@@ -2780,6 +2801,7 @@ function renderFunctionPlot(container, params = {}) {
 function renderArrheniusChart(container, params = {}) {
   const { D0 = 1e-4, Q = 80000, Trange = [400, 1200] } = params;
   const R = 8.314;
+  destroyChart('arrhenius');                    // 重建前先銷毀舊實例，避免遺留 Chart.js 監聽/RAF
   const canvas = makeCanvas(container, 'chart-arrhenius');
   const ctx = canvas.getContext('2d');
 
@@ -2861,6 +2883,7 @@ function renderArrheniusChart(container, params = {}) {
 
 // Stress-Strain curve
 function renderStressStrainChart(container, params = {}) {
+  destroyChart('ss');
   const canvas = makeCanvas(container, 'chart-ss');
   const ctx = canvas.getContext('2d');
   const pts = [
@@ -2905,6 +2928,7 @@ function renderStressStrainChart(container, params = {}) {
 
 // Simple binary phase diagram
 function renderPhaseDiagramChart(container, params = {}) {
+  destroyChart('pd');
   const canvas = makeCanvas(container, 'chart-pd');
   const ctx = canvas.getContext('2d');
 
@@ -2954,6 +2978,7 @@ function renderPhaseDiagramChart(container, params = {}) {
 
 // Free energy vs composition
 function renderFreeEnergyChart(container, params = {}) {
+  destroyChart('fe');
   const canvas = makeCanvas(container, 'chart-fe');
   const ctx = canvas.getContext('2d');
   let T = 250;
@@ -3012,11 +3037,30 @@ function renderFreeEnergyChart(container, params = {}) {
 }
 
 // 3D Crystal (Three.js)
+// 釋放一個 3D 容器（Three.js）：取消動畫迴圈、移除 window 監聽、釋放 GPU 資源並丟失 WebGL context。
+// renderCrystal3D / renderSurface3D 重渲染前、以及離開課堂時都要呼叫，避免記憶體洩漏與 WebGL context 耗盡。
+function _dispose3D(container) {
+  if (!container) return;
+  if (container._animId) { cancelAnimationFrame(container._animId); container._animId = null; }
+  if (container._onMove) { window.removeEventListener('mousemove', container._onMove); container._onMove = null; }
+  if (container._onUp)   { window.removeEventListener('mouseup', container._onUp); container._onUp = null; }
+  const tw = container._three;
+  if (tw) {
+    if (tw.scene) tw.scene.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m && m.dispose());
+    });
+    if (tw.renderer) { try { tw.renderer.dispose(); tw.renderer.forceContextLoss(); } catch (e) {} }
+    container._three = null;
+  }
+}
+
 function renderCrystal3D(container, params = {}) {
   if (typeof THREE === 'undefined') {
     container.innerHTML = `<p style="text-align:center;padding:20px;color:var(--text-muted);">Three.js 載入失敗，請確認網路連線。</p>`;
     return;
   }
+  _dispose3D(container);                        // 清理上一次渲染的動畫、window 監聽與 GPU 資源
 
   const type = params.type || 'fcc';
   container.innerHTML = '';
@@ -3114,17 +3158,24 @@ function renderCrystal3D(container, params = {}) {
   });
   container.appendChild(toggle);
 
-  // Orbit-like interaction
+  // Orbit-like interaction（window 監聽具名化並存喺 container，方便 _dispose3D 移除，避免跨渲染累積）
   let isDragging = false, lastX = 0, lastY = 0;
   let rotX = 0, rotY = 0;
   renderer.domElement.addEventListener('mousedown', e => { isDragging=true; lastX=e.clientX; lastY=e.clientY; });
-  window.addEventListener('mouseup', () => { isDragging=false; });
-  window.addEventListener('mousemove', e => {
+  renderer.domElement.addEventListener('touchstart', e => { if (e.touches[0]) { isDragging=true; lastX=e.touches[0].clientX; lastY=e.touches[0].clientY; } }, { passive: true });
+  const onUp = () => { isDragging=false; };
+  const onMove = e => {
     if (!isDragging) return;
     rotY += (e.clientX - lastX) * 0.01;
     rotX += (e.clientY - lastY) * 0.01;
     lastX=e.clientX; lastY=e.clientY;
-  });
+  };
+  renderer.domElement.addEventListener('touchmove', e => { if (e.touches[0]) { onMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY }); e.preventDefault(); } }, { passive: false });
+  renderer.domElement.addEventListener('touchend', onUp);
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('mousemove', onMove);
+  container._onUp = onUp; container._onMove = onMove;
+  container._three = { renderer, scene };
 
   let animId;
   const animate = () => {
@@ -3147,7 +3198,7 @@ function renderSurface3D(container, params = {}) {
     container.innerHTML = `<p style="text-align:center;padding:20px;color:var(--text-muted);">Three.js 載入失敗，請確認網路連線。</p>`;
     return;
   }
-  if (container._animId) cancelAnimationFrame(container._animId);
+  _dispose3D(container);                        // 清理上一次渲染的動畫、window 監聽與 GPU 資源
 
   const fn = params.fn || 'paraboloid';
   const A = params.a ?? 1, B = params.b ?? 1;
@@ -3215,12 +3266,15 @@ function renderSurface3D(container, params = {}) {
     lastX = cx; lastY = cy;
   };
   const up = () => { isDragging = false; };
+  const winMove = e => move(e.clientX, e.clientY);   // 具名化，方便 _dispose3D 移除（避免 window 監聽累積）
   renderer.domElement.addEventListener('mousedown', e => down(e.clientX, e.clientY));
-  window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+  window.addEventListener('mousemove', winMove);
   window.addEventListener('mouseup', up);
   renderer.domElement.addEventListener('touchstart', e => { if (e.touches[0]) down(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
   renderer.domElement.addEventListener('touchmove', e => { if (e.touches[0]) { move(e.touches[0].clientX, e.touches[0].clientY); e.preventDefault(); } }, { passive: false });
   renderer.domElement.addEventListener('touchend', up);
+  container._onMove = winMove; container._onUp = up;
+  container._three = { renderer, scene };
 
   const dist = RANGE * 3.4;
   let animId;
@@ -3476,6 +3530,8 @@ function _practiceStopTimer() {
 }
 function _practiceTeardown() {
   if (_practice && _practice.intervalId) clearInterval(_practice.intervalId);
+  document.removeEventListener('visibilitychange', _practiceOnVisibility);  // 清走分頁可見性監聽（下次開練習再掛）
+  _practiceVisBound = false;
 }
 function _practiceAttachVisibility() {
   if (_practiceVisBound) return;
@@ -3619,12 +3675,15 @@ function renderFillQuiz(item, q, qi, sessionId) {
     <div class="quiz-hint-tip">提示：可用一般鍵盤輸入，例如 x² 打成 x^2 或 x2 都算對；大小寫不限。</div>
     <div class="quiz-fill-row">
       <input class="quiz-fill-input" id="fill_${sessionId}_${qi}" placeholder="輸入答案…">
-      <button class="quiz-confirm-btn" onclick="answerFill('${sessionId}',${qi},this.closest('.quiz-item'),'${esc(String(q.answer))}',${q.tolerance||0.05})">確認</button>
+      <button class="quiz-confirm-btn" data-correct="${esc(String(q.answer))}" data-tol="${q.tolerance ?? 0.05}" onclick="answerFill('${sessionId}',${qi},this)">確認</button>
     </div>
     <div class="quiz-explain" id="qexp_${sessionId}_${qi}"><span class="quiz-explain-icon">💡</span>${esc(q.explain||'')}</div>`;
 }
 
-function answerFill(sessionId, qi, item, correctStr, tolerance) {
+function answerFill(sessionId, qi, btn) {
+  const item = btn.closest('.quiz-item');
+  const correctStr = btn.dataset.correct || '';
+  const tolerance = parseFloat(btn.dataset.tol);   // data-tol 一定有值（q.tolerance ?? 0.05）
   if (item.dataset.answered) return;
   const inputEl = el(`fill_${sessionId}_${qi}`);
   if (!inputEl) return;
@@ -3694,7 +3753,7 @@ function renderMatchQuiz(item, q, qi, sessionId) {
       <div>${rights.map((r,i) => `<div class="quiz-opt match-right" data-ri="${i}" data-val="${esc(r)}" onclick="matchSelectRight(this,${qi})">${esc(r)}</div>`).join('')}</div>
     </div>
     <div id="match-pairs-${qi}" style="font-size:12px;color:var(--text-muted);min-height:20px;"></div>
-    <button class="quiz-confirm-btn" style="margin-top:8px;" onclick="answerMatch('${sessionId}',${qi},this.closest('.quiz-item'),${JSON.stringify(pairs).replace(/"/g,"'")})">確認配對</button>
+    <button class="quiz-confirm-btn" style="margin-top:8px;" data-pairs="${esc(JSON.stringify(pairs))}" onclick="answerMatch('${sessionId}',${qi},this)">確認配對</button>
     <div class="quiz-explain" id="qexp_${sessionId}_${qi}"><span class="quiz-explain-icon">💡</span>${esc(q.explain||'')}</div>`;
   item._matchState = { left: null, pairs: [] };
 }
@@ -3726,9 +3785,11 @@ function _tryPair(qi, item) {
   s.left = null; s.right = null;
   qsa('.match-left, .match-right', item).forEach(b => b.classList.remove('selected'));
 }
-function answerMatch(sessionId, qi, item, pairsStr) {
+function answerMatch(sessionId, qi, btn) {
+  const item = btn.closest('.quiz-item');
   if (item.dataset.answered) return;
-  const correct = Array.isArray(pairsStr) ? pairsStr : JSON.parse(pairsStr.replace(/'/g,'"'));
+  let correct = [];
+  try { correct = JSON.parse(btn.dataset.pairs || '[]'); } catch (e) { correct = []; }
   const s = _matchState[qi] || {};
   const made = s.pairs || [];
   let allCorrect = made.length === correct.length;
@@ -4963,7 +5024,7 @@ function importJSON(input) {
     try {
       const data = JSON.parse(e.target.result);
       if (!data.sessions) throw new Error('missing sessions key');
-      userState = { ...defaultUserState(), ...data };
+      userState = mergeUserStates(userState, data);   // 合併而非覆蓋：唔會蓋走本機較新嘅進度（同 Drive 同步邏輯一致）
       appState.settings.lang = userState.settings?.lang || 'zh';
       appState.settings.storageMode = userState.settings?.storageMode || 'local';
       save();
@@ -5063,8 +5124,8 @@ async function initApp() {
     });
   }
 
-  // Nav buttons
-  qsa('.nav-btn[data-page]').forEach(btn => {
+  // Nav buttons（頂部 + 底部一律用 data-page 委派綁定，唔依賴行內 onclick）
+  qsa('.nav-btn[data-page], .bnav-btn[data-page]').forEach(btn => {
     btn.addEventListener('click', () => navigate(btn.dataset.page));
   });
 

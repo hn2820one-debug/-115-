@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>FoundationLearn — 三個月補底計劃</title>
 
   <!-- PWA：可安裝 + 離線 -->
@@ -76,47 +76,49 @@
 
   <!-- U28: Mobile bottom navigation -->
   <nav id="bottom-nav">
-    <button class="bnav-btn" data-page="pg-dashboard" onclick="navigate('pg-dashboard')">
+    <button class="bnav-btn" data-page="pg-dashboard">
       <span class="bnav-icon">🏠</span><span>儀表板</span>
     </button>
-    <button class="bnav-btn" data-page="pg-map" onclick="navigate('pg-map')">
+    <button class="bnav-btn" data-page="pg-map">
       <span class="bnav-icon">🗺️</span><span>地圖</span>
     </button>
-    <button class="bnav-btn" data-page="pg-practice" onclick="navigate('pg-practice')">
+    <button class="bnav-btn" data-page="pg-practice">
       <span class="bnav-icon">✏️</span><span>練習</span>
     </button>
-    <button class="bnav-btn" data-page="pg-progress" onclick="navigate('pg-progress')">
+    <button class="bnav-btn" data-page="pg-progress">
       <span class="bnav-icon">📊</span><span>紀錄</span>
     </button>
-    <button class="bnav-btn" data-page="pg-resources" onclick="navigate('pg-resources')">
+    <button class="bnav-btn" data-page="pg-resources">
       <span class="bnav-icon">📚</span><span>資源</span>
     </button>
-    <button class="bnav-btn" data-page="pg-settings" onclick="navigate('pg-settings')">
+    <button class="bnav-btn" data-page="pg-settings">
       <span class="bnav-icon">⚙️</span><span>設定</span>
     </button>
   </nav>
 
-  <!-- External Libraries (CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <!-- External Libraries (CDN，全部 defer：唔阻塞首屏，又保留執行次序，App 跑時已就緒) -->
+  <!-- marked 釘版本 15.0.12（避免日後 major 版改 API 靜默爆；與 sw.js 預存清單一致） -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <!-- Google Identity Services (Drive 同步用，async 載入不阻塞 App) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <!-- Debug Logger (必須在 app.js 之前載入，令 flog() 全域可用) -->
-  <script src="debug.js"></script>
+  <!-- Debug Logger (defer，次序在 app.js 之前，令 flog() 全域可用) -->
+  <script defer src="debug.js"></script>
 
-  <!-- Application -->
-  <script src="app.js"></script>
+  <!-- Application (defer，喺上面所有 defer 腳本之後、DOM 解析完先執行) -->
+  <script defer src="app.js"></script>
 
   <!-- PWA Service Worker 註冊（離線可用、可安裝） -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js')
+          .catch(err => { try { flogErr('SW', 'register failed', err); } catch (e) { console.error('SW register failed', err); } });
       });
     }
   </script>

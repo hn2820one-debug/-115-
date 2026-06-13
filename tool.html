@@ -388,10 +388,11 @@
     const file = input.files[0];
     if (!file) return;
     const reader = new FileReader();
+    reader.onerror = () => { toast('✗ 讀檔失敗，請再試一次'); input.value = ''; };
     reader.onload = e => {
       try {
         const data = JSON.parse(e.target.result);
-        if (typeof data !== 'object' || !('sessions' in data)) throw new Error('格式不符');
+        if (!data || typeof data !== 'object' || typeof data.sessions !== 'object' || data.sessions === null) throw new Error('格式不符');
         localStorage.setItem('fl_v1', JSON.stringify(data));
         refreshStatus();
         toast('✓ 已從備份還原，請重新開啟學習網站');
